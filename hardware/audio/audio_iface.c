@@ -32,7 +32,7 @@ void codec_dev_exit()
 }
 
 //normal play and record
-void normal_play_enable(bool enable)
+void normal_play_enable(bool enable __unused)
 {
   // init volume
   //disable other mode
@@ -75,7 +75,7 @@ void normal_record_route(int path)
 }
 
 //FM play and record
-void fm_play_enable(bool enable){
+void fm_play_enable(bool enable __unused){
 
 
 }
@@ -112,7 +112,7 @@ void fm_volume(int path,int volume)
 }
 
 //Factory test
-void factory_enable(bool enable){
+void factory_enable(bool enable __unused){
 
 }
 
@@ -124,20 +124,20 @@ void factory_route(int path){
 }
 
 //Ringtone 
-void ringtone_enable(bool enable){
+void ringtone_enable(bool enable __unused){
 
 }
 
-void ringtone_path(int path){
+void ringtone_path(int path __unused){
 
 }
 
-void ringtone_volume(float volume){
+void ringtone_volume(float volume __unused){
 
 }
 
 //phone play and record
-void phone_play_enable(bool enable){
+void phone_play_enable(bool enable __unused){
 
 }
 
