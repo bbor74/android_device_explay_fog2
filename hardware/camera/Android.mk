@@ -17,6 +17,7 @@ LOCAL_C_INCLUDES += 								\
 	frameworks/native/include/media/openmax			\
 	hardware/libhardware/include/hardware			\
 	framework/native/include						\
+	system/media/camera/include     			\
 	frameworks/av/media/CedarX-Projects/CedarX/include/include_camera \
 	$(TARGET_HARDWARE_INCLUDE)
 
