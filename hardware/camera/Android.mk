@@ -11,15 +11,18 @@ LOCAL_SHARED_LIBRARIES:= \
     libcutils \
     libcamera_client \
     libui \
+    libjpeg \
+    libjhead \
 	
 LOCAL_C_INCLUDES += 								\
 	frameworks/base/core/jni/android/graphics 		\
 	frameworks/native/include/media/openmax			\
 	hardware/libhardware/include/hardware			\
-	framework/native/include						\
+	frameworks/native/include						\
 	system/media/camera/include     			\
-	frameworks/av/media/CedarX-Projects/CedarX/include/include_camera \
-	$(TARGET_HARDWARE_INCLUDE)
+	$(TARGET_HARDWARE_INCLUDE) \
+	external/jpeg \
+	external/jhead
 
 LOCAL_SRC_FILES := \
 	HALCameraFactory.cpp \
@@ -29,8 +32,10 @@ LOCAL_SRC_FILES := \
 	BufferListManager.cpp \
 	OSAL_Mutex.c \
 	OSAL_Queue.c \
-	scaler.c
-
+	scaler.c \
+	jdatadst.cpp \
+	jpegConvert.cpp \
+	exifwriter.c
 
 # choose hal for new driver or old
 SUPPORT_NEW_DRIVER := Y
