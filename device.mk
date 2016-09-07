@@ -61,6 +61,10 @@ PRODUCT_COPY_FILES += \
 
 #    $(LOCAL_PATH)/rootdir/nand.ko:root/nand.ko \
 
+# Storage
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.sys.sdcardfs=true
+
 # System Configuration
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.sf.lcd_density=140 \
