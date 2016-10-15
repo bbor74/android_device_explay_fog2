@@ -15,6 +15,9 @@
 #
 LOCAL_PATH := device/explay/fog2
 
+# Bionic
+MALLOC_SVELTE := true
+
 USE_CAMERA_STUB := false
 
 # GPS
