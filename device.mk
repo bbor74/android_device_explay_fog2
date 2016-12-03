@@ -95,6 +95,7 @@ PRODUCT_DEX_PREOPT_DEFAULT_FLAGS := \
 # Graphics
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.opengles.version = 131072 \
+	ro.egl.destroy_after_detach=true \
 	drm.service.enabled=false
 
 PRODUCT_PROPERTY_OVERRIDES += \
