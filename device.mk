@@ -63,6 +63,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	ro.zygote.disable_gl_preload=true \
 	ro.bq.gpu_to_cpu_unsupported=1
 
+# Disable dirty region for Mali
+PRODUCT_PROPERTY_OVERRIDES += \
+debug.hwui.render_dirty_regions=false
+
 # Debug
 ADDITIONAL_DEFAULT_PROPERTIES += \
     ro.adb.secure=0 \
