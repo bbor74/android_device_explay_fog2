@@ -58,6 +58,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.sys.language=ru \
 	persist.sys.country=RU
 
+# Mark as low ram device
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.config.low_ram=true
+
 # Fix Graphics Issues
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.zygote.disable_gl_preload=true \
