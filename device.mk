@@ -58,6 +58,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.sys.language=ru \
 	persist.sys.country=RU
 
+# Fix Graphics Issues
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.zygote.disable_gl_preload=true \
+	ro.bq.gpu_to_cpu_unsupported=1
+
 # Debug
 ADDITIONAL_DEFAULT_PROPERTIES += \
     ro.adb.secure=0 \
