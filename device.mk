@@ -62,6 +62,16 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.low_ram=true
 
+# ART
+PRODUCT_PROPERTY_OVERRIDES += \
+	dalvik.vm.dex2oat-flags=--no-watch-dog \
+	dalvik.vm.dex2oat-filter=interpret-only \
+	dalvik.vm.image-dex2oat-filter=speed \
+	dalvik.vm.profiler=1
+
+PRODUCT_DEX_PREOPT_DEFAULT_FLAGS := \
+	--compiler-filter=interpret-only
+
 # Fix Graphics Issues
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.zygote.disable_gl_preload=true \
