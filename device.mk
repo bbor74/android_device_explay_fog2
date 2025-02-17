@@ -72,6 +72,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_DEX_PREOPT_DEFAULT_FLAGS := \
 	--compiler-filter=interpret-only
 
+# Graphics
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.opengles.version = 131072 \
+	drm.service.enabled=false
+
 # Fix Graphics Issues
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.zygote.disable_gl_preload=true \
