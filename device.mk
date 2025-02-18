@@ -23,6 +23,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.sys.language=ru \
 	persist.sys.country=RU
 
+# Navigation bar
+PRODUCT_PROPERTY_OVERRIDES += \
+	qemu.hw.mainkeys=0
+
 # Mark as low ram device
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.low_ram=true
