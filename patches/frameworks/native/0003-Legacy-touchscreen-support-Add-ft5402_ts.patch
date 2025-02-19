@@ -1,0 +1,35 @@
+From 73d7e7b8817d44da9398a7ed01b57cd1ec9fcc63 Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Wed, 19 Feb 2025 09:30:42 +0400
+Subject: [PATCH 3/3] Legacy touchscreen support: Add ft5402_ts
+
+Change-Id: Ib5b6be59a50f4e68af9295f735f1c9184672ea6e
+---
+ include/input/InputDevice.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/include/input/InputDevice.h b/include/input/InputDevice.h
+index dea102c70f..d1f7e0ae3d 100644
+--- a/include/input/InputDevice.h
++++ b/include/input/InputDevice.h
+@@ -24,14 +24,14 @@ namespace android {
+ 
+ struct CtpName{
+     inline CtpName():
+-        number (10),
++        number (11),
+         default_name(String8("tp")),
+-        ctp_name ({String8("gslX680"),String8("gt82x"),String8("ft5x_ts"),String8("sunxi-ts"),String8("gt818_ts"),
++        ctp_name ({String8("gslX680"),String8("gt82x"),String8("ft5x_ts"),String8("ft5402_ts"),String8("sunxi-ts"),String8("gt818_ts"),
+                 String8("tu_ts"),String8("sw-ts"),String8("gt9xx_ts"),String8("gt9xxf_ts"),String8("aw5306_ts")}){
+         }
+     int number;
+     String8 default_name;
+-    String8 ctp_name[10];
++    String8 ctp_name[11];
+ };
+ /*
+  * Identifies a device.
+-- 
+2.17.1
+

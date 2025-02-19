@@ -1,0 +1,66 @@
+From 07199c549b44d5489059cc311844f9f2ea13500b Mon Sep 17 00:00:00 2001
+From: yugers <yugers@gmail.com>
+Date: Sun, 9 Oct 2016 22:18:43 +0300
+Subject: [PATCH 2/3] Add legacy touchscreen support - part 2
+
+Change-Id: I380a5a8c1676c14ee8cd65b7db6e5e0a124b0d68
+---
+ include/input/InputDevice.h | 11 +++++++++++
+ libs/input/InputDevice.cpp  | 12 ++++++++++++
+ 2 files changed, 23 insertions(+)
+
+diff --git a/include/input/InputDevice.h b/include/input/InputDevice.h
+index adf9fb9170..dea102c70f 100644
+--- a/include/input/InputDevice.h
++++ b/include/input/InputDevice.h
+@@ -22,6 +22,17 @@
+ 
+ namespace android {
+ 
++struct CtpName{
++    inline CtpName():
++        number (10),
++        default_name(String8("tp")),
++        ctp_name ({String8("gslX680"),String8("gt82x"),String8("ft5x_ts"),String8("sunxi-ts"),String8("gt818_ts"),
++                String8("tu_ts"),String8("sw-ts"),String8("gt9xx_ts"),String8("gt9xxf_ts"),String8("aw5306_ts")}){
++        }
++    int number;
++    String8 default_name;
++    String8 ctp_name[10];
++};
+ /*
+  * Identifies a device.
+  */
+diff --git a/libs/input/InputDevice.cpp b/libs/input/InputDevice.cpp
+index b11110a18c..f85b2e8d0c 100644
+--- a/libs/input/InputDevice.cpp
++++ b/libs/input/InputDevice.cpp
+@@ -24,6 +24,7 @@
+ 
+ namespace android {
+ 
++CtpName name = CtpName();
+ static const char* CONFIGURATION_FILE_DIR[] = {
+         "idc/",
+         "keylayout/",
+@@ -78,6 +79,17 @@ String8 getInputDeviceConfigurationFilePathByDeviceIdentifier(
+             return productPath;
+         }
+     }
++    int i = 0;
++    while(i < name.number){
++#if DEBUG_PROBE
++        LOGE("#######name = %s", name.default_name.string());
++        LOGE("#######ctp_name = %s", name.ctp_name[i].string());
++#endif
++        if(name.ctp_name[i] == deviceIdentifier.name){
++            return getInputDeviceConfigurationFilePathByName(name.default_name, type);
++        }
++        i++;
++    }
+ 
+     // Try device name.
+     return getInputDeviceConfigurationFilePathByName(deviceIdentifier.name, type);
+-- 
+2.17.1
+
