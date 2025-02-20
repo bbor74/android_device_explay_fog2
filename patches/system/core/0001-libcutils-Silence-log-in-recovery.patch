@@ -1,0 +1,29 @@
+From 5bc720f9576f2eaf4e7f8d4fc88c21524a03651f Mon Sep 17 00:00:00 2001
+From: cjh1249131356 <cjh1249131356@gmail.com>
+Date: Sun, 1 May 2022 16:40:50 +0800
+Subject: [PATCH] libcutils: Silence log in recovery
+
+* Error opening trace file: No such file or directory (2)
+
+Change-Id: I980642798fa1ec57a0c36084bc575630fc4d95da
+Signed-off-by: cjh1249131356 <cjh1249131356@gmail.com>
+---
+ libcutils/trace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libcutils/trace.c b/libcutils/trace.c
+index f57aac2a1..22858ddce 100644
+--- a/libcutils/trace.c
++++ b/libcutils/trace.c
+@@ -168,7 +168,7 @@ static void atrace_init_once()
+ {
+     atrace_marker_fd = open("/sys/kernel/debug/tracing/trace_marker", O_WRONLY);
+     if (atrace_marker_fd == -1) {
+-        ALOGE("Error opening trace file: %s (%d)", strerror(errno), errno);
++        if (errno != 2) ALOGE("Error opening trace file: %s (%d)", strerror(errno), errno);
+         atrace_enabled_tags = 0;
+         goto done;
+     }
+-- 
+2.17.1
+
