@@ -30,7 +30,7 @@ PRODUCT_COPY_FILES += \
 
 # System Configuration
 PRODUCT_PROPERTY_OVERRIDES += \
-	ro.sf.lcd_density=120 \
+	ro.sf.lcd_density=140 \
 	persist.sys.timezone=Europe/Moscow \
 	persist.sys.language=ru \
 	persist.sys.country=RU
