@@ -1,0 +1,37 @@
+From 58fcc03ae05b105e04075ef31e013b46269ed162 Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Tue, 4 Mar 2025 13:12:20 +0400
+Subject: [PATCH 4/4] Add the option to flip the navigation bar in portrait
+ mode
+
+Change-Id: Ic74ccadef82e9319edf2e43a8c59785a1a70cf5d
+---
+ .../com/android/systemui/statusbar/phone/NavbarEditor.java   | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavbarEditor.java b/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavbarEditor.java
+index 8bd6db6dcfb..a79081b02b4 100644
+--- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavbarEditor.java
++++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavbarEditor.java
+@@ -22,6 +22,7 @@ import android.content.DialogInterface;
+ import android.graphics.PorterDuff;
+ import android.graphics.PorterDuffColorFilter;
+ import android.os.UserHandle;
++import android.os.SystemProperties;
+ import android.provider.Settings;
+ import android.util.DisplayMetrics;
+ import android.view.DisplayInfo;
+@@ -185,6 +186,10 @@ public class NavbarEditor implements View.OnTouchListener {
+     }
+ 
+     public static boolean isDevicePhone(Context context) {
++        String navbarflip = SystemProperties.get("ro.navbar.flip", null);
++        if (navbarflip != null) {
++            sIsDevicePhone = Boolean.valueOf(navbarflip);
++        }
+         if (sIsDevicePhone == null) {
+             WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+             DisplayInfo outDisplayInfo = new DisplayInfo();
+-- 
+2.17.1
+

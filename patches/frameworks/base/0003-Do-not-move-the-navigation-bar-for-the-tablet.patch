@@ -1,0 +1,27 @@
+From a3bc4b827dd08dc9896fcfde77c603a096c80597 Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Tue, 4 Mar 2025 13:11:31 +0400
+Subject: [PATCH 3/4] Do not move the navigation bar for the tablet
+
+Change-Id: If2aaf95ac8c3c5863151a72a5cf5e712a7e8ce10
+---
+ .../com/android/internal/policy/impl/PhoneWindowManager.java   | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java b/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
+index 1ef905fb91a..f914851d349 100644
+--- a/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
++++ b/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
+@@ -1898,6 +1898,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
+         // Allow the navigation bar to move on non-square small devices (phones).
+         mNavigationBarCanMove = width != height && shortSizeDp < 600;
+ 
++        if (SystemProperties.get("ro.build.characteristics").contains("tablet")) {
++            mNavigationBarCanMove = false;
++        }
+         mHasNavigationBar = res.getBoolean(com.android.internal.R.bool.config_showNavigationBar);
+         // Allow a system property to override this. Used by the emulator.
+         // See also hasNavigationBar().
+-- 
+2.17.1
+
