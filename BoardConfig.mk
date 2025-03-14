@@ -43,6 +43,10 @@ BOARD_KERNEL_CMDLINE := console=ttyS0,115200 rw init=/init loglevel=4 androidboo
 BOARD_KERNEL_BASE := 0x40000000
 TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/kernel
 
+# Enable dex-preoptimization to speed up first boot sequence
+WITH_DEXPREOPT := true
+DONT_DEXPREOPT_PREBUILTS := true
+
 # Memory
 BOARD_FLASH_BLOCK_SIZE := 4096
 BOARD_BOOTIMAGE_PARTITION_SIZE := 16777216
