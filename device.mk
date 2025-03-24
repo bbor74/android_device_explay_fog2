@@ -100,6 +100,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	wifi.supplicant_scan_interval=15 \
 	keyguard.no_require_sim=true
 
+ # NO ril device
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.radio.noril=true
+
 # APP CONFIGS
 PRODUCT_CHARACTERISTICS := tablet
 PRODUCT_AAPT_CONFIG := ldpi mdpi hdpi
