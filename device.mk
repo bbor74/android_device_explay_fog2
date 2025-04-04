@@ -65,6 +65,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	ro.opengles.version = 131072 \
 	drm.service.enabled=false
 
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.kernel.android.checkjni=0
+
 # Fix Graphics Issues
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.zygote.disable_gl_preload=true \
