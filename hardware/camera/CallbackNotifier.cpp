@@ -787,7 +787,7 @@ void CallbackNotifier::setContinuousPictureCnt(int cnt)
 bool CallbackNotifier::takePicture(const void* frame, bool is_continuous)
 {
 	V4L2BUF_t * pbuf = (V4L2BUF_t *)frame;
-
+	int framesize =0;
 	int src_format = 0;
 	int src_addr_phy = 0;
 	int src_addr_vir = 0;
@@ -816,50 +816,83 @@ bool CallbackNotifier::takePicture(const void* frame, bool is_continuous)
 		src_height			= pbuf->height;
 		memcpy((void*)&src_crop, (void*)&pbuf->crop_rect, sizeof(RECT_t));
 	}
-	
-	int framesize = ALIGN_16B(src_width) * src_height * 3/2;
+
+	camera_position_type pt;
+	pt.latitude		= mGpsLatitude;
+	pt.longitude	= mGpsLongitude;
+	pt.altitude		= mGpsAltitude;
+	pt.timestamp	= mGpsTimestamp;
+	LOGD("src_width: %d src_height: %d", src_width, src_height);
+	framesize = ALIGN_16B(src_width) * src_height * 3/2;
 	camera_memory_t* src_addr_vir_copy = mGetMemoryCB(-1, framesize, 1, NULL);
 	if (NULL == src_addr_vir_copy || NULL == src_addr_vir_copy->data)
 	{
-		LOGE("%s: Memory failure", __FUNCTION__);
+		LOGE("%s: Memory failure in CAMERA_MSG_COMPRESSED_IMAGE", __FUNCTION__);
 		return false;
 	}
-
-	framesize = mCBWidth * mCBHeight * 3/2;
+	LOGD("mPictureWidth: %d mPictureHeight: %d", mPictureWidth, mPictureHeight);
+	framesize = mPictureWidth * mPictureHeight * 3/2;
 	camera_memory_t* cam_buff_copy = mGetMemoryCB(-1, framesize, 1, NULL);
 	if (NULL == cam_buff_copy || NULL == cam_buff_copy->data)
 	{
-		LOGE("%s: Memory failure", __FUNCTION__);
+		LOGE("%s: Memory failure in CAMERA_MSG_COMPRESSED_IMAGE", __FUNCTION__);
+		return false;
+	}
+	camera_memory_t* cam_buff = mGetMemoryCB(-1, framesize, 1, NULL);
+	if (NULL == cam_buff || NULL == cam_buff->data)
+	{
+		LOGE("%s: Memory failure in CAMERA_MSG_COMPRESSED_IMAGE", __FUNCTION__);
 		return false;
 	}
 
-	if (src_format == V4L2_PIX_FMT_NV12)
-	{
-		NV12ToYVU420((void*)src_addr_vir, (void*)src_addr_vir_copy->data, ALIGN_16B(src_width), src_height);
-	}
-	else if(src_format == V4L2_PIX_FMT_NV21)
-	{
-		NV21ToYVU420((void*)src_addr_vir, (void*)src_addr_vir_copy->data, ALIGN_16B(src_width), src_height);
-	}
+//	if (src_format == V4L2_PIX_FMT_YVU420)
+//	{
+//		LOGD("%s: src_format: V4L2_PIX_FMT_YVU420", __FUNCTION__);
+		// it will be used in cts
+
+	scaler((unsigned char*)src_addr_vir, (unsigned char*)cam_buff_copy->data,
+					ALIGN_16B(src_width), src_height,
+					mPictureWidth, mPictureHeight, /*src_format*/0, 16);
+//	}
+
+//	LOGD("src_format: %d ", src_format);
+//	if (src_format == V4L2_PIX_FMT_NV12)
+//	{
+//		LOGD("%s: src_format: V4L2_PIX_FMT_NV12", __FUNCTION__);
+//		NV12ToYVU420((void*)src_addr_vir, (void*)src_addr_vir_copy->data, ALIGN_16B(src_width), src_height);
+//	}
+//	else if(src_format == V4L2_PIX_FMT_NV21)
+//	{
+//		LOGD("%s: src_format: V4L2_PIX_FMT_NV21", __FUNCTION__);
+//		NV21ToYVU420((void*)src_addr_vir, (void*)src_addr_vir_copy->data, ALIGN_16B(src_width), src_height);
+//	}
+//	scaler((unsigned char*)src_addr_vir_copy->data/* src*/, (unsigned char*)cam_buff_copy->data/*dest*/,
+//					ALIGN_16B(src_width), src_height,
+//					mPictureWidth, mPictureHeight, 0, 16);
 
 	// Receive and convert to jpeg internaly, without using privative app
 	uint32_t jpegSize = 0;
-    if (yuv420_save2jpeg((unsigned char*) cam_buff_copy->data,
-        (void*)src_addr_vir_copy->data, mCBWidth, mCBHeight, 100 /* maximum quality */, &jpegSize)) {
+    if (yuv420_save2jpeg((unsigned char*) cam_buff->data/*dest*/,
+        (void*)cam_buff_copy->data/* src*/, mPictureWidth, mPictureHeight, mJpegQuality /* 100 maximum quality */, &jpegSize)) {
         LOGD("jpegConvert done! ExifWriter...");
 	}
 	else {
         LOGE("jpegConvert failed!");
 		return false;
 	}
-
-    writeExif(cam_buff_copy->data, cam_buff_copy->data, jpegSize,
-             &jpegSize, 0 /* change this later */, NULL /* no location */);
+	LOGD("mJpegRotate: %d ", mJpegRotate);
+    camera_position_type *npt = &pt ;
+    writeExif(cam_buff->data/*orig*/, cam_buff_copy->data/*dest*/, jpegSize,
+             &jpegSize, mJpegRotate /* 0 change this later */, npt /* NULL no location */);
 
 	DBG_TIME_DIFF("enc");
 
 	mDataCB(CAMERA_MSG_COMPRESSED_IMAGE, cam_buff_copy, 0, NULL, mCallbackCookie);
-	
+
+	src_addr_vir_copy->release(src_addr_vir_copy);
+	cam_buff_copy->release(cam_buff_copy);
+	cam_buff->release(cam_buff);
+
 	DBG_TIME_DIFF("photo end");
 	LOGV("taking photo end");
 	return true;
