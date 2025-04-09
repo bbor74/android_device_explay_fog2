@@ -47,7 +47,7 @@ char * float2rationnal( float src )
 
   startx = x = src;
 
-  ALOGV("float2rationnal: Convertir %f", src);
+  ALOGV("float2rationnal: Convert %f", src);
 
   /* initialize matrix */
   m[0][0] = m[1][1] = 1;
@@ -86,15 +86,15 @@ char * float2rationnal( float src )
 char * coord2degminsec( float src )
 {
     char *res = (char *)malloc( 256 * sizeof(char) );
-    ALOGV("coord2degminsec: Convertir %f", src);
+    ALOGV("coord2degminsec: Convert %f", src);
     float *dms = float2degminsec( fabs(src) );
-    ALOGV("coord2degminsec: paso1 (float) %f %f %f", dms[0], dms[1], dms[2]);
+    ALOGV("coord2degminsec: step1 (float) %f %f %f", dms[0], dms[1], dms[2]);
     strcpy( res, float2rationnal(dms[0]) );
     strcat( res , "," );
     strcat( res , float2rationnal(dms[1]) );
     strcat( res , "," );
     strcat( res , float2rationnal(dms[2]) );
-    ALOGV("coord2degminsec: Convertido en %s", res);
+    ALOGV("coord2degminsec: Become %s", res);
     free( dms );
     return res;
 }
@@ -196,7 +196,7 @@ void writeExif( void *origData, void *destData , int origSize , uint32_t *result
 
         it++;
         (*it).Value = coord2degminsec( pt->latitude );
-        ALOGV("writeExif: La latitud queda en: %s", (*it).Value);
+        ALOGV("writeExif: latitude is: %s", (*it).Value);
 
         (*it).Tag = 0x02;
         (*it).Format = FMT_URATIONAL;
@@ -216,7 +216,7 @@ void writeExif( void *origData, void *destData , int origSize , uint32_t *result
 
         it++;
         (*it).Value = coord2degminsec( pt->longitude );
-        ALOGV("writeExif: La longitud queda en: %s", (*it).Value);
+        ALOGV("writeExif: longitude is: %s", (*it).Value);
 
         (*it).Tag = 0x04;
         (*it).Format = FMT_URATIONAL;
@@ -236,7 +236,7 @@ void writeExif( void *origData, void *destData , int origSize , uint32_t *result
 
         it++;
         (*it).Value = float2rationnal( fabs( pt->altitude ) );
-        ALOGV("writeExif: La altitud queda en: %s", (*it).Value);
+        ALOGV("writeExif: altitude is: %s", (*it).Value);
 
         (*it).Tag = 0x06;
         (*it).Format = FMT_SRATIONAL;
