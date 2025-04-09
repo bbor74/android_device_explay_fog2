@@ -16,12 +16,18 @@ PRODUCT_PACKAGES += \
 	audio.usb.default \
 	audio.r_submix.default
 
+# Camera
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.camera.xml:system/etc/permissions/android.hardware.camera.xml \
+    frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml
+
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
 	config.disable_bluetooth=true
 
 # HAL
 PRODUCT_PACKAGES += \
+   camera.polaris \
    hwcomposer.polaris
 
 # Ramdisk
