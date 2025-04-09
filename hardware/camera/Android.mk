@@ -12,12 +12,6 @@ LOCAL_SHARED_LIBRARIES:= \
     libcamera_client \
     libui \
 	
-# cedarx libraries
-LOCAL_SHARED_LIBRARIES += \
-	libfacedetection \
-	libion_alloc \
-	libjpgenc
-	
 LOCAL_C_INCLUDES += 								\
 	frameworks/base/core/jni/android/graphics 		\
 	frameworks/native/include/media/openmax			\
