@@ -1,0 +1,277 @@
+From 0d0152a3d53a03773b9e565fba30d232bbf34a4f Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Wed, 9 Apr 2025 09:47:29 +0400
+Subject: [PATCH] init: Add format_userdata and insmod_modules commands
+
+Change-Id: Id036b7c63f25ddf12c31a9b21c37d004bb71d5cd
+---
+ init/builtins.c    | 207 +++++++++++++++++++++++++++++++++++++++++++++
+ init/init_parser.c |   4 +
+ init/keywords.h    |   4 +
+ 3 files changed, 215 insertions(+)
+
+diff --git a/init/builtins.c b/init/builtins.c
+index d4b3f99c2..eed34f8e7 100644
+--- a/init/builtins.c
++++ b/init/builtins.c
+@@ -1029,6 +1029,213 @@ int do_wait(int nargs, char **args)
+         return -1;
+ }
+ 
++int do_format_userdata(int nargs, char **args)
++{
++ERROR("-----------rogge---------------do_format_userdata");
++    const char * devicePath = args[1];
++    char bootsector[512];
++    int fd;
++    pid_t child;
++    int status;
++
++    property_set("ro.udisk.label", args[2]);
++    fd = open(devicePath, O_RDONLY);
++    if (fd <= 0) {
++        ERROR("open device error: %s", strerror(errno));
++        return 1;
++    }
++    memset(bootsector, 0, 512);
++    read(fd, bootsector, 512);
++    close(fd);
++    if ((bootsector[510]==0x55) && (bootsector[511]==0xaa)) {
++        ERROR("dont need format %s", devicePath);
++        return 1;
++    } else {
++ERROR("-----------rogge---------------start format");
++        ERROR("start format %s", devicePath);
++        child = fork();
++        if (child == 0) {
++            ERROR("fork to format %s", devicePath);
++            execl("/system/bin/logwrapper", "/system/bin/logwrapper", "/system/bin/newfs_msdos",
++                    "-F", "32", "-O", "android", "-c", "8", "-L", args[2], args[1], NULL);
++            exit(-1);
++        }
++        ERROR("wait for format %s", devicePath);
++        while (waitpid(-1, &status, 0) != child);
++        ERROR("format %s ok", devicePath);
++        return 1;
++    }
++}
++
++int do_insmod_modules(int argc, char **argv)
++{
++ERROR("-----------rogge---------------do_insmod_modules");
++    const char *modules = argv[1];
++    int ret = 0;
++
++    FILE *fp = NULL;
++    int back_name_len = 0;
++    int back_node_len = 0;
++    int front_name_len = 0;
++    int front_node_len = 0;
++    //int camera_num = 0;
++
++    char back_name[64];
++    char back_node[64];
++    char front_name[64];
++    char front_node[64];
++    //char num[1];
++
++    char str[128];
++
++    memset(back_name, 0, 64);
++    memset(back_node, 0, 64);
++    memset(front_name, 0, 64);
++    memset(front_node, 0, 64);
++    //memset(num, 0, 1);
++
++    memset(str, 0, 128);
++
++    if (strstr(modules, "camera"))
++    {
++        //fopen back_name
++        fp = fopen("/sys/devices/camera/back_name", "r");
++        if (NULL == fp )
++        {
++            ERROR("fopen /sys/devices/camera/back_name failed, waitting for 2ms time");
++            usleep(2000);
++            fp = fopen("/sys/devices/camera/back_name", "r");
++        }
++
++        if (NULL != fp)
++        {
++            back_name_len = fread(back_name, 1, 64, fp);
++            fclose(fp);
++            fp = NULL;
++        }
++        else
++        {
++            ERROR("fopen /sys/devices/camera/back_name failed");
++        }
++
++        //fopen back_node
++        fp = fopen("/sys/devices/camera/back_node", "r");
++        if (NULL != fp)
++        {
++            back_node_len = fread(back_node, 1, 64, fp);
++            fclose(fp);
++            fp = NULL;
++        }
++        else
++        {
++            ERROR(" fopen /sys/devices/camera/back_node failed");
++        }
++
++        //fopen front_name
++        fp = fopen("/sys/devices/camera/front_name", "r");
++        if (NULL != fp)
++        {
++            front_name_len = fread(front_name, 1, 64, fp);
++            fclose(fp);
++            fp = NULL;
++        }
++        else
++        {
++            ERROR(" fopen /sys/devices/camera/front_name failed");
++        }
++
++        //fopen front_node
++        fp = fopen("/sys/devices/camera/front_node", "r");
++        if (NULL != fp)
++        {
++            front_node_len = fread(front_node, 1, 64, fp);
++            fclose(fp);
++            fp = NULL;
++        }
++        else
++        {
++            ERROR("fopen /sys/devices/camera/front_node failed");
++        }
++        /*
++        //fopen num
++        fp = fopen("/sys/devices/camera/num", "r");
++        if (NULL != fp)
++        {
++            fread(num, 1, 1, fp);
++            fclose(fp);
++            fp = NULL;
++            camera_num = (int)(num[0] - 0x30);
++        }
++        else
++        {
++            ERROR("fopen /sys/device/camera/num failed");
++        }
++        */
++
++        //insmod back camera
++        if (back_name_len > 0)
++        {
++            memset(str, 0, 128);
++            sprintf(str, "/system/vendor/modules/%s.ko", back_name);
++            ret = insmod(str, "");
++            if(ret < 0)
++            {
++                ERROR("(back camera) insmod %s, err: %s", str, strerror(errno));
++            } else {
++                ERROR("(back camera) insmod %s ", str);
++            }
++        }
++
++        //insmod front camera
++        if (front_name_len > 0)
++        {
++          memset(str, 0, 128);
++            sprintf(str, "/system/vendor/modules/%s.ko", front_name);
++            ret = insmod(str, "");
++            if(ret < 0)
++            {
++                ERROR("(front camera) insmod %s, err: %s", str, strerror(errno));
++            } else {
++                ERROR("(front camera) insmod %s ", str);
++            }
++        }
++
++        //insmod back node
++        if (back_node_len > 0)
++        {
++            memset(str, 0, 128);
++            sprintf(str, "/system/vendor/modules/%s.ko", back_node);
++            ret = insmod(str, "");
++            if(ret < 0)
++            {
++                ERROR("(back node) insmod %s, err: %s", str, strerror(errno));
++            } else {
++                ERROR("(back node) insmod %s ", str);
++            }
++        }
++
++        //insmod front node
++        if (front_node_len > 0)
++        {
++          memset(str, 0, 128);
++            sprintf(str, "/system/vendor/modules/%s.ko", front_node);
++            ret = insmod(str, "");
++            if(ret < 0)
++            {
++                ERROR("(front node) insmod %s, err: %s", str, strerror(errno));
++            } else {
++                ERROR("(front node) insmod %s ", str);
++            }
++        }
++    }
++    else
++    {
++        ERROR("insmod_modules insmod camera failed");
++    }
++
++    return 1;
++}
++
+ int do_umount(int nargs, char **args) {
+     return umount(args[1]);
+ }
+diff --git a/init/init_parser.c b/init/init_parser.c
+index eec90902d..532b8123b 100644
+--- a/init/init_parser.c
++++ b/init/init_parser.c
+@@ -102,6 +102,9 @@ static int lookup_keyword(const char *s)
+         if (!strcmp(s, "xport")) return K_export;
+         if (!strcmp(s, "xport_rc")) return K_export_rc;
+         break;
++    case 'f':
++        if(!strcmp(s, "ormat_userdata")) return K_format_userdata;
++        break;
+     case 'g':
+         if (!strcmp(s, "roup")) return K_group;
+         break;
+@@ -113,6 +116,7 @@ static int lookup_keyword(const char *s)
+         if (!strcmp(s, "fup")) return K_ifup;
+         if (!strcmp(s, "nsmod")) return K_insmod;
+         if (!strcmp(s, "mport")) return K_import;
++        if (!strcmp(s, "nsmod_modules")) return K_insmod_modules;
+         break;
+     case 'k':
+         if (!strcmp(s, "eycodes")) return K_keycodes;
+diff --git a/init/keywords.h b/init/keywords.h
+index 224a505de..800ab85f0 100644
+--- a/init/keywords.h
++++ b/init/keywords.h
+@@ -44,6 +44,8 @@ int do_load_persist_props(int nargs, char **args);
+ int do_load_all_props(int nargs, char **args);
+ int do_wait(int nargs, char **args);
+ int do_umount(int nargs, char **args);
++int do_format_userdata(int nargs, char **args);
++int do_insmod_modules(int nargs, char **args);
+ #define __MAKE_KEYWORD_ENUM__
+ #define KEYWORD(symbol, flags, nargs, func) K_##symbol,
+ enum {
+@@ -111,6 +113,8 @@ enum {
+     KEYWORD(load_all_props,        COMMAND, 0, do_load_all_props)
+     KEYWORD(ioprio,      OPTION,  0, 0)
+     KEYWORD(umount,		COMMAND, 1, do_umount)
++    KEYWORD(format_userdata,COMMAND, 1, do_format_userdata)
++    KEYWORD(insmod_modules,COMMAND, 1, do_insmod_modules)
+ #ifdef __MAKE_KEYWORD_ENUM__
+     KEYWORD_COUNT,
+ };
+-- 
+2.17.1
+
