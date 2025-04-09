@@ -190,7 +190,7 @@ CameraHardware::~CameraHardware()
 
 	if (mFaceDetection != NULL)
 	{
-		DestroyFaceDetectionDev(mFaceDetection);
+		//DestroyFaceDetectionDev(mFaceDetection);
 		mFaceDetection = NULL;
 	}
 
@@ -471,7 +471,7 @@ bool CameraHardware::commandThread()
 			if (mFaceDetection != 0)
 			{
 				LOGV("start facedetection size: %dx%d", width, height);
-				mFaceDetection->ioctrl(mFaceDetection, FACE_OPS_CMD_START, width, height);
+				//mFaceDetection->ioctrl(mFaceDetection, FACE_OPS_CMD_START, width, height);
 			}
 			else
 			{
@@ -484,7 +484,7 @@ bool CameraHardware::commandThread()
 			LOGV("CMD_QUEUE_STOP_FACE_DETECTE");
 			if (mFaceDetection != 0)
 			{
-				mFaceDetection->ioctrl(mFaceDetection, FACE_OPS_CMD_STOP, 0, 0);
+				//mFaceDetection->ioctrl(mFaceDetection, FACE_OPS_CMD_STOP, 0, 0);
 			}
 			else
 			{
@@ -541,7 +541,7 @@ status_t CameraHardware::Initialize()
 	getCallingProcessName(mCallingProcessName);
 	mCallbackNotifier.setCallingProcess(mCallingProcessName);
 
-	if (mFaceDetection == NULL)
+	/**if (mFaceDetection == NULL)
 	{
 		// create FaceDetection object
 		CreateFaceDetectionDev(&mFaceDetection);
@@ -553,7 +553,7 @@ status_t CameraHardware::Initialize()
 	}
 
 	mFaceDetection->ioctrl(mFaceDetection, FACE_OPS_CMD_REGISTE_USER, (int)this, 0);
-	mFaceDetection->setCallback(mFaceDetection, faceNotifyCb);
+	mFaceDetection->setCallback(mFaceDetection, faceNotifyCb);*/
 
 	initDefaultParameters();
 
