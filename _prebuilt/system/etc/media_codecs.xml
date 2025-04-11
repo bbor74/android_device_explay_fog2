@@ -131,7 +131,15 @@ Only the three quirks included above are recognized at this point:
 
     <Encoders>
     <!--	<MediaCodec name="OMX.allwinner.video.encoder.avc" type="video/avc" /> -->
-		
+
+        <MediaCodec name="OMX.google.h264.encoder" type="video/avc">
+            <Limit name="size" min="16x16" max="896x896" />
+            <Limit name="alignment" value="16x16" />
+            <Limit name="block-size" value="16x16" />
+            <Limit name="blocks-per-second" range="1-11880" />
+            <Limit name="bitrate" range="1-2000000" />
+        </MediaCodec>
+
     	<MediaCodec name="OMX.google.h263.encoder" type="video/3gpp" />
         <MediaCodec name="OMX.google.mpeg4.encoder" type="video/mp4v-es" />        
         <MediaCodec name="OMX.google.amrnb.encoder" type="audio/3gpp" />
