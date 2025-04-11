@@ -1,0 +1,40 @@
+From 39285a9222bfedbf77774acd3a9b3a333534c7a5 Mon Sep 17 00:00:00 2001
+From: Robert Crabtree <robertx.l.crabtree@intel.com>
+Date: Wed, 25 Jul 2012 11:59:58 -0700
+Subject: [PATCH] SW encode: Increase default AVC level
+
+The AVC SW encoder only supports up to level 2 which is insufficient
+for camera's VGA resolution. Increase default AVC level to 3.1 to support
+up to 720p.
+
+Change-Id: I082150438902e03fd38f124d9ed41264b50a736e
+Signed-off-by: Robert Crabtree <robertx.l.crabtree@intel.com>
+---
+ media/libstagefright/codecs/avc/enc/SoftAVCEncoder.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/media/libstagefright/codecs/avc/enc/SoftAVCEncoder.cpp b/media/libstagefright/codecs/avc/enc/SoftAVCEncoder.cpp
+index 173abf735..24b146278 100644
+--- a/media/libstagefright/codecs/avc/enc/SoftAVCEncoder.cpp
++++ b/media/libstagefright/codecs/avc/enc/SoftAVCEncoder.cpp
+@@ -70,7 +70,7 @@ static LevelConversion ConversionTable[] = {
+     { OMX_VIDEO_AVCLevel12, AVC_LEVEL1_2, 396 },
+     { OMX_VIDEO_AVCLevel13, AVC_LEVEL1_3, 396 },
+     { OMX_VIDEO_AVCLevel2,  AVC_LEVEL2,   396 },
+-#if 0
++#if 1
+     // encoding speed is very poor if video resolution
+     // is higher than CIF or if level is higher than 2
+     { OMX_VIDEO_AVCLevel21, AVC_LEVEL2_1, 792 },
+@@ -162,7 +162,7 @@ SoftAVCEncoder::SoftAVCEncoder(
+             callbacks, appData, component),
+       mIDRFrameRefreshIntervalInSec(1),
+       mAVCEncProfile(AVC_BASELINE),
+-      mAVCEncLevel(AVC_LEVEL2),
++      mAVCEncLevel(AVC_LEVEL3_1), // up to 720p @ 30 FPS
+       mNumInputFrames(-1),
+       mPrevTimestampUs(-1),
+       mStarted(false),
+-- 
+2.17.1
+
