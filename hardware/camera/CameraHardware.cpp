@@ -558,12 +558,15 @@ void CameraHardware::initDefaultParameters()
 	// At present, we use preview and video the same size. Next version, maybe different.
 	p.set(CameraParameters::KEY_SUPPORTED_VIDEO_SIZES, value);
 	p.set(CameraParameters::KEY_PREFERRED_PREVIEW_SIZE_FOR_VIDEO, "1280x720");
+	LOGV("supportPreviewSizeValue: [%s] %s", CameraParameters::KEY_SUPPORTED_VIDEO_SIZES, value);
+	LOGV("supportPreviewSizeValue: [%s] %s", CameraParameters::KEY_PREFERRED_PREVIEW_SIZE_FOR_VIDEO, "1280x720");
 #endif
 
 	value = mCameraConfig->defaultPreviewSizeValue();
 	p.set(CameraParameters::KEY_PREVIEW_SIZE, value);
 	p.set(CameraParameters::KEY_VIDEO_SIZE, value);
-	
+	LOGV("defaultPreviewSizeValue: [%s] %s", CameraParameters::KEY_PREVIEW_SIZE, value);
+	LOGV("defaultPreviewSizeValue: [%s] %s", CameraParameters::KEY_VIDEO_SIZE, value);
 	// picture size
 	LOGV("to init picture size");
 	value = mCameraConfig->supportPictureSizeValue();
