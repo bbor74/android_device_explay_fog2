@@ -568,7 +568,7 @@ void CameraHardware::initDefaultParameters()
 	LOGV("to init picture size");
 	value = mCameraConfig->supportPictureSizeValue();
 	p.set(CameraParameters::KEY_SUPPORTED_PICTURE_SIZES, value);
-	LOGV("supportPreviewSizeValue: [%s] %s", CameraParameters::KEY_SUPPORTED_PICTURE_SIZES, value);
+	LOGV("supportPictureSizeValue: [%s] %s", CameraParameters::KEY_SUPPORTED_PICTURE_SIZES, value);
 
 	value = mCameraConfig->defaultPictureSizeValue();
 	p.set(CameraParameters::KEY_PICTURE_SIZE, value);
