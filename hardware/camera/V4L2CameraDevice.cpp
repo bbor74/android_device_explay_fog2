@@ -708,7 +708,9 @@ bool V4L2CameraDevice::captureThread()
 	}
 	
 	// deal with this frame
-	mCurFrameTimestamp = (int64_t)((int64_t)buf.timestamp.tv_usec + (((int64_t)buf.timestamp.tv_sec) * 1000000));
+	//mCurFrameTimestamp = (int64_t)((int64_t)buf.timestamp.tv_usec + (((int64_t)buf.timestamp.tv_sec) * 1000000));
+
+	mCurFrameTimestamp = (int64_t)systemTime();
 
 	if (mLastZoom != mNewZoom)
 	{
