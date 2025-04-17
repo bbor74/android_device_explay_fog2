@@ -819,30 +819,27 @@ bool CallbackNotifier::takePicture(const void* frame, bool is_continuous)
 		return false;
 	}
 
-//	if (src_format == V4L2_PIX_FMT_YVU420)
-//	{
-//		LOGD("%s: src_format: V4L2_PIX_FMT_YVU420", __FUNCTION__);
-		// it will be used in cts
-
-	scaler((unsigned char*)src_addr_vir, (unsigned char*)cam_buff_copy->data,
-					ALIGN_16B(src_width), src_height,
-					mPictureWidth, mPictureHeight, /*src_format*/0, 16);
-//	}
-
-//	LOGD("src_format: %d ", src_format);
-//	if (src_format == V4L2_PIX_FMT_NV12)
-//	{
-//		LOGD("%s: src_format: V4L2_PIX_FMT_NV12", __FUNCTION__);
-//		NV12ToYVU420((void*)src_addr_vir, (void*)src_addr_vir_copy->data, ALIGN_16B(src_width), src_height);
-//	}
-//	else if(src_format == V4L2_PIX_FMT_NV21)
-//	{
-//		LOGD("%s: src_format: V4L2_PIX_FMT_NV21", __FUNCTION__);
-//		NV21ToYVU420((void*)src_addr_vir, (void*)src_addr_vir_copy->data, ALIGN_16B(src_width), src_height);
-//	}
-//	scaler((unsigned char*)src_addr_vir_copy->data/* src*/, (unsigned char*)cam_buff_copy->data/*dest*/,
+//	scaler((unsigned char*)src_addr_vir/* src*/, (unsigned char*)cam_buff_copy->data/*dest*/,
 //					ALIGN_16B(src_width), src_height,
-//					mPictureWidth, mPictureHeight, 0, 16);
+//					mPictureWidth, mPictureHeight, /*src_format*/0, 16);
+
+	yuv420spDownScale((void*)src_addr_vir, cam_buff_copy->data,
+						ALIGN_16B(src_width), src_height,
+						mPictureWidth, mPictureHeight);
+
+	if (src_format == V4L2_PIX_FMT_NV12)
+	{
+		// NV12 <--> NV21
+		formatToNV21(cam_buff_copy->data,//dst
+					cam_buff_copy->data,//src
+					mPictureWidth,
+					mPictureHeight,
+					ALIGN_16B(mPictureWidth),
+					0,
+					2,
+					ALIGN_16B(mPictureWidth) * mPictureHeight * 3/2,
+					src_format);
+	}
 
 	// Receive and convert to jpeg internaly, without using privative app
 	uint32_t jpegSize = 0;
