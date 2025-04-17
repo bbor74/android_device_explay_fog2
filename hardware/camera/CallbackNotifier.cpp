@@ -634,49 +634,23 @@ void CallbackNotifier::onNextFrameSW(const void* frame)
 				LOGE("%s: Memory failure in CAMERA_MSG_PREVIEW_FRAME", __FUNCTION__);
 				return;
 			}
-			if (src_format == V4L2_PIX_FMT_YVU420)
+
+			yuv420spDownScale((void*)src_addr_vir, cam_buff->data,
+								ALIGN_16B(src_width), src_height,
+								mCBWidth, mCBHeight);
+
+	        if (src_format == V4L2_PIX_FMT_NV12)
 			{
-				// it will be used in cts
-				scaler((unsigned char*)src_addr_vir, (unsigned char*)cam_buff->data, 
-									ALIGN_16B(src_width), src_height,
-									mCBWidth, mCBHeight, /*src_format*/0, 16);
-			}
-			else
-			{
-		    	framesize = ALIGN_16B(src_width) * src_height * 3/2;
-				camera_memory_t* src_addr_vir_copy = mGetMemoryCB(-1, framesize, 1, NULL);
-				if (NULL == src_addr_vir_copy 
-				|| NULL == src_addr_vir_copy->data) 
-				{
-					LOGE("%s: Memory failure in CAMERA_MSG_PREVIEW_FRAME", __FUNCTION__);
-					return;
-				}
-
-				framesize = mCBWidth * mCBHeight * 3/2;
-	        	camera_memory_t* cam_buff_copy = mGetMemoryCB(-1, framesize, 1, NULL);
-				if (NULL == cam_buff_copy 
-				|| NULL == cam_buff_copy->data) 
-				{
-					LOGE("%s: Memory failure in CAMERA_MSG_PREVIEW_FRAME", __FUNCTION__);
-					return;
-				}
-
-				if (src_format == V4L2_PIX_FMT_NV12)
-				{
-					NV12ToYVU420((void*)src_addr_vir, (void*)src_addr_vir_copy->data, ALIGN_16B(src_width), src_height);
-				}
-				else if(src_format == V4L2_PIX_FMT_NV21)
-				{
-					NV21ToYVU420((void*)src_addr_vir, (void*)src_addr_vir_copy->data, ALIGN_16B(src_width), src_height);
-				}
-				
-				scaler((unsigned char*)src_addr_vir_copy->data, (unsigned char*)cam_buff_copy->data, 
-									ALIGN_16B(src_width), src_height,
-									mCBWidth, mCBHeight, 0, 16);
-				YVU420ToNV21(cam_buff_copy->data, cam_buff->data, mCBWidth, mCBHeight);
-
-				cam_buff_copy->release(cam_buff_copy);
-				src_addr_vir_copy->release(src_addr_vir_copy);
+				// NV12 <--> NV21
+				formatToNV21(cam_buff->data,
+							cam_buff->data,
+							mCBWidth,
+							mCBHeight,
+							ALIGN_16B(mCBWidth),
+							0,
+							2,
+							ALIGN_16B(mCBWidth) * mCBHeight * 3/2,
+							src_format);
 			}
 			
             mDataCB(CAMERA_MSG_PREVIEW_FRAME, cam_buff, 0, NULL, mCallbackCookie);
