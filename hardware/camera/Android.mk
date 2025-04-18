@@ -59,11 +59,11 @@ ifneq ($(filter crane%,$(TARGET_DEVICE)),)
 LOCAL_CFLAGS += -D__SUN4I__
 endif
 
-ifneq ($(filter polaris%,$(TARGET_DEVICE)),)
+ifneq ($(filter fog2,$(TARGET_DEVICE)),)
 LOCAL_CFLAGS += -D__SUN6I__
 endif
 
-ifneq ($(filter polaris%,$(TARGET_DEVICE)),)
+ifneq ($(filter fog2,$(TARGET_DEVICE)),)
 LOCAL_CFLAGS += -D__SUNXI__
 endif
 
