@@ -596,15 +596,19 @@ void CameraHardware::initDefaultParameters()
 	{
 		value = mCameraConfig->supportFocusModeValue();
 		p.set(CameraParameters::KEY_SUPPORTED_FOCUS_MODES, value);
+		LOGV("supportFocusModeValue: [%s] %s", CameraParameters::KEY_SUPPORTED_FOCUS_MODES, value);
 		value = mCameraConfig->defaultFocusModeValue();
 		p.set(CameraParameters::KEY_FOCUS_MODE, value);
+		LOGV("defaultFocusModeValue: [%s] %s", CameraParameters::KEY_FOCUS_MODE, value);
 		p.set(CameraParameters::KEY_MAX_NUM_FOCUS_AREAS,"1");
 	}
 	else
 	{
 		// add for CTS
 		p.set(CameraParameters::KEY_SUPPORTED_FOCUS_MODES, CameraParameters::FOCUS_MODE_FIXED);
+		LOGV("supportFocusModeValue: [%s] %s", CameraParameters::KEY_SUPPORTED_FOCUS_MODES, CameraParameters::FOCUS_MODE_FIXED);
 		p.set(CameraParameters::KEY_FOCUS_MODE, CameraParameters::FOCUS_MODE_FIXED);
+		LOGV("defaultFocusModeValue: [%s] %s", CameraParameters::KEY_FOCUS_MODE, CameraParameters::FOCUS_MODE_FIXED);
 	}
 	p.set(CameraParameters::KEY_FOCUS_AREAS, "(0,0,0,0,0)");
 	p.set(CameraParameters::KEY_FOCAL_LENGTH, "3.43");
