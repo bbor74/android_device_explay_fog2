@@ -763,6 +763,13 @@ COMMOM_PARAMS:
 	// take picture in video mode
 	p.set(CameraParameters::KEY_VIDEO_SNAPSHOT_SUPPORTED, "true");
 
+	//init keys added for AWGallery
+	p.set(KEY_CONTINUOUS_PICTURE_PATH, "");
+	//p.set("is_continuous_picture_fast", "false");
+	p.set(KEY_SNAP_PATH, "");
+	p.set(KEY_PICTURE_MODE, "normal");
+	p.set(KEY_CANCEL_CONTINUOUS_PICTURE, "false");
+
 	mParameters = p;
 
 	mFirstSetParameters = true;
@@ -2177,6 +2184,8 @@ status_t CameraHardware::cleanupCamera()
 
 	mParameters.set(KEY_SNAP_PATH, "");
 	mCallbackNotifier.setSnapPath("");
+
+	mParameters.set(KEY_PICTURE_MODE, "normal");
 
 	// reset preview format to yuv420sp
 	mParameters.set(CameraParameters::KEY_PREVIEW_FORMAT, CameraParameters::PIXEL_FORMAT_YUV420SP);
