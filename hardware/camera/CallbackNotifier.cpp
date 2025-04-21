@@ -34,8 +34,10 @@ static const char* lCameraMessages[] =
     "CAMERA_MSG_COMPRESSED_IMAGE",
     "CAMERA_MSG_RAW_IMAGE_NOTIFY",
     "CAMERA_MSG_PREVIEW_METADATA",
+    "CAMERA_MSG_FOCUS_MOVE",
+    "CAMERA_MSG_STATS_DATA",
+    "CAMERA_MSG_META_DATA",
     "CAMERA_MSG_CONTINUOUSSNAP",
-    "CAMERA_MSG_SNAP"
     "CAMERA_MSG_SNAP_THUMB"
 };
 static const int lCameraMessagesNum = sizeof(lCameraMessages) / sizeof(char*);

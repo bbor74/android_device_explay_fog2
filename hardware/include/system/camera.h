@@ -88,10 +88,12 @@ enum {
     // Notify on autofocus start and stop. This is useful in continuous
     // autofocus - FOCUS_MODE_CONTINUOUS_VIDEO and FOCUS_MODE_CONTINUOUS_PICTURE.
     CAMERA_MSG_FOCUS_MOVE = 0x0800,       // notifyCallback
-    CAMERA_MSG_CONTINUOUSSNAP= 0x1000,    //notifyCallback for continuous snap by fuqiang
-    CAMERA_MSG_SNAP= 0x2000,    //notifyCallback of setting camera idle  for single snap by fuqiang
-    CAMERA_MSG_SNAP_THUMB= 0x4000,    //notifyCallback of saving thumb for single snap by fuqiang
-    CAMERA_MSG_SNAP_FD= 0x8000,    //notifyCallback of requesting fd for single and continuoussnap by fuqiang
+    CAMERA_MSG_STATS_DATA = 0x1000,
+    CAMERA_MSG_META_DATA = 0x2000,
+    CAMERA_MSG_CONTINUOUSSNAP= 0x4000,    //notifyCallback for continuous snap by fuqiang
+    //CAMERA_MSG_SNAP= 0x2000,    //notifyCallback of setting camera idle  for single snap by fuqiang
+    CAMERA_MSG_SNAP_THUMB= 0x8000,    //notifyCallback of saving thumb for single snap by fuqiang
+    //CAMERA_MSG_SNAP_FD= 0x8000,    //notifyCallback of requesting fd for single and continuoussnap by fuqiang
     CAMERA_MSG_ALL_MSGS = 0xFFFF
 };
 
