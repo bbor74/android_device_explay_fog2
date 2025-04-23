@@ -15,7 +15,9 @@
 
 #include <videodev2.h>
 #include <camera/CameraParameters.h>
+#ifdef SUPPORT_FACE_DETECTION
 #include <FaceDetectionApi.h>
+#endif
 
 #include "V4L2CameraDevice.h"
 #include "PreviewWindow.h"
@@ -435,7 +437,9 @@ protected:
 
 	char							mCallingProcessName[128];
 
+#ifdef SUPPORT_FACE_DETECTION
 	FaceDetectionDev *				mFaceDetection;
+#endif
 	
 	Rect							mFrameRectCrop;		// current frame buffer crop for focus
 	char							mFocusAreasStr[32];

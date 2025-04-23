@@ -42,6 +42,7 @@ static void PrintParamDiff(const CameraParameters& current, const char* new_par)
  */
 static char* AddValue(const char* param, const char* val);
 
+#ifdef SUPPORT_FACE_DETECTION
 static int faceNotifyCb(int cmd, void * data, void * user)
 {
 	CameraHardware* camera_hw = (CameraHardware *)user;
@@ -72,6 +73,7 @@ static int faceNotifyCb(int cmd, void * data, void * user)
 	
 	return 0;
 }
+#endif
 
 // Parse string like "640x480" or "10000,20000"
 static int parse_pair(const char *str, int *first, int *second, char delim,
@@ -112,7 +114,6 @@ CameraHardware::CameraHardware(struct hw_module_t* module, CCameraConfig* pCamer
           mVideoCaptureWidth(0),
           mVideoCaptureHeight(0),
           mUseHwEncoder(false),
-          mFaceDetection(NULL),
           mFocusStatus(FOCUS_STATUS_IDLE),
           mIsSingleFocus(false),
           mOriention(0),
@@ -123,6 +124,10 @@ CameraHardware::CameraHardware(struct hw_module_t* module, CCameraConfig* pCamer
      * Initialize camera_device descriptor for this object.
      */
 	F_LOG;
+
+#ifdef SUPPORT_FACE_DETECTION
+    mFaceDetection = NULL;
+#endif
 
     /* Common header */
     common.tag = HARDWARE_DEVICE_TAG;
@@ -188,11 +193,13 @@ CameraHardware::~CameraHardware()
 
 	OSAL_QueueTerminate(&mQueueCommand);
 
+#ifdef SUPPORT_FACE_DETECTION
 	if (mFaceDetection != NULL)
 	{
-		//DestroyFaceDetectionDev(mFaceDetection);
+		DestroyFaceDetectionDev(mFaceDetection);
 		mFaceDetection = NULL;
 	}
+#endif
 
 	if (mV4L2CameraDevice != NULL)
 	{
@@ -441,6 +448,7 @@ bool CameraHardware::commandThread()
 			}
         	break;
 		}
+#ifdef SUPPORT_FACE_DETECTION
 		case CMD_QUEUE_START_FACE_DETECTE:
 		{
 			int width = 0, height = 0;
@@ -471,7 +479,7 @@ bool CameraHardware::commandThread()
 			if (mFaceDetection != 0)
 			{
 				LOGV("start facedetection size: %dx%d", width, height);
-				//mFaceDetection->ioctrl(mFaceDetection, FACE_OPS_CMD_START, width, height);
+				mFaceDetection->ioctrl(mFaceDetection, FACE_OPS_CMD_START, width, height);
 			}
 			else
 			{
@@ -484,7 +492,7 @@ bool CameraHardware::commandThread()
 			LOGV("CMD_QUEUE_STOP_FACE_DETECTE");
 			if (mFaceDetection != 0)
 			{
-				//mFaceDetection->ioctrl(mFaceDetection, FACE_OPS_CMD_STOP, 0, 0);
+				mFaceDetection->ioctrl(mFaceDetection, FACE_OPS_CMD_STOP, 0, 0);
 			}
 			else
 			{
@@ -492,6 +500,7 @@ bool CameraHardware::commandThread()
 			}
 			break;
 		}
+#endif
 		case CMD_QUEUE_TAKE_PICTURE:
 		{
 			LOGV("CMD_QUEUE_TAKE_PICTURE");
@@ -541,7 +550,8 @@ status_t CameraHardware::Initialize()
 	getCallingProcessName(mCallingProcessName);
 	mCallbackNotifier.setCallingProcess(mCallingProcessName);
 
-	/**if (mFaceDetection == NULL)
+#ifdef SUPPORT_FACE_DETECTION
+	if (mFaceDetection == NULL)
 	{
 		// create FaceDetection object
 		CreateFaceDetectionDev(&mFaceDetection);
@@ -553,8 +563,8 @@ status_t CameraHardware::Initialize()
 	}
 
 	mFaceDetection->ioctrl(mFaceDetection, FACE_OPS_CMD_REGISTE_USER, (int)this, 0);
-	mFaceDetection->setCallback(mFaceDetection, faceNotifyCb);*/
-
+	mFaceDetection->setCallback(mFaceDetection, faceNotifyCb);
+#endif
 	initDefaultParameters();
 
     return NO_ERROR;
@@ -2209,6 +2219,7 @@ status_t CameraHardware::sendCommand(int32_t cmd, int32_t arg1, int32_t arg2)
 		mUseHwEncoder = true;
 		mV4L2CameraDevice->setHwEncoder(true);
 		return OK;
+#ifdef SUPPORT_FACE_DETECTION
 	case CAMERA_CMD_START_FACE_DETECTION:
 	{
 		const char *face = mParameters.get(CameraParameters::KEY_MAX_NUM_DETECTED_FACES_HW);
@@ -2226,6 +2237,7 @@ status_t CameraHardware::sendCommand(int32_t cmd, int32_t arg1, int32_t arg2)
 		OSAL_Queue(&mQueueCommand, &mQueueElement[CMD_QUEUE_STOP_FACE_DETECTE]);
 		pthread_cond_signal(&mCommandCond);
 		return OK;
+#endif
 	case CAMERA_CMD_PING:
 		return OK;
 	case CAMERA_CMD_ENABLE_FOCUS_MOVE_MSG:
@@ -2265,6 +2277,7 @@ status_t CameraHardware::dumpCamera(int fd)
  * Facedetection management
  ***************************************************************************/
 
+#ifdef SUPPORT_FACE_DETECTION
 int CameraHardware::getCurrentFaceFrame(void * frame)
 {
 	return mV4L2CameraDevice->getCurrentFaceFrame(frame);
@@ -2292,6 +2305,7 @@ int CameraHardware::faceDetection(camera_frame_metadata_t *face)
 	}
 	return mCallbackNotifier.faceDetectionMsg(face);
 }
+#endif
 
 /****************************************************************************
  * Preview management.
