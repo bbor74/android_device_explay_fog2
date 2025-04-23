@@ -497,8 +497,20 @@ void CameraHardware::initDefaultParameters()
     p.set(CameraHardware::ORIENTATION_KEY, mHalCameraInfo.orientation);
 
 	// exif Make and Model
-	mCallbackNotifier.setExifMake(mCameraConfig->getExifMake());
-	mCallbackNotifier.setExifModel(mCameraConfig->getExifModel());
+	char property[PROPERTY_VALUE_MAX];
+	if (property_get("ro.product.manufacturer", property, NULL) > 0)
+	{
+		mCallbackNotifier.setExifMake(property);
+	} else {
+		mCallbackNotifier.setExifMake(mCameraConfig->getExifMake());
+	}
+
+	if (property_get("ro.product.model", property, NULL) > 0)
+	{
+		mCallbackNotifier.setExifModel(property);
+	} else {
+		mCallbackNotifier.setExifModel(mCameraConfig->getExifModel());
+	}
 
 	LOGD("........................... to do initDefaultParameters");
 	// for USB camera
