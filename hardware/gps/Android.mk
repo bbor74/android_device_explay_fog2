@@ -32,6 +32,7 @@ LOCAL_MODULE := gps.$(TARGET_BOARD_PLATFORM)
 LOCAL_MODULE_TAGS := optional
 
 LOCAL_SHARED_LIBRARIES := \
+	libutils \
 	libcutils
 ##
 

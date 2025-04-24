@@ -26,6 +26,7 @@
 #include <time.h>
 
 #define  LOG_TAG  "fakegps"
+#include <utils/Timers.h>
 #include <cutils/log.h>
 #include <cutils/sockets.h>
 #include <cutils/properties.h>
@@ -79,6 +80,8 @@ static inline void updateFix()
     fix.latitude = getFloatProperty("hw.fakegps.latitude");
     fix.longitude = getFloatProperty("hw.fakegps.longitude");
     fix.altitude = getFloatProperty("hw.fakegps.altitude");
+    fix.timestamp = (long long)systemTime(SYSTEM_TIME_MONOTONIC);
+
     ALOGD("latitude=%f, longitude=%f, altitude=%f",
          fix.latitude,
          fix.longitude,
