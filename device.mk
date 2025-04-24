@@ -25,9 +25,16 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PROPERTY_OVERRIDES += \
 	config.disable_bluetooth=true
 
+# FakeGPS location/settings
+PRODUCT_PROPERTY_OVERRIDES += \
+	hw.fakegps.latitude=55.085754 \
+	hw.fakegps.longitude=38.770379 \
+	hw.fakegps.altitude=310.0
+
 # HAL
 PRODUCT_PACKAGES += \
    camera.polaris \
+   gps.polaris \
    hwcomposer.polaris
 
 # Ramdisk
