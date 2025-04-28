@@ -1,0 +1,40 @@
+From 77235e9d7b14a795ba02ad8b735ef3182ffef7b8 Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Mon, 28 Apr 2025 17:23:45 +0400
+Subject: [PATCH] Fix the provider identification error
+
+* W/CameraMetadataJV( 1692): setGpsLocation - No process method, Location is not from a GPS or NETWORKprovider
+
+Change-Id: Ied9c2efbd55fa464dfed260212a67113c2a3300b
+---
+ .../hardware/camera2/impl/CameraMetadataNative.java | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/core/java/android/hardware/camera2/impl/CameraMetadataNative.java b/core/java/android/hardware/camera2/impl/CameraMetadataNative.java
+index f47ce793d03..70fd607f513 100644
+--- a/core/java/android/hardware/camera2/impl/CameraMetadataNative.java
++++ b/core/java/android/hardware/camera2/impl/CameraMetadataNative.java
+@@ -233,14 +233,13 @@ public class CameraMetadataNative implements Parcelable {
+         if (provider == null) {
+             return null;
+         }
+-        switch(provider) {
+-            case LocationManager.GPS_PROVIDER:
+-                return GPS_PROCESS;
+-            case LocationManager.NETWORK_PROVIDER:
+-                return CELLID_PROCESS;
+-            default:
+-                return null;
++        if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
++            return GPS_PROCESS;
++        }
++        if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
++            return CELLID_PROCESS;
+         }
++        return null;
+     }
+ 
+     private static String translateProcessToLocationProvider(final String process) {
+-- 
+2.17.1
+
