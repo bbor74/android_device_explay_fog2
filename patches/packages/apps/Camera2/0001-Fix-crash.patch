@@ -1,0 +1,56 @@
+From 757b9a6e8d6123ead288288a6993b2434e01722b Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Mon, 28 Apr 2025 17:29:18 +0400
+Subject: [PATCH 1/2] Fix crash
+
+V/CAM_CameraController( 1147): onCameraOpened
+V/CAM_CameraActivity( 1147): onCameraOpened
+D/AndroidRuntime( 1147): Shutting down VM
+
+Change-Id: I8af379d035c0ec00bafd764931f1a735ed814c37
+--------- beginning of crash
+E/AndroidRuntime( 1147): FATAL EXCEPTION: main
+E/AndroidRuntime( 1147): Process: com.android.camera2, PID: 1147
+E/AndroidRuntime( 1147): java.lang.NullPointerException: camera must not be null
+E/AndroidRuntime( 1147): 	at com.android.ex.camera2.portability.AndroidCamera2Settings.<init>(AndroidCamera2Settings.java:82)
+E/AndroidRuntime( 1147): 	at com.android.ex.camera2.portability.AndroidCamera2AgentImpl$Camera2Handler.buildSettings(AndroidCamera2AgentImpl.java:672)
+E/AndroidRuntime( 1147): 	at com.android.ex.camera2.portability.AndroidCamera2AgentImpl$AndroidCamera2ProxyImpl.getSettings(AndroidCamera2AgentImpl.java:1210)
+E/AndroidRuntime( 1147): 	at com.android.camera.CameraActivity.resetExposureCompensationToDefault(CameraActivity.java:547)
+E/AndroidRuntime( 1147): 	at com.android.camera.CameraActivity.onCameraOpened(CameraActivity.java:535)
+E/AndroidRuntime( 1147): 	at com.android.camera.app.CameraController.onCameraOpened(CameraController.java:168)
+E/AndroidRuntime( 1147): 	at com.android.ex.camera2.portability.CameraAgent$CameraOpenCallbackForward$1.run(CameraAgent.java:116)
+E/AndroidRuntime( 1147): 	at android.os.Handler.handleCallback(Handler.java:739)
+E/AndroidRuntime( 1147): 	at android.os.Handler.dispatchMessage(Handler.java:95)
+E/AndroidRuntime( 1147): 	at android.os.Looper.loop(Looper.java:135)
+E/AndroidRuntime( 1147): 	at android.app.ActivityThread.main(ActivityThread.java:5294)
+E/AndroidRuntime( 1147): 	at java.lang.reflect.Method.invoke(Native Method)
+E/AndroidRuntime( 1147): 	at java.lang.reflect.Method.invoke(Method.java:372)
+E/AndroidRuntime( 1147): 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:904)
+E/AndroidRuntime( 1147): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:699)
+---
+ src/com/android/camera/app/CameraController.java | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/src/com/android/camera/app/CameraController.java b/src/com/android/camera/app/CameraController.java
+index c6f5d62e9..f9623ff8c 100644
+--- a/src/com/android/camera/app/CameraController.java
++++ b/src/com/android/camera/app/CameraController.java
+@@ -158,7 +158,14 @@ public class CameraController implements CameraAgent.CameraOpenCallback, CameraP
+ 
+     @Override
+     public void onCameraOpened(CameraAgent.CameraProxy camera) {
+-        Log.v(TAG, "onCameraOpened");
++        Log.v(TAG, "onCameraOpened: Sleep 500");
++
++        try {
++            Thread.sleep(500);
++        } catch (Exception e) {
++            Log.v(TAG, "Got exception onCameraOpened", e);
++        }
++
+         if (mRequestingCameraId != camera.getCameraId()) {
+             return;
+         }
+-- 
+2.17.1
+
