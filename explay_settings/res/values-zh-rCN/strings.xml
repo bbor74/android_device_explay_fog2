@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<resources>
+    <string name="app_name">高级设置</string>
+    <string name="reboot_needed">请重启使设置生效。</string>
+    <string name="fail">未知错误。</string>
+</resources>

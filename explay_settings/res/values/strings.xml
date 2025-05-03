@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<resources>
+    <string name="app_name">Advanced settings</string>
+    <string name="reboot_needed">Please, reboot to apply changes.</string>
+    <string name="fail">Unknown error.</string>
+
+    <string name="fakegps_category">fakegps</string>
+    <string name="fakegps_latitude">Latitude</string>
+    <string name="fakegps_hint">nothing</string>
+    <string name="fakegps_longitude">Longitude</string>
+    <string name="fakegps_hint2">nothing</string>
+    <string name="fakegps_altitude">Altitude</string>
+    <string name="fakegps_hint3">nothing</string>
+</resources>

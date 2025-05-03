@@ -31,6 +31,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	hw.fakegps.longitude=38.770379 \
 	hw.fakegps.altitude=310.0
 
+PRODUCT_PACKAGES += explay_settings
+
 # HAL
 PRODUCT_PACKAGES += \
    camera.polaris \

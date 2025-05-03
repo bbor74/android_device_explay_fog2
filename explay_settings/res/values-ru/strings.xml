@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<resources>
+    <string name="app_name">Дополнительно</string>
+    <string name="reboot_needed">Перезагрузите телефон для применения настроек.</string>
+    <string name="fail">Неизвестная ошибка.</string>
+
+    <string name="fakegps_category">fakegps</string>
+    <string name="fakegps_latitude">Широта</string>
+    <string name="fakegps_hint">ничего</string>
+    <string name="fakegps_longitude">Долгота</string>
+    <string name="fakegps_hint2">ничего</string>
+    <string name="fakegps_altitude">Высота</string>
+    <string name="fakegps_hint3">ничего</string>
+</resources>

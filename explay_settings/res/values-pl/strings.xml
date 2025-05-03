@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<resources>
+    <string name="app_name">Ustawienia zaawansowane</string>
+    <string name="reboot_needed">Proszę uruchomić ponownie aby zastosować zmiany.</string>
+    <string name="fail">Nieznany błąd.</string>
+</resources>
