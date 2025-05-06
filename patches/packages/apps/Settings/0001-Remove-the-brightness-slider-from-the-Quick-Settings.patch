@@ -1,0 +1,27 @@
+From 54a0df46a7d33366023aeb555b0994ceba965f93 Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Tue, 6 May 2025 17:09:17 +0400
+Subject: [PATCH] Remove the brightness slider from the Quick Settings panel,
+ by default (2/2)
+
+Change-Id: Icaf61f5d179e6db949ab8ee554933aeed4930f46
+---
+ res/xml/notification_drawer_settings.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/res/xml/notification_drawer_settings.xml b/res/xml/notification_drawer_settings.xml
+index fd0f103eb..2268df9ef 100644
+--- a/res/xml/notification_drawer_settings.xml
++++ b/res/xml/notification_drawer_settings.xml
+@@ -55,7 +55,7 @@
+         <com.android.settings.cyanogenmod.CMSecureSettingSwitchPreference
+             android:key="qs_show_brightness_slider"
+             android:title="@string/qs_brightness_slider_title"
+-            android:defaultValue="true"/>
++            android:defaultValue="false"/>
+ 
+         <com.android.settings.cyanogenmod.SecureSettingSwitchPreference
+             android:key="qs_location_advanced"
+-- 
+2.17.1
+
