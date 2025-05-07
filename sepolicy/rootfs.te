@@ -1,0 +1,2 @@
+#============= rootfs ==============
+allow rootfs labeledfs:filesystem associate;

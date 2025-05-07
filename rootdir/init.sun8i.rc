@@ -1,0 +1,62 @@
+import init.sun8i.usb.rc
+
+on init
+
+	insmod /nand.ko
+
+	mkdir /databk 0700 root  system
+
+on early-fs
+	mount_all /fstab.sun8i
+	setprop ro.crypto.fuse_sdcard true
+	insmod /system/vendor/modules/disp.ko
+	insmod /system/vendor/modules/lcd.ko
+	insmod /system/vendor/modules/mali.ko
+	
+on post-fs-data
+	mkdir /data/media 0770 media_rw media_rw
+	#mkdir /mnt/media/sdcard 0770 media_rw media_rw
+
+on fs
+
+
+
+#csi module
+	insmod /system/vendor/modules/videobuf-core.ko
+	insmod /system/vendor/modules/videobuf-dma-contig.ko
+	insmod /system/vendor/modules/cam_detect.ko
+#	insmod /system/vendor/modules/actuator.ko
+#	insmod /system/vendor/modules/ad5820_act.ko
+	insmod /system/vendor/modules/cci.ko
+	insmod /system/vendor/modules/vfe_os.ko
+	insmod /system/vendor/modules/vfe_subdev.ko
+	insmod_modules camera
+#	insmod /system/vendor/modules/gc0308.ko
+#	insmod /system/vendor/modules/gc2035.ko
+	insmod /system/vendor/modules/vfe_v4l2.ko
+
+#insmod tp and keyboard gsensor 
+#	insmod /system/vendor/modules/sw-device.ko
+	insmod /system/vendor/modules/inet_ctp.ko
+#	insmod /system/vendor/modules/ft5x02.ko
+	insmod /system/vendor/modules/ft5x_ts.ko
+	insmod /system/vendor/modules/ft5402.ko
+	insmod /system/vendor/modules/gslX680new.ko
+	insmod /system/vendor/modules/gslX680.ko
+	insmod /system/vendor/modules/gt9xxf_ts.ko
+	insmod /system/vendor/modules/gt9xx_ts.ko
+	insmod /system/vendor/modules/sunxi-keyboard.ko
+	insmod /system/vendor/modules/bma250.ko
+	insmod /system/vendor/modules/lsm330_acc.ko
+	insmod /system/vendor/modules/lsm330_gyr.ko
+	
+#inet_recovery
+	insmod /system/vendor/modules/inet_recover.ko
+
+
+#insmod usb ethernet
+	insmod /system/vendor/modules/asix.ko
+	insmod /system/vendor/modules/qf9700.ko
+	insmod /system/vendor/modules/mcs7830.ko
+	insmod /system/vendor/modules/rtl8150.ko
+

@@ -1,0 +1,3 @@
+#============= kernel ==============
+allow kernel device:blk_file { getattr create setattr unlink };
+allow kernel self:capability mknod;
