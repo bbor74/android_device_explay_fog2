@@ -56,6 +56,8 @@ TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_EGL_CFG := $(LOCAL_PATH)/_prebuilt/system/lib/egl/egl.cfg
 USE_OPENGL_RENDERER := true
 
+BOARD_USE_LEGACY_TOUCHSCREEN := true
+
 # TWRP recovery
 TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
 TW_THEME := landscape_mdpi
