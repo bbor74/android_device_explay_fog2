@@ -12,3 +12,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
 	$(call find-copy-subdir-files,*,$(LOCAL_PATH)/_prebuilt/system/vendor/modules,system/vendor/modules)
 
+# Touchscreens
+PRODUCT_COPY_FILES += \
+	$(call find-copy-subdir-files,*,$(LOCAL_PATH)/_prebuilt/system/usr/idc,system/usr/idc)
+
