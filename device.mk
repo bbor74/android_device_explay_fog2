@@ -5,6 +5,17 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 
+
+#egl
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/_prebuilt/system/lib/egl/egl.cfg:system/lib/egl/egl.cfg \
+    $(LOCAL_PATH)/_prebuilt/system/lib/hw/gralloc.sun8i.so:system/lib/hw/gralloc.sun8i.so \
+    $(LOCAL_PATH)/_prebuilt/system/lib/egl/libEGL_mali.so:system/lib/egl/libEGL_mali.so \
+    $(LOCAL_PATH)/_prebuilt/system/lib/egl/libGLESv1_CM_mali.so:system/lib/egl/libGLESv1_CM_mali.so \
+    $(LOCAL_PATH)/_prebuilt/system/lib/egl/libGLESv2_mali.so:system/lib/egl/libGLESv2_mali.so \
+    $(LOCAL_PATH)/_prebuilt/system/lib/libMali.so:system/lib/libMali.so \
+    $(LOCAL_PATH)/_prebuilt/system/lib/libion.so:system/lib/libion.so
+
 # Ramdisk
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/fstab.sun8i:root/fstab.sun8i \
