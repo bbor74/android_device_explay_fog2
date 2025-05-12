@@ -7,6 +7,7 @@ PRODUCT_RELEASE_NAME := Polaris
 $(call inherit-product, vendor/cm/config/common_full_tablet_wifionly.mk)
 $(call inherit-product, frameworks/native/build/tablet-dalvik-heap.mk)
 $(call inherit-product, device/explay/fog2/device.mk)
+$(call inherit-product, device/explay/fog2/cm_fog2-blobs.mk)
 
 # Boot animation
 TARGET_SCREEN_HEIGHT := 480
