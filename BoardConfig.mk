@@ -83,6 +83,10 @@ TW_MAX_BRIGHTNESS := 255
 TW_DEFAULT_LANGUAGE := ru
 TW_DEVICE_VERSION := by bbor74 
 
+# Bluetooth Configuration
+BOARD_HAVE_BLUETOOTH := false
+BOARD_HAVE_BLUETOOTH_BCM := false
+
 # TWRP_INCLUDE_LOGCAT := true
 # TARGET_USES_LOGD := true
 
