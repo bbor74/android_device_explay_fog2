@@ -1,8 +1,6 @@
 
 LOCAL_PATH := device/explay/fog2
 
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
-
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
