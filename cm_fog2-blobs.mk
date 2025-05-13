@@ -16,3 +16,8 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
 	$(call find-copy-subdir-files,*,$(LOCAL_PATH)/_prebuilt/system/usr/idc,system/usr/idc)
 
+# Sensors
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/_prebuilt/system/lib/hw/sensors.polaris.so:system/lib/hw/sensors.polaris.so \
+	$(LOCAL_PATH)/_prebuilt/system/usr/gsensor.cfg:system/usr/gsensor.cfg \
+	$(LOCAL_PATH)/_prebuilt/system/bin/sensors.sh:system/bin/sensors.sh
