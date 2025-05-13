@@ -21,3 +21,15 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/_prebuilt/system/lib/hw/sensors.polaris.so:system/lib/hw/sensors.polaris.so \
 	$(LOCAL_PATH)/_prebuilt/system/usr/gsensor.cfg:system/usr/gsensor.cfg \
 	$(LOCAL_PATH)/_prebuilt/system/bin/sensors.sh:system/bin/sensors.sh
+
+# Media files
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/_prebuilt/system/etc/audio_effects.conf:system/etc/audio_effects.conf \
+    $(LOCAL_PATH)/_prebuilt/system/etc/audio_policy.conf:system/etc/audio_policy.conf \
+    $(LOCAL_PATH)/_prebuilt/system/etc/phone_volume.conf:system/etc/phone_volume.conf \
+    $(LOCAL_PATH)/_prebuilt/system/etc/media_codecs.xml:system/etc/media_codecs.xml \
+    $(LOCAL_PATH)/_prebuilt/system/lib/hw/audio.primary.polaris.so:system/lib/hw/audio.primary.polaris.so \
+    $(LOCAL_PATH)/_prebuilt/system/lib/libcodec_audio.so:system/lib/libcodec_audio.so \
+    $(LOCAL_PATH)/_prebuilt/system/lib/libtinyalsa.so:system/lib/libtinyalsa.so \
+    $(LOCAL_PATH)/_prebuilt/system/lib/libril_audio.so:system/lib/libril_audio.so
+
