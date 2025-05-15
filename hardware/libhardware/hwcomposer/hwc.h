@@ -5,7 +5,7 @@
 #include <hardware/hwcomposer.h>
 #include "gralloc_priv.h"
 #include <drv_display.h>
-#include <fb.h>
+//#include <fb.h>
 
 #include <fcntl.h>
 #include <errno.h>
@@ -84,7 +84,10 @@ typedef struct
     int                 time_stamp;
     int                 show_black[2];
 
+#if SUPPORT_FEATURE_3D
     __display_3d_mode   cur_3d_mode[2];
+#endif
+
     int                 hint_hdmi_mode;// 4:720p50, 5:720p60, 8:1080p24, 9:1080p50, 10:1080p60, 255:auto
 
     void*               pvPrivateData;
@@ -116,9 +119,19 @@ extern int  get_height_from_mode(int mode);
 extern void *VsyncThreadWrapper(void *priv);
 extern int hwcdev_generate_private_data(SUNXI_hwcdev_context_t *ctx);
 extern int hwcdev_free_private_data(SUNXI_hwcdev_context_t *ctx);
+#ifdef DISPLAY_CMD_SET3DMODE
 extern int _hwc_device_set_3d_mode(int disp, __display_3d_mode mode);
+#endif
+#ifdef DISPLAY_CMD_SETBACKLIGHTMODE
 extern int _hwc_device_set_backlight_mode(int disp, int mode);
+#endif
+#ifdef DISPLAY_CMD_SETBACKLIGHTDEMOMODE
 extern  int _hwc_device_set_backlight_demomode(int disp, int mode);
+#endif
+#ifdef DISPLAY_CMD_SETDISPLAYENHANCEMODE
 extern int _hwc_device_set_enhancemode(int disp, int mode);
+#endif
+#ifdef DISPLAY_CMD_SETDISPLAYENHANCEDEMOMODE
 extern int _hwc_device_set_enhancedemomode(int disp, int mode);
+#endif
 #endif

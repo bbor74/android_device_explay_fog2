@@ -206,9 +206,11 @@ static int hwc_hdmi_switch(void)
         if(ctx->hdmi_hpd)
         {
             __disp_tv_mode_t hdmi_mode;
+#if SUPPORT_FEATURE_3D
             if(ctx->cur_3d_mode[1] == DISPLAY_3D_LEFT_RIGHT_HDMI || ctx->cur_3d_mode[1] == DISPLAY_3D_TOP_BOTTOM_HDMI)
                 hdmi_mode = DISP_TV_MOD_1080P_24HZ_3D_FP;
             else
+#endif
                 hdmi_mode = get_suitable_hdmi_mode();
             ctx->display_width[1] = get_width_from_mode(hdmi_mode);
             ctx->display_height[1] = get_height_from_mode(hdmi_mode);
