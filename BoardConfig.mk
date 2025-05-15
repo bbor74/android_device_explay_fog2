@@ -52,6 +52,9 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 2013265920
 
 TARGET_USERIMAGES_USE_EXT4 := true
 
+# hardware module include file path
+TARGET_HARDWARE_INCLUDE := $(LOCAL_PATH)/hardware/include
+
 # EGL
 BOARD_EGL_CFG := $(LOCAL_PATH)/_prebuilt/system/lib/egl/egl.cfg
 USE_OPENGL_RENDERER := true

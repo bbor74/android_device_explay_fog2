@@ -19,6 +19,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PROPERTY_OVERRIDES += \
 	config.disable_bluetooth=true
 
+# HAL
+PRODUCT_PACKAGES += \
+   hwcomposer.polaris
+
 # Ramdisk
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/fstab.sun8i:root/fstab.sun8i \
