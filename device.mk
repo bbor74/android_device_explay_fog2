@@ -9,6 +9,11 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/tablet_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml
 
+# wifi features
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
+    frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml
+
 # Audio
 PRODUCT_PACKAGES += \
 	audio.a2dp.default \
@@ -82,6 +87,18 @@ ADDITIONAL_DEFAULT_PROPERTIES += \
     ro.hardware=sun8i
 
 #    persist.sys.usb.config=mtp,adb
+
+# wifi
+PRODUCT_PACKAGES += \
+    libwpa_client \
+    hostapd \
+    dhcpcd.conf \
+    wpa_supplicant
+
+PRODUCT_PROPERTY_OVERRIDES += \
+	wifi.interface=wlan0 \
+	wifi.supplicant_scan_interval=15 \
+	keyguard.no_require_sim=true
 
 # APP CONFIGS
 PRODUCT_CHARACTERISTICS := tablet

@@ -33,3 +33,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/_prebuilt/system/lib/libtinyalsa.so:system/lib/libtinyalsa.so \
     $(LOCAL_PATH)/_prebuilt/system/lib/libril_audio.so:system/lib/libril_audio.so
 
+# WiFi
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/_prebuilt/system/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
+
