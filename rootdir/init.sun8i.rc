@@ -88,7 +88,8 @@ on fs
 	insmod /system/vendor/modules/mcs7830.ko
 	insmod /system/vendor/modules/rtl8150.ko
 
-	insmod /system/vendor/modules/8188eu.ko ifname=wlan0 if2name=p2p0
+	#insmod /system/vendor/modules/8188eu.ko ifname=wlan0 if2name=p2p0
+	insmod /system/vendor/modules/8189es.ko ifname=wlan0 if2name=p2p0
 
 # virtual sdcard daemon running as media_rw (1023)
 service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
