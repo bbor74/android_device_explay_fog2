@@ -37,3 +37,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/_prebuilt/system/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
 
+# Tablet core hardware permissions
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/_prebuilt/system/etc/permissions/tablet_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml
+
