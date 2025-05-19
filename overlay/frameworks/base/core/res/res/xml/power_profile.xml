@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<device name="Android">
+  <!-- All values are in mA except as noted -->
+  <item name="none">0</item>
+  <item name="screen.on">256</item>
+  <item name="screen.full">318</item>
+  <item name="wifi.on">2.9</item>
+  <item name="wifi.active">31.0</item>
+  <item name="wifi.scan">100</item>
+  <item name="dsp.audio">14.1</item>
+  <item name="dsp.video">54.0</item>
+
+  <!-- Different CPU speeds as reported in
+       /sys/devices/system/cpu/cpu0/cpufreq/stats/time_in_state -->  
+  <array name="cpu.speeds">
+      <value>60000</value>  <!-- 60 MHz -->
+      <value>120000</value>  <!-- 120 MHz -->
+      <value>240000</value>  <!-- 240 MHz -->
+      <value>312000</value>  <!-- 312 MHz -->
+      <value>408000</value>  <!-- 408 MHz -->
+      <value>504000</value>  <!-- 504 MHz -->
+      <value>600000</value>  <!-- 600 MHz -->
+      <value>720000</value>  <!-- 720 MHz -->
+      <value>816000</value>  <!-- 816 MHz -->
+      <value>912000</value> <!--  912 MHz -->
+      <value>1008000</value> <!--  1008 MHz -->
+      <value>1104000</value> <!--  1104 MHz -->
+      <value>1200000</value> <!--  1200 MHz -->
+      <value>1248000</value> <!--  1248 MHz -->
+      <value>1296000</value> <!--  1296 MHz -->
+      <value>1440000</value> <!--  1440 MHz -->
+  </array>
+  <!-- Power consumption when CPU is idle -->
+  <item name="cpu.idle">3.8</item>
+  <item name="cpu.awake">54.6</item>
+  <!-- Power consumption at different speeds -->
+  <array name="cpu.active">
+      <value>100</value> <!-- 60 MHz -->
+      <value>106</value> <!-- 120 MHz -->
+      <value>118</value> <!-- 240 MHz -->
+      <value>125</value> <!-- 312 MHz -->
+      <value>135</value> <!-- 408 MHz -->
+      <value>144</value> <!-- 504 MHz -->
+      <value>154</value> <!-- 600 MHz -->
+      <value>166</value> <!-- 720 MHz -->
+      <value>176</value> <!-- 816 MHz -->
+      <value>185</value> <!-- 912 MHz -->
+      <value>195</value> <!-- 1008 MHz -->
+      <value>204</value> <!-- 1104 MHz -->
+      <value>214</value> <!-- 1200 MHz -->
+      <value>219</value> <!-- 1248 MHz -->
+      <value>224</value> <!-- 1296 MHz -->
+      <value>238</value> <!-- 1440 MHz -->
+  </array>
+  <!-- This is the battery capacity in mAh -->
+  <item name="battery.capacity">2300</item>
+</device>
