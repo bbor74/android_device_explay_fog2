@@ -77,9 +77,9 @@ static float getFloatProperty(const char *propName)
 
 static inline void updateFix()
 {
-    fix.latitude = getFloatProperty("hw.fakegps.latitude");
-    fix.longitude = getFloatProperty("hw.fakegps.longitude");
-    fix.altitude = getFloatProperty("hw.fakegps.altitude");
+    fix.latitude = getFloatProperty("persist.fakegps.latitude");
+    fix.longitude = getFloatProperty("persist.fakegps.longitude");
+    fix.altitude = getFloatProperty("persist.fakegps.altitude");
     fix.timestamp = (long long)systemTime(SYSTEM_TIME_MONOTONIC);
 
     ALOGD("latitude=%f, longitude=%f, altitude=%f",

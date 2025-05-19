@@ -27,9 +27,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # FakeGPS location/settings
 PRODUCT_PROPERTY_OVERRIDES += \
-	hw.fakegps.latitude=55.085754 \
-	hw.fakegps.longitude=38.770379 \
-	hw.fakegps.altitude=310.0
+	persist.fakegps.latitude=55.085754 \
+	persist.fakegps.longitude=38.770379 \
+	persist.fakegps.altitude=310.0
 
 PRODUCT_PACKAGES += explay_settings
 

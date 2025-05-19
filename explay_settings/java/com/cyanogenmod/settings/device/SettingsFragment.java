@@ -25,9 +25,9 @@ import java.util.Arrays;
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
     
     private static final String TAG = "explay_settings";
-    private static final String FAKEGPS_LATITUDE_PROPERTY_NAME = "hw.fakegps.latitude";
-    private static final String FAKEGPS_LONGITUDE_PROPERTY_NAME = "hw.fakegps.longitude";
-    private static final String FAKEGPS_ALTITUDE_PROPERTY_NAME = "hw.fakegps.altitude";
+    private static final String FAKEGPS_LATITUDE_PROPERTY_NAME = "persist.fakegps.latitude";
+    private static final String FAKEGPS_LONGITUDE_PROPERTY_NAME = "persist.fakegps.longitude";
+    private static final String FAKEGPS_ALTITUDE_PROPERTY_NAME = "persist.fakegps.altitude";
 
     private static final String FAKEGPS_LATITUDE_DEFAULT = "55.085754";
     private static final String FAKEGPS_LONGITUDE_DEFAULT = "38.770379";
