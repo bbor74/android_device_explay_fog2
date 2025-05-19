@@ -9,7 +9,7 @@
 #else
 #define USE_NEW_MODE
 #endif
-#define USE_ION_MEM_ALLOCATOR
+//#define USE_ION_MEM_ALLOCATOR
 
 #define ALIGN_4K(x) (((x) + (4095)) & ~(4095))
 #define ALIGN_32B(x) (((x) + (31)) & ~(31))
