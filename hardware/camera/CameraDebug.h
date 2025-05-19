@@ -2,12 +2,18 @@
 #define __HAL_CAMERA_DEBUG_H__
 
 #define CAMERA_HAL_VERSION		"3000130327_V1.0"
-
+#ifdef SUPPORT_NEW_DRIVER
+#define CAMERA_DRIVER "NEW"
+#else
+#define CAMERA_DRIVER "OLD"
+#endif
 #define CAMERA_HAL_MODE_OLD		1
 #if	(CAMERA_HAL_MODE_OLD == 1)
 #define USE_OLD_MODE
+#define CAMERA_HAL_MODE "OLD"
 #else
 #define USE_NEW_MODE
+#define CAMERA_HAL_MODE "NEW"
 #endif
 //#define USE_ION_MEM_ALLOCATOR
 

@@ -59,7 +59,7 @@ HALCameraFactory::HALCameraFactory()
 {
 	F_LOG;
 
-	LOGD("camera hal version: %s", CAMERA_HAL_VERSION);
+	LOGD("camera hal version: %s / driver: %s / hal mode: %s", CAMERA_HAL_VERSION, CAMERA_DRIVER, CAMERA_HAL_MODE);
 
     /* Make sure that array is allocated. */
     if (mHardwareCameras == NULL) {
