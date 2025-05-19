@@ -77,6 +77,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
 debug.hwui.render_dirty_regions=false
 
+# Set default player to AwesomePlayer
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.sys.media.use-awesome=true
+
 # Debug
 ADDITIONAL_DEFAULT_PROPERTIES += \
     ro.adb.secure=0 \
