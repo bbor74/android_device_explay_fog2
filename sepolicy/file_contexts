@@ -1,0 +1,8 @@
+# label graphics device with a new type, we need
+# to allow write operation from appdomain
+
+# gpu device labeling
+/dev/mali0              u:object_r:gpu_device:s0
+
+# disp device labeling
+/dev/disp               u:object_r:disp_device:s0

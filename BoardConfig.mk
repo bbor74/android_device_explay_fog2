@@ -121,8 +121,17 @@ BOARD_WLAN_DEVICE := rtl8189es
 # SELinux
 BOARD_SEPOLICY_DIRS += device/explay/fog2/sepolicy
 BOARD_SEPOLICY_UNION += \
+    device.te \
+    file_contexts \
+    healthd.te \
     init.te \
     kernel.te \
     logd.te \
+    mediaserver.te \
+    netd.te \
     recovery.te \
-    rootfs.te
+    rootfs.te \
+    surfaceflinger.te \
+    system_server.te \
+    untrusted_app.te
+

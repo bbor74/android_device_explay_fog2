@@ -1,0 +1,7 @@
+#============= mediaserver ==============
+allow mediaserver cache_file:dir { add_name remove_name write };
+allow mediaserver cache_file:file { create open setattr unlink write };
+
+#============= mediaserver ==============
+allow mediaserver platform_app:dir search;
+allow mediaserver platform_app:file { open read };

@@ -1,0 +1,3 @@
+#============= system_server ==============
+allow system_server disp_device:chr_file { ioctl open read };
+
