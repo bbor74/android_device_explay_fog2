@@ -6,3 +6,5 @@
 
 # disp device labeling
 /dev/disp               u:object_r:disp_device:s0
+
+/dev/rfkill                  u:object_r:rfkill_device:s0

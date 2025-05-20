@@ -1,2 +1,4 @@
 type disp_device, dev_type;
 
+# /dev/rfkill
+type rfkill_device, dev_type;

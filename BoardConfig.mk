@@ -133,5 +133,6 @@ BOARD_SEPOLICY_UNION += \
     rootfs.te \
     surfaceflinger.te \
     system_server.te \
-    untrusted_app.te
+    untrusted_app.te \
+    wpa.te
 
