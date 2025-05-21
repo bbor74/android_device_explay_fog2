@@ -36,6 +36,7 @@ on init
 
 on early-fs
 	mount_all /fstab.sun8i
+	swapon_all /fstab.sun8i
 	setprop ro.crypto.fuse_sdcard true
 	insmod /system/vendor/modules/disp.ko
 	insmod /system/vendor/modules/lcd.ko
