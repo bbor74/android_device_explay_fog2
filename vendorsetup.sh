@@ -15,6 +15,6 @@
 #
 sh device/explay/fog2/update-overlay.sh
 
-add_lunch_combo cm_fog2-eng
-add_lunch_combo cm_fog2-user
-add_lunch_combo cm_fog2-userdebug
+add_lunch_combo lineage_fog2-eng
+add_lunch_combo lineage_fog2-user
+add_lunch_combo lineage_fog2-userdebug
