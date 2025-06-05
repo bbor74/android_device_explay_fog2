@@ -69,6 +69,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.low_ram=true
 
+# Disable atlas services on low-ram targets
+PRODUCT_PROPERTY_OVERRIDES += \
+    config.disable_atlas=true
+
 # ART
 PRODUCT_PROPERTY_OVERRIDES += \
 	dalvik.vm.dex2oat-flags=--no-watch-dog \
