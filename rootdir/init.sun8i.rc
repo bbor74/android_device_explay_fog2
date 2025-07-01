@@ -89,8 +89,8 @@ on fs
 	insmod /system/vendor/modules/mcs7830.ko
 	insmod /system/vendor/modules/rtl8150.ko
 
-	#insmod /system/vendor/modules/8188eu.ko ifname=wlan0 if2name=p2p0
-	insmod /system/vendor/modules/8189es.ko ifname=wlan0 if2name=p2p0
+	insmod /system/vendor/modules/8188eu.ko ifname=wlan0 if2name=p2p0
+	# insmod /system/vendor/modules/8189es.ko ifname=wlan0 if2name=p2p0
 
 service_redefine media /system/bin/mediaserver
     class main
