@@ -43,9 +43,11 @@ TARGET_GLOBAL_CFLAGS += -mtune=cortex-a7 -mfpu=neon -mfloat-abi=softfp
 TARGET_GLOBAL_CPPFLAGS += -mtune=cortex-a7 -mfpu=neon -mfloat-abi=softfp
 
 # Kernel
+TARGET_KERNEL_SOURCE := kernel/allwinner/linux-3.4-sunxi
+TARGET_KERNEL_CONFIG := explay_fog_defconfig
 BOARD_KERNEL_CMDLINE := console=ttyS0,115200 rw init=/init loglevel=4
 BOARD_KERNEL_BASE := 0x40000000
-TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/kernel
+# TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/kernel
 
 # Enable dex-preoptimization to speed up first boot sequence
 WITH_DEXPREOPT := true

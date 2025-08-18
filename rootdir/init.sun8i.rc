@@ -2,7 +2,7 @@ import init.sun8i.usb.rc
 
 on init
 
-	insmod /nand.ko
+	#insmod /nand.ko
 
 #See storage config details at http://source.android.com/tech/storage/
 	mkdir /mnt/shell/emulated 0700 shell shell
@@ -38,9 +38,9 @@ on early-fs
 	mount_all /fstab.sun8i
 	swapon_all /fstab.sun8i
 	setprop ro.crypto.fuse_sdcard true
-	insmod /system/vendor/modules/disp.ko
-	insmod /system/vendor/modules/lcd.ko
-	insmod /system/vendor/modules/mali.ko
+	insmod /system/lib/modules/disp.ko
+	insmod /system/lib/modules/lcd.ko
+	insmod /system/lib/modules/mali.ko
 	
 on post-fs-data
 	mkdir /data/media 0770 media_rw media_rw
@@ -51,46 +51,46 @@ on fs
 
 
 #csi module
-	insmod /system/vendor/modules/videobuf-core.ko
-	insmod /system/vendor/modules/videobuf-dma-contig.ko
-	insmod /system/vendor/modules/cam_detect.ko
-#	insmod /system/vendor/modules/actuator.ko
-#	insmod /system/vendor/modules/ad5820_act.ko
-	insmod /system/vendor/modules/cci.ko
-	insmod /system/vendor/modules/vfe_os.ko
-	insmod /system/vendor/modules/vfe_subdev.ko
+	insmod /system/lib/modules/videobuf-core.ko
+	insmod /system/lib/modules/videobuf-dma-contig.ko
+	insmod /system/lib/modules/cam_detect.ko
+#	insmod /system/lib/modules/actuator.ko
+#	insmod /system/lib/modules/ad5820_act.ko
+	insmod /system/lib/modules/cci.ko
+	insmod /system/lib/modules/vfe_os.ko
+	insmod /system/lib/modules/vfe_subdev.ko
 	insmod_modules camera
-#	insmod /system/vendor/modules/gc0308.ko
-#	insmod /system/vendor/modules/gc2035.ko
-	insmod /system/vendor/modules/vfe_v4l2.ko
+#	insmod /system/lib/modules/gc0308.ko
+#	insmod /system/lib/modules/gc2035.ko
+	insmod /system/lib/modules/vfe_v4l2.ko
 
 #insmod tp and keyboard gsensor 
-#	insmod /system/vendor/modules/sw-device.ko
-	insmod /system/vendor/modules/inet_ctp.ko
-#	insmod /system/vendor/modules/ft5x02.ko
-	insmod /system/vendor/modules/ft5x_ts.ko
-	insmod /system/vendor/modules/ft5402.ko
-	insmod /system/vendor/modules/gslX680new.ko
-	insmod /system/vendor/modules/gslX680.ko
-	insmod /system/vendor/modules/gt9xxf_ts.ko
-	insmod /system/vendor/modules/gt9xx_ts.ko
-	insmod /system/vendor/modules/sunxi-keyboard.ko
-	insmod /system/vendor/modules/bma250.ko
-	insmod /system/vendor/modules/lsm330_acc.ko
-	insmod /system/vendor/modules/lsm330_gyr.ko
+#	insmod /system/lib/modules/sw-device.ko
+	insmod /system/lib/modules/inet_ctp.ko
+#	insmod /system/lib/modules/ft5x02.ko
+	insmod /system/lib/modules/ft5x_ts.ko
+	insmod /system/lib/modules/ft5402.ko
+	insmod /system/lib/modules/gslX680new.ko
+	insmod /system/lib/modules/gslX680.ko
+	insmod /system/lib/modules/gt9xxf_ts.ko
+	insmod /system/lib/modules/gt9xx_ts.ko
+	insmod /system/lib/modules/sunxi-keyboard.ko
+	insmod /system/lib/modules/bma250.ko
+	insmod /system/lib/modules/lsm330_acc.ko
+	insmod /system/lib/modules/lsm330_gyr.ko
 	
 #inet_recovery
-	insmod /system/vendor/modules/inet_recover.ko
+	insmod /system/lib/modules/inet_recover.ko
 
 
 #insmod usb ethernet
-	insmod /system/vendor/modules/asix.ko
-	insmod /system/vendor/modules/qf9700.ko
-	insmod /system/vendor/modules/mcs7830.ko
-	insmod /system/vendor/modules/rtl8150.ko
+	insmod /system/lib/modules/asix.ko
+	insmod /system/lib/modules/qf9700.ko
+	insmod /system/lib/modules/mcs7830.ko
+	insmod /system/lib/modules/rtl8150.ko
 
-	#insmod /system/vendor/modules/8188eu.ko ifname=wlan0 if2name=p2p0
-	insmod /system/vendor/modules/8189es.ko ifname=wlan0 if2name=p2p0
+	#insmod /system/lib/modules/8188eu.ko ifname=wlan0 if2name=p2p0
+	insmod /system/lib/modules/8189es.ko ifname=wlan0 if2name=p2p0
 
 service_redefine media /system/bin/mediaserver
     class main

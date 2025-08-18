@@ -45,8 +45,9 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/init.recovery.sun8i.rc:root/init.recovery.sun8i.rc \
     $(LOCAL_PATH)/rootdir/init.sun8i.rc:root/init.sun8i.rc \
     $(LOCAL_PATH)/rootdir/init.sun8i.usb.rc:root/init.sun8i.usb.rc \
-    $(LOCAL_PATH)/rootdir/nand.ko:root/nand.ko \
     $(LOCAL_PATH)/rootdir/ueventd.sun8i.rc:root/ueventd.sun8i.rc
+
+#    $(LOCAL_PATH)/rootdir/nand.ko:root/nand.ko \
 
 # System Configuration
 PRODUCT_PROPERTY_OVERRIDES += \
