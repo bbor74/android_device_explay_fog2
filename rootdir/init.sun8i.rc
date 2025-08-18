@@ -115,6 +115,7 @@ service  sensors  /system/xbin/busybox  sh  /system/bin/sensors.sh
     group root
     disabled
     oneshot
+    seclabel u:object_r:sensors_exec:s0
 
 on property:sys.sensors=1
     start sensors

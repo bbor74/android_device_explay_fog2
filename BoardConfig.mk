@@ -133,6 +133,7 @@ BOARD_SEPOLICY_UNION += \
     netd.te \
     recovery.te \
     rootfs.te \
+    sensors.te \
     surfaceflinger.te \
     system_server.te \
     untrusted_app.te \
