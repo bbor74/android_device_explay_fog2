@@ -46,6 +46,10 @@ on post-fs-data
 	mkdir /data/media 0770 media_rw media_rw
 	#mkdir /mnt/media/sdcard 0770 media_rw media_rw
 
+on boot
+	# Disable suspend
+	write /sys/power/wake_lock disablesuspend
+
 on fs
 
 
