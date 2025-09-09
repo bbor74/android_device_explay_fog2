@@ -2,3 +2,21 @@ type sensors, domain;
 type sensors_exec, exec_type, file_type;
 init_daemon_domain(sensors)
 
+#============= sensors_exec ==============
+allow sensors_exec init:fd use;
+allow sensors_exec init:process sigchld;
+allow sensors_exec kernel:fd use;
+allow sensors_exec null_device:chr_file { read write };
+allow sensors_exec proc:file { getattr open read };
+allow sensors_exec properties_device:file { getattr open read };
+allow sensors_exec rootfs:dir { open read };
+allow sensors_exec rootfs:lnk_file read;
+allow sensors_exec self:capability chown;
+allow sensors_exec self:file { open read };
+allow sensors_exec self:process { fork sigchld };
+allow sensors_exec selinuxfs:filesystem getattr;
+allow sensors_exec sysfs:dir { open read search };
+allow sensors_exec sysfs:file { getattr setattr };
+allow sensors_exec system_file:dir search;
+allow sensors_exec system_file:file { entrypoint execute execute_no_trans getattr open read };
+allow sensors_exec system_file:lnk_file read;

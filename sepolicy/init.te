@@ -1,2 +1,5 @@
 #============= init ==============
 allow init self:capability sys_module;
+
+#============= init ==============
+allow init sensors_exec:process { noatsecure rlimitinh siginh transition };

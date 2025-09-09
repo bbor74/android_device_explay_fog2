@@ -124,6 +124,7 @@ BOARD_WLAN_DEVICE := rtl8189es
 BOARD_SEPOLICY_DIRS += device/explay/fog2/sepolicy
 BOARD_SEPOLICY_UNION += \
     device.te \
+    dex2oat.te \
     file_contexts \
     healthd.te \
     init.te \
