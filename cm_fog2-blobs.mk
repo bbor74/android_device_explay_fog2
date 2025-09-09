@@ -35,6 +35,7 @@ PRODUCT_COPY_FILES += \
 
 # WiFi
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/_prebuilt/system/vendor/modules/wifi_efuse.map:system/vendor/modules/wifi_efuse.map \
     $(LOCAL_PATH)/_prebuilt/system/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
 
 # Tablet core hardware permissions
