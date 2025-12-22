@@ -70,14 +70,14 @@ on fs
 
 #insmod tp and keyboard gsensor 
 #	insmod /system/lib/modules/sw-device.ko
-	insmod /system/lib/modules/inet_ctp.ko
+	#insmod /system/lib/modules/inet_ctp.ko
 #	insmod /system/lib/modules/ft5x02.ko
-	insmod /system/lib/modules/ft5x_ts.ko
-	insmod /system/lib/modules/ft5402.ko
+	#insmod /system/lib/modules/ft5x_ts.ko
+	#insmod /system/lib/modules/ft5402.ko
 	insmod /system/lib/modules/gslX680new.ko
-	insmod /system/lib/modules/gslX680.ko
-	insmod /system/lib/modules/gt9xxf_ts.ko
-	insmod /system/lib/modules/gt9xx_ts.ko
+	#insmod /system/lib/modules/gslX680.ko
+	#insmod /system/lib/modules/gt9xxf_ts.ko
+	#insmod /system/lib/modules/gt9xx_ts.ko
 	insmod /system/lib/modules/sunxi-keyboard.ko
 	insmod /system/lib/modules/bma250.ko
 	insmod /system/lib/modules/lsm330_acc.ko
