@@ -39,8 +39,12 @@ static int _hwcdev_is_valid_format(int format)
     case HAL_PIXEL_FORMAT_RGB_888:
     case HAL_PIXEL_FORMAT_RGB_565:
     case HAL_PIXEL_FORMAT_BGRA_8888:
+#ifdef HAL_PIXEL_FORMAT_sRGB_A_8888
     case HAL_PIXEL_FORMAT_sRGB_A_8888:
+#endif
+#ifdef HAL_PIXEL_FORMAT_sRGB_X_8888
     case HAL_PIXEL_FORMAT_sRGB_X_8888:
+#endif
     case HAL_PIXEL_FORMAT_YV12:
 	case HAL_PIXEL_FORMAT_YCrCb_420_SP:
         return 1;
