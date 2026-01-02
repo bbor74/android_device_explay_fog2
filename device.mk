@@ -58,10 +58,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.sys.language=ru \
 	persist.sys.country=RU
 
-# USB OTG storage
-PRODUCT_PROPERTY_OVERRIDES += \
-	persist.sys.isUsbOtgEnabled=true
-
 # Navigation bar
 PRODUCT_PROPERTY_OVERRIDES += \
 	qemu.hw.mainkeys=0
