@@ -6,3 +6,14 @@ allow init sensors_exec:process { noatsecure rlimitinh siginh };
 
 #============= init ==============
 dontaudit init sensors_exec:process transition;
+
+#============= init ==============
+allow init debugfs:dir mounton;
+allow init tmpfs:lnk_file create;
+
+#============= init ==============
+allow init block_device:blk_file write;
+
+#============= init ==============
+allow init kernel:system module_request;
+

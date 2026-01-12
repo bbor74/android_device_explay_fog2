@@ -1,2 +1,7 @@
 #============= logd ==============
 allow logd rootfs:file { entrypoint execute };
+
+#============= logd ==============
+allow logd sensors_exec:dir search;
+allow logd sensors_exec:file { read getattr open };
+

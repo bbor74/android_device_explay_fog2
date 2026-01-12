@@ -6,7 +6,7 @@ init_daemon_domain(sensors)
 allow sensors_exec init:fd use;
 allow sensors_exec init:process sigchld;
 allow sensors_exec kernel:fd use;
-allow sensors_exec null_device:chr_file { read write };
+allow sensors_exec null_device:chr_file { read write ioctl getattr };
 allow sensors_exec proc:file { getattr open read };
 allow sensors_exec properties_device:file { getattr open read };
 allow sensors_exec rootfs:dir { open read };
@@ -20,3 +20,13 @@ allow sensors_exec sysfs:file { getattr setattr };
 allow sensors_exec system_file:dir search;
 allow sensors_exec system_file:file { entrypoint execute execute_no_trans getattr open read };
 allow sensors_exec system_file:lnk_file read;
+
+#============= sensors_exec ==============
+allow sensors_exec device:dir search;
+allow sensors_exec owntty_device:chr_file { read write open };
+allow sensors_exec proc:lnk_file read;
+allow sensors_exec self:dir search;
+allow sensors_exec self:lnk_file read;
+allow sensors_exec shell_exec:file { read entrypoint };
+allow sensors_exec toolbox_exec:file { read getattr open execute execute_no_trans };
+
