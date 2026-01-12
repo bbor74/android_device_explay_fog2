@@ -546,6 +546,29 @@ static int hwc_eventControl(struct hwc_composer_device_1* dev, int disp,
     return -EINVAL;
 }
 
+static int hwc_query(struct hwc_composer_device_1* dev,
+                     int param, int* value)
+{
+    SUNXI_hwcdev_context_t* ctx = &gSunxiHwcDevice;
+    int supported = HWC_DISPLAY_PRIMARY_BIT;
+
+    switch (param) {
+    case HWC_BACKGROUND_LAYER_SUPPORTED:
+        // Not supported for now
+        value[0] = 0;
+        break;
+    case HWC_DISPLAY_TYPES_SUPPORTED:
+  //      if(ctx->mMDP.hasOverlay)
+  //          supported |= HWC_DISPLAY_EXTERNAL_BIT;
+        value[0] = supported;
+        break;
+    default:
+        return -EINVAL;
+    }
+    return 0;
+
+}
+
 static void hwc_register_procs(struct hwc_composer_device_1* dev,
             hwc_procs_t const* procs)
 {
@@ -641,6 +664,9 @@ static int32_t hwc_attribute(struct hwc_composer_device_1 *pdev,
     case HWC_DISPLAY_DPI_Y:
         return ydpi;
 
+    case HWC_DISPLAY_COLOR_TRANSFORM:
+        return 0;//HAL_COLOR_TRANSFORM_IDENTITY
+
     default:
         ALOGE("unknown display attribute %u", attribute);
         return -EINVAL;
@@ -655,6 +681,9 @@ static int hwc_getDisplayAttributes(struct hwc_composer_device_1 *dev,
         if (disp == HWC_DISPLAY_PRIMARY)
         {
             values[i] = hwc_attribute(dev, attributes[i]);
+            if (values[i] == -EINVAL) {
+                return -EINVAL;
+            }
         }
         else 
         {
@@ -708,6 +737,7 @@ static int hwc_device_open(const struct hw_module_t* module, const char* name,
     psHwcDevice->registerProcs   = hwc_register_procs;
     psHwcDevice->eventControl	= hwc_eventControl;
 	psHwcDevice->blank			= hwc_blank;
+	psHwcDevice->query			= hwc_query;
 	psHwcDevice->getDisplayConfigs = hwc_getDisplayConfigs;
 	psHwcDevice->getDisplayAttributes = hwc_getDisplayAttributes;
 

@@ -488,6 +488,7 @@ static int hwc_uevent(void)
 
 void *VsyncThreadWrapper(void *priv)
 {
+	priv;
 	setpriority(PRIO_PROCESS, 0, HAL_PRIORITY_URGENT_DISPLAY);
 
 	hwc_uevent();
