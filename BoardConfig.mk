@@ -72,6 +72,9 @@ USE_OPENGL_RENDERER := true
 
 BOARD_USE_LEGACY_TOUCHSCREEN := true
 
+# Use a smaller subset of system fonts to keep image size lower
+SMALLER_FONT_FOOTPRINT := true
+
 # TWRP recovery
 TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
 TW_THEME := landscape_mdpi
