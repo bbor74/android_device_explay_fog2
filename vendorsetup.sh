@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-sh device/explay/fog/update-overlay.sh
+sh device/explay/fog2/update-overlay.sh
 
 add_lunch_combo cm_fog2-eng
 add_lunch_combo cm_fog2-user
