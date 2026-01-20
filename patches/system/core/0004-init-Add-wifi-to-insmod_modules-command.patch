@@ -1,0 +1,84 @@
+From d94b93e2883be0ffdc6215732804bc36383b85c4 Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Tue, 20 Jan 2026 14:09:10 +0400
+Subject: [PATCH] init: Add 'wifi' to insmod_modules command
+
+Change-Id: Idf558730c286fc20008ed272814acafd3e587bab
+---
+ init/builtins.cpp | 34 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 33 insertions(+), 1 deletion(-)
+
+diff --git a/init/builtins.cpp b/init/builtins.cpp
+index ccf175be..796d01b4 100644
+--- a/init/builtins.cpp
++++ b/init/builtins.cpp
+@@ -962,6 +962,8 @@ int do_insmod_modules(int argc, char **argv)
+ {
+ ERROR("-----------rogge---------------do_insmod_modules");
+     const char *modules = argv[1];
++    const char *arg2 = argv[2];
++    const char *arg3 = argv[3];
+     int ret = 0;
+     char options[1];
+ 
+@@ -981,6 +983,9 @@ ERROR("-----------rogge---------------do_insmod_modules");
+     //char num[1];
+ 
+     char str[128];
++    char opt[128];
++
++    char wlan_type[PROP_VALUE_MAX];
+ 
+     memset(back_name, 0, 64);
+     memset(back_node, 0, 64);
+@@ -989,9 +994,11 @@ ERROR("-----------rogge---------------do_insmod_modules");
+     //memset(num, 0, 1);
+ 
+     memset(str, 0, 128);
++    memset(opt, 0, 128);
+ 
+     if (strstr(modules, "camera"))
+     {
++        ERROR("insmod_modules: camera");
+         //fopen back_name
+         fp = fopen("/sys/devices/camera/back_name", "r");
+         if (NULL == fp )
+@@ -1122,9 +1129,34 @@ ERROR("-----------rogge---------------do_insmod_modules");
+             }
+         }
+     }
++    else if (strstr(modules, "wifi"))
++    {
++        ERROR("insmod_modules: wifi \n");
++        ret = property_get("ro.inet.wlan.type", wlan_type);
++        if (!ret)
++            {
++                strcpy(wlan_type, "8189es");
++                ERROR("(wifi) no 'ro.inet.wlan.type' found, use default: %s \n", wlan_type);
++            } else {
++                ERROR("(wifi) 'ro.inet.wlan.type' found, use: %s \n", wlan_type);
++            }
++
++          memset(str, 0, 128);
++          memset(opt, 0, 128);
++
++            sprintf(str, "/system/lib/modules/%s.ko", wlan_type);
++            sprintf(opt, "%s %s", arg2, arg3);
++            ret = insmod(str, opt);
++            if(ret < 0)
++            {
++                ERROR("(wifi) insmod %s %s, err: %s \n", str, opt, strerror(errno));
++            } else {
++                ERROR("(wifi) insmod %s %s \n", str, opt);
++            }
++    }
+     else
+     {
+-        ERROR("insmod_modules insmod camera failed");
++        ERROR("insmod_modules insmod camera and wifi failed \n");
+     }
+ 
+     return 1;
+-- 
+2.17.1
+
