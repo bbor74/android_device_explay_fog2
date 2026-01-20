@@ -46,7 +46,8 @@ on post-fs-data
 	mkdir /data/media 0770 media_rw media_rw
 	#mkdir /mnt/media/sdcard 0770 media_rw media_rw
 
-#on boot
+on boot
+	insmod_modules wifi ifname=wlan0 if2name=p2p0
 	# Disable suspend
 # 	write /sys/power/wake_lock disablesuspend
 
@@ -93,8 +94,9 @@ on fs
 	insmod /system/lib/modules/mcs7830.ko
 	insmod /system/lib/modules/rtl8150.ko
 
+	#insmod_modules wifi ifname=wlan0 if2name=p2p0
 	#insmod /system/lib/modules/8188eu.ko ifname=wlan0 if2name=p2p0
-	insmod /system/lib/modules/8189es.ko ifname=wlan0 if2name=p2p0
+	#insmod /system/lib/modules/8189es.ko ifname=wlan0 if2name=p2p0
 
 service_redefine media /system/bin/mediaserver
     class main
