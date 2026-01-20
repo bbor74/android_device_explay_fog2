@@ -28,6 +28,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PROPERTY_OVERRIDES += \
 	config.disable_bluetooth=true
 
+# Busybox
+PRODUCT_PACKAGES += \
+	busybox
+
 # FakeGPS location/settings
 PRODUCT_PROPERTY_OVERRIDES += \
 	persist.fakegps.latitude=55.085754 \
