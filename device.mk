@@ -113,7 +113,10 @@ ADDITIONAL_DEFAULT_PROPERTIES += \
     ro.debuggable=1 \
     ro.hardware=sun8i
 
-#    persist.sys.usb.config=mtp,adb
+# USB
+PRODUCT_COPY_FILES += \
+	frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
+	frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml
 
 # wifi
 PRODUCT_PACKAGES += \
