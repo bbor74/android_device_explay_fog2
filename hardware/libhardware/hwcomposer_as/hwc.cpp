@@ -610,7 +610,7 @@ static int32_t hwc_attribute(struct hwc_composer_device_1 *pdev,
         ALOGE("FBIOGET_VSCREENINFO ioctl failed: %s", strerror(errno));
         return -1;
     }
-
+#if 0
     if(info.pixclock){
 
 	    refreshRate = 1000000000000LLU /
@@ -627,9 +627,9 @@ static int32_t hwc_attribute(struct hwc_composer_device_1 *pdev,
 		refreshRate = 60;
 	}
 	ALOGD("refresh rate: %d Hz", refreshRate);
-	//Out GPU is not fully with 63 fps, but the parameter claim it is fps, so hardcode it
-	//refreshRate = 60;
-
+#else
+	refreshRate = 60;
+#endif
     if(info.width == 0)
     {
         xdpi = 160000;
