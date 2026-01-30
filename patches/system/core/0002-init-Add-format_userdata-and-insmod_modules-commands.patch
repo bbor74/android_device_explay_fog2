@@ -1,20 +1,20 @@
-From 0d0152a3d53a03773b9e565fba30d232bbf34a4f Mon Sep 17 00:00:00 2001
+From 8cec61308e3ee99776d4fa1858c157a11326abbc Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
-Date: Wed, 9 Apr 2025 09:47:29 +0400
-Subject: [PATCH] init: Add format_userdata and insmod_modules commands
+Date: Tue, 3 Jun 2025 13:26:24 +0400
+Subject: [PATCH 2/4] init: Add format_userdata and insmod_modules commands
 
-Change-Id: Id036b7c63f25ddf12c31a9b21c37d004bb71d5cd
+Change-Id: Iedcc52fdc880efc66597ddd2f99fa39a8c7ebe56
 ---
- init/builtins.c    | 207 +++++++++++++++++++++++++++++++++++++++++++++
- init/init_parser.c |   4 +
- init/keywords.h    |   4 +
- 3 files changed, 215 insertions(+)
+ init/builtins.cpp    | 210 +++++++++++++++++++++++++++++++++++++++++++
+ init/init_parser.cpp |   4 +
+ init/keywords.h      |   4 +
+ 3 files changed, 218 insertions(+)
 
-diff --git a/init/builtins.c b/init/builtins.c
-index d4b3f99c2..eed34f8e7 100644
---- a/init/builtins.c
-+++ b/init/builtins.c
-@@ -1029,6 +1029,213 @@ int do_wait(int nargs, char **args)
+diff --git a/init/builtins.cpp b/init/builtins.cpp
+index 1681d170..36751f32 100644
+--- a/init/builtins.cpp
++++ b/init/builtins.cpp
+@@ -920,6 +920,216 @@ int do_wait(int nargs, char **args)
          return -1;
  }
  
@@ -61,6 +61,9 @@ index d4b3f99c2..eed34f8e7 100644
 +ERROR("-----------rogge---------------do_insmod_modules");
 +    const char *modules = argv[1];
 +    int ret = 0;
++    char options[1];
++
++    options[0] = '\0';
 +
 +    FILE *fp = NULL;
 +    int back_name_len = 0;
@@ -166,7 +169,7 @@ index d4b3f99c2..eed34f8e7 100644
 +        {
 +            memset(str, 0, 128);
 +            sprintf(str, "/system/vendor/modules/%s.ko", back_name);
-+            ret = insmod(str, "");
++            ret = insmod(str, options);
 +            if(ret < 0)
 +            {
 +                ERROR("(back camera) insmod %s, err: %s", str, strerror(errno));
@@ -180,7 +183,7 @@ index d4b3f99c2..eed34f8e7 100644
 +        {
 +          memset(str, 0, 128);
 +            sprintf(str, "/system/vendor/modules/%s.ko", front_name);
-+            ret = insmod(str, "");
++            ret = insmod(str, options);
 +            if(ret < 0)
 +            {
 +                ERROR("(front camera) insmod %s, err: %s", str, strerror(errno));
@@ -194,7 +197,7 @@ index d4b3f99c2..eed34f8e7 100644
 +        {
 +            memset(str, 0, 128);
 +            sprintf(str, "/system/vendor/modules/%s.ko", back_node);
-+            ret = insmod(str, "");
++            ret = insmod(str, options);
 +            if(ret < 0)
 +            {
 +                ERROR("(back node) insmod %s, err: %s", str, strerror(errno));
@@ -208,7 +211,7 @@ index d4b3f99c2..eed34f8e7 100644
 +        {
 +          memset(str, 0, 128);
 +            sprintf(str, "/system/vendor/modules/%s.ko", front_node);
-+            ret = insmod(str, "");
++            ret = insmod(str, options);
 +            if(ret < 0)
 +            {
 +                ERROR("(front node) insmod %s, err: %s", str, strerror(errno));
@@ -225,16 +228,16 @@ index d4b3f99c2..eed34f8e7 100644
 +    return 1;
 +}
 +
- int do_umount(int nargs, char **args) {
-     return umount(args[1]);
- }
-diff --git a/init/init_parser.c b/init/init_parser.c
-index eec90902d..532b8123b 100644
---- a/init/init_parser.c
-+++ b/init/init_parser.c
-@@ -102,6 +102,9 @@ static int lookup_keyword(const char *s)
+ /*
+  * Callback to make a directory from the ext4 code
+  */
+diff --git a/init/init_parser.cpp b/init/init_parser.cpp
+index c36d36e2..3227cc09 100644
+--- a/init/init_parser.cpp
++++ b/init/init_parser.cpp
+@@ -140,6 +140,9 @@ static int lookup_keyword(const char *s)
+         if (!strcmp(s, "xec")) return K_exec;
          if (!strcmp(s, "xport")) return K_export;
-         if (!strcmp(s, "xport_rc")) return K_export_rc;
          break;
 +    case 'f':
 +        if(!strcmp(s, "ormat_userdata")) return K_format_userdata;
@@ -242,31 +245,31 @@ index eec90902d..532b8123b 100644
      case 'g':
          if (!strcmp(s, "roup")) return K_group;
          break;
-@@ -113,6 +116,7 @@ static int lookup_keyword(const char *s)
-         if (!strcmp(s, "fup")) return K_ifup;
+@@ -152,6 +155,7 @@ static int lookup_keyword(const char *s)
          if (!strcmp(s, "nsmod")) return K_insmod;
          if (!strcmp(s, "mport")) return K_import;
+         if (!strcmp(s, "nstallkey")) return K_installkey;
 +        if (!strcmp(s, "nsmod_modules")) return K_insmod_modules;
          break;
      case 'k':
          if (!strcmp(s, "eycodes")) return K_keycodes;
 diff --git a/init/keywords.h b/init/keywords.h
-index 224a505de..800ab85f0 100644
+index 303685d4..291a9cd9 100644
 --- a/init/keywords.h
 +++ b/init/keywords.h
-@@ -44,6 +44,8 @@ int do_load_persist_props(int nargs, char **args);
- int do_load_all_props(int nargs, char **args);
+@@ -39,6 +39,8 @@ int do_load_system_props(int nargs, char **args);
+ int do_verity_load_state(int nargs, char **args);
+ int do_verity_update_state(int nargs, char **args);
  int do_wait(int nargs, char **args);
- int do_umount(int nargs, char **args);
 +int do_format_userdata(int nargs, char **args);
 +int do_insmod_modules(int nargs, char **args);
  #define __MAKE_KEYWORD_ENUM__
  #define KEYWORD(symbol, flags, nargs, func) K_##symbol,
  enum {
-@@ -111,6 +113,8 @@ enum {
-     KEYWORD(load_all_props,        COMMAND, 0, do_load_all_props)
-     KEYWORD(ioprio,      OPTION,  0, 0)
-     KEYWORD(umount,		COMMAND, 1, do_umount)
+@@ -102,6 +104,8 @@ enum {
+     KEYWORD(wait,        COMMAND, 1, do_wait)
+     KEYWORD(write,       COMMAND, 2, do_write)
+     KEYWORD(writepid,    OPTION,  0, 0)
 +    KEYWORD(format_userdata,COMMAND, 1, do_format_userdata)
 +    KEYWORD(insmod_modules,COMMAND, 1, do_insmod_modules)
  #ifdef __MAKE_KEYWORD_ENUM__

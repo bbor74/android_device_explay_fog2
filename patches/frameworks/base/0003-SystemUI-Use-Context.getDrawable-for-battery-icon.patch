@@ -1,0 +1,40 @@
+From 73a471c08e8f5dfa80083d54980c5ddf228e962a Mon Sep 17 00:00:00 2001
+From: LuK1337 <priv.luk@gmail.com>
+Date: Sat, 11 Feb 2017 13:39:00 +0100
+Subject: [PATCH 3/5] SystemUI: Use Context.getDrawable for battery icon
+
+Fixes:
+02-11 13:36:21.859 28053 28053 W Resources: Drawable com.android.systemui:drawable/ic_battery_portrait
+has unresolved theme attributes! Consider using Resources.getDrawable(int, Theme) or
+Context.getDrawable(int).
+
+Change-Id: Ia8b639e7710e81b4b9408baeac80efabcb2c2303
+---
+ .../SystemUI/src/com/android/systemui/BatteryMeterView.java   | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/packages/SystemUI/src/com/android/systemui/BatteryMeterView.java b/packages/SystemUI/src/com/android/systemui/BatteryMeterView.java
+index 06c29577d75..857e8c061e3 100755
+--- a/packages/SystemUI/src/com/android/systemui/BatteryMeterView.java
++++ b/packages/SystemUI/src/com/android/systemui/BatteryMeterView.java
+@@ -572,7 +572,7 @@ public class BatteryMeterView extends View implements DemoMode,
+             final int resId = getBatteryDrawableResourceForMode(mode);
+             final Drawable batteryDrawable;
+             try {
+-                batteryDrawable = res.getDrawable(resId);
++                batteryDrawable = getContext().getDrawable(resId);
+             } catch (Resources.NotFoundException e) {
+                 throw new BatteryMeterDrawableException(res.getResourceName(resId) + " is an " +
+                         "invalid drawable", e);
+@@ -634,7 +634,7 @@ public class BatteryMeterView extends View implements DemoMode,
+             }
+ 
+             int drawableResId = getBatteryDrawableResourceForMode(mode);
+-            mBatteryDrawable = (LayerDrawable) res.getDrawable(drawableResId);
++            mBatteryDrawable = (LayerDrawable) getContext().getDrawable(drawableResId);
+             mFrameDrawable = mBatteryDrawable.findDrawableByLayerId(R.id.battery_frame);
+             mFrameDrawable.setTint(mCurrentBackgroundColor != 0
+                     ? mCurrentBackgroundColor
+-- 
+2.17.1
+
