@@ -1,4 +1,4 @@
-From 39285a9222bfedbf77774acd3a9b3a333534c7a5 Mon Sep 17 00:00:00 2001
+From 29da8315d5737e4c0ea30fcafb653d076b748312 Mon Sep 17 00:00:00 2001
 From: Robert Crabtree <robertx.l.crabtree@intel.com>
 Date: Wed, 25 Jul 2012 11:59:58 -0700
 Subject: [PATCH] SW encode: Increase default AVC level
@@ -14,7 +14,7 @@ Signed-off-by: Robert Crabtree <robertx.l.crabtree@intel.com>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/media/libstagefright/codecs/avc/enc/SoftAVCEncoder.cpp b/media/libstagefright/codecs/avc/enc/SoftAVCEncoder.cpp
-index 173abf735..24b146278 100644
+index cce6d15c3..a2092c777 100644
 --- a/media/libstagefright/codecs/avc/enc/SoftAVCEncoder.cpp
 +++ b/media/libstagefright/codecs/avc/enc/SoftAVCEncoder.cpp
 @@ -70,7 +70,7 @@ static LevelConversion ConversionTable[] = {

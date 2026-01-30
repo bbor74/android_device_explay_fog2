@@ -1,7 +1,7 @@
-From af925a57c9c1d510b48416f9d6d5efac04f81aec Mon Sep 17 00:00:00 2001
+From 39c877308294b3c1eceadeda1755b37cd34ef486 Mon Sep 17 00:00:00 2001
 From: Yonghua Zheng <yonghua.zheng@esimtek.com>
 Date: Thu, 13 Jul 2017 17:56:56 +0800
-Subject: [PATCH 5/5] Patch to support customizable fontScale
+Subject: [PATCH 3/4] Patch to support customizable fontScale
 
 Due to low density, fonts look small and hard to read
 so provide this patch for customization to set the
@@ -13,10 +13,10 @@ Change-Id: Ib57bdf397f2ca17bca94f75aa102d2146d5353d6
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/core/java/android/content/res/Configuration.java b/core/java/android/content/res/Configuration.java
-index a4132c9126a..8d1b2e7f070 100644
+index 0bc1ec22a34..1647cd05290 100644
 --- a/core/java/android/content/res/Configuration.java
 +++ b/core/java/android/content/res/Configuration.java
-@@ -839,7 +839,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
+@@ -868,7 +868,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
       * Set this object to the system defaults.
       */
      public void setToDefaults() {

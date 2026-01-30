@@ -1,0 +1,37 @@
+From 181e42b39a319e95c805c44bb13629dd784f0e87 Mon Sep 17 00:00:00 2001
+From: Sultanxda <sultanxda@gmail.com>
+Date: Fri, 20 Nov 2015 15:23:03 -0800
+Subject: [PATCH] Snap: Disable panorama feature
+
+Extremely buggy.
+---
+ src/com/android/camera/ui/ModuleSwitcher.java | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/src/com/android/camera/ui/ModuleSwitcher.java b/src/com/android/camera/ui/ModuleSwitcher.java
+index efac6d98b..2b40c9fc6 100644
+--- a/src/com/android/camera/ui/ModuleSwitcher.java
++++ b/src/com/android/camera/ui/ModuleSwitcher.java
+@@ -112,6 +112,9 @@ public class ModuleSwitcher extends RotateImageView
+         // Always decrement one because of GCam.
+         --numDrawIds;
+ 
++        // Always decrement one because of pano.
++        --numDrawIds;
++
+         int[] drawids = new int[numDrawIds];
+         int[] moduleids = new int[numDrawIds];
+         int ix = 0;
+@@ -122,6 +125,9 @@ public class ModuleSwitcher extends RotateImageView
+             if (i == GCAM_MODULE_INDEX) {
+                 continue; // don't add to UI
+             }
++            if (i == WIDE_ANGLE_PANO_MODULE_INDEX) {
++                continue; // don't add to UI
++            }
+             moduleids[ix] = i;
+             drawids[ix++] = DRAW_IDS[i];
+         }
+-- 
+2.17.1
+

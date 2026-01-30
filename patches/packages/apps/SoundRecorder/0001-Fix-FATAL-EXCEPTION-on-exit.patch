@@ -1,0 +1,51 @@
+From 20406f8e851014b3b5eab61038004fb37ae2b5cb Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Tue, 13 Jan 2026 16:17:57 +0400
+Subject: [PATCH] Fix FATAL EXCEPTION on exit
+
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: FATAL EXCEPTION: main
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: Process: com.android.soundrecorder, PID: 1387
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: Theme: themes:{}
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: java.lang.RuntimeException: Unable to destroy activity {com.android.soundrecorder/com.android.soundrecorder.SoundRecorder}: java.lang.NullPointerException: Attempt to invoke virtual method 'void android.bluetooth.BluetoothAdapter.closeProfileProxy(int, android.bluetooth.BluetoothProfile)' on a null object reference
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: 	at android.app.ActivityThread.performDestroyActivity(ActivityThread.java:3865)
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: 	at android.app.ActivityThread.handleDestroyActivity(ActivityThread.java:3883)
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: 	at android.app.ActivityThread.-wrap5(ActivityThread.java)
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1417)
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:102)
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:148)
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:5461)
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:726)
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:616)
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: Caused by: java.lang.NullPointerException: Attempt to invoke virtual method 'void android.bluetooth.BluetoothAdapter.closeProfileProxy(int, android.bluetooth.BluetoothProfile)' on a null object reference
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: 	at com.android.soundrecorder.SoundRecorder.onDestroy(SoundRecorder.java:1791)
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: 	at android.app.Activity.performDestroy(Activity.java:6422)
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: 	at android.app.Instrumentation.callActivityOnDestroy(Instrumentation.java:1143)
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: 	at android.app.ActivityThread.performDestroyActivity(ActivityThread.java:3852)
+01-13 15:17:43.021  1387  1387 E AndroidRuntime: 	... 9 more
+
+Change-Id: Iaec4b3661b2478bae43858a18f271805b66de483
+---
+ src/com/android/soundrecorder/SoundRecorder.java | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/com/android/soundrecorder/SoundRecorder.java b/src/com/android/soundrecorder/SoundRecorder.java
+index 7071cff..c6b5d64 100644
+--- a/src/com/android/soundrecorder/SoundRecorder.java
++++ b/src/com/android/soundrecorder/SoundRecorder.java
+@@ -1787,9 +1787,9 @@ public class SoundRecorder extends Activity
+      */
+     @Override
+     public void onDestroy() {
+-
+-        mBluetoothAdapter.closeProfileProxy(BluetoothProfile.HEADSET, mBluetoothHeadset);
+-
++        if (mBluetoothHeadset != null && mBluetoothAdapter != null ) {
++            mBluetoothAdapter.closeProfileProxy(BluetoothProfile.HEADSET, mBluetoothHeadset);
++        }
+         if (mSDCardMountEventReceiver != null) {
+             unregisterReceiver(mSDCardMountEventReceiver);
+             mSDCardMountEventReceiver = null;
+-- 
+2.17.1
+

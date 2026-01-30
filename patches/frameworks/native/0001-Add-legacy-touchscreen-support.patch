@@ -1,19 +1,19 @@
-From 2d27e8868f36795a90cb41010b235c89d100aa8e Mon Sep 17 00:00:00 2001
-From: fire855 <thefire855@gmail.com>
-Date: Sun, 17 Jan 2016 16:12:22 +0100
+From 83a6103ba0b4b305d9702aaa160a88d7e495f980 Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Mon, 2 Jun 2025 16:47:17 +0400
 Subject: [PATCH 1/3] Add legacy touchscreen support
 
-Change-Id: I26244ce60bdb8230d71498e3f289cad62bb918f9
+Change-Id: I2a801c289a91b3d7d7910589b808abd130df0703
 ---
  services/inputflinger/Android.mk      |  5 +++++
- services/inputflinger/InputReader.cpp | 30 +++++++++++++++++++++++++++
- 2 files changed, 35 insertions(+)
+ services/inputflinger/InputReader.cpp | 15 +++++++++++++--
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
 diff --git a/services/inputflinger/Android.mk b/services/inputflinger/Android.mk
-index 85edbe5db4..e3c4ad26ef 100644
+index ed867d844..8a5b48142 100644
 --- a/services/inputflinger/Android.mk
 +++ b/services/inputflinger/Android.mk
-@@ -47,4 +47,9 @@ LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)
+@@ -44,6 +44,11 @@ LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)
  
  LOCAL_MODULE := libinputflinger
  
@@ -23,83 +23,50 @@ index 85edbe5db4..e3c4ad26ef 100644
 +endif
 +
  include $(BUILD_SHARED_LIBRARY)
+ 
+ include $(call all-makefiles-under,$(LOCAL_PATH))
 diff --git a/services/inputflinger/InputReader.cpp b/services/inputflinger/InputReader.cpp
-index 6bca3d46ec..2228831e8e 100644
+index 6cfdcebfc..23e329cf1 100644
 --- a/services/inputflinger/InputReader.cpp
 +++ b/services/inputflinger/InputReader.cpp
-@@ -1368,6 +1368,12 @@ void TouchButtonAccumulator::process(const RawEvent* rawEvent) {
-             break;
+@@ -6544,7 +6544,11 @@ void MultiTouchInputMapper::syncTouch(nsecs_t when, RawState* outState) {
+         if (!inSlot->isInUse()) {
+             continue;
          }
-     }
+-
 +#ifdef LEGACY_TOUCHSCREEN
-+    // set true to mBtnTouch by multi-touch event with pressure more than zero
-+    // some touchscreen driver which has BTN_TOUCH feature doesn't send BTN_TOUCH event
-+    else if (rawEvent->type == EV_ABS && rawEvent->code == ABS_MT_TOUCH_MAJOR && rawEvent->value > 0)
-+        mBtnTouch = true;
++        if ((inSlot->getX() == 0) && (inSlot->getY() == 0)) {
++            continue;
++        }
 +#endif
- }
- 
- uint32_t TouchButtonAccumulator::getButtonState() const {
-@@ -1650,7 +1656,12 @@ void MultiTouchMotionAccumulator::process(const RawEvent* rawEvent) {
-                 break;
-             case ABS_MT_TOUCH_MAJOR:
-                 slot->mInUse = true;
+         if (outCount >= MAX_POINTERS) {
+ #if DEBUG_POINTERS
+             ALOGD("MultiTouch device %s emitted more than maximum of %d pointers; "
+@@ -6578,8 +6582,11 @@ void MultiTouchInputMapper::syncTouch(nsecs_t when, RawState* outState) {
+         bool isHovering = mTouchButtonAccumulator.getToolType() != AMOTION_EVENT_TOOL_TYPE_MOUSE
+                 && (mTouchButtonAccumulator.isHovering()
+                         || (mRawPointerAxes.pressure.valid && inSlot->getPressure() <= 0));
 +#ifdef LEGACY_TOUCHSCREEN
-+                // emulate ABS_MT_PRESSURE
-+                slot->mAbsMTPressure = rawEvent->value;
++        outPointer.isHovering = false;
 +#else
-                 slot->mAbsMTTouchMajor = rawEvent->value;
+         outPointer.isHovering = isHovering;
+-
 +#endif
-                 break;
-             case ABS_MT_TOUCH_MINOR:
-                 slot->mInUse = true;
-@@ -1659,7 +1670,12 @@ void MultiTouchMotionAccumulator::process(const RawEvent* rawEvent) {
-                 break;
-             case ABS_MT_WIDTH_MAJOR:
-                 slot->mInUse = true;
+         // Assign pointer id using tracking id if available.
+         mHavePointerIds = true;
+         int32_t trackingId = inSlot->getTrackingId();
+@@ -6604,7 +6611,11 @@ void MultiTouchInputMapper::syncTouch(nsecs_t when, RawState* outState) {
+         } else {
+             outPointer.id = id;
+             outState->rawPointerData.idToIndex[id] = outCount;
 +#ifdef LEGACY_TOUCHSCREEN
-+                // emulate ABS_MT_TOUCH_MAJOR
-+                slot->mAbsMTTouchMajor = rawEvent->value;
++            outState->rawPointerData.markIdBit(id, outPointer.isHovering);
 +#else
-                 slot->mAbsMTWidthMajor = rawEvent->value;
+             outState->rawPointerData.markIdBit(id, isHovering);
 +#endif
-                 break;
-             case ABS_MT_WIDTH_MINOR:
-                 slot->mInUse = true;
-@@ -1696,6 +1712,12 @@ void MultiTouchMotionAccumulator::process(const RawEvent* rawEvent) {
-             }
+             newPointerIdBits.markBit(id);
          }
-     } else if (rawEvent->type == EV_SYN && rawEvent->code == SYN_MT_REPORT) {
-+#ifdef LEGACY_TOUCHSCREEN
-+        // don't use the slot with pressure less than or qeual to zero
-+        // some touchscreen driver sends multi-touch event for not-in-use pointer
-+        if (mSlots[mCurrentSlot].mAbsMTPressure <= 0)
-+            mSlots[mCurrentSlot].mInUse = false;
-+#endif
-         // MultiTouch Sync: The driver has returned all data for *one* of the pointers.
-         mCurrentSlot += 1;
-     }
-@@ -6256,12 +6278,20 @@ void MultiTouchInputMapper::configureRawPointerAxes() {
  
-     getAbsoluteAxisInfo(ABS_MT_POSITION_X, &mRawPointerAxes.x);
-     getAbsoluteAxisInfo(ABS_MT_POSITION_Y, &mRawPointerAxes.y);
-+#ifdef LEGACY_TOUCHSCREEN
-+    getAbsoluteAxisInfo(ABS_MT_WIDTH_MAJOR, &mRawPointerAxes.touchMajor);
-+#else
-     getAbsoluteAxisInfo(ABS_MT_TOUCH_MAJOR, &mRawPointerAxes.touchMajor);
-+#endif
-     getAbsoluteAxisInfo(ABS_MT_TOUCH_MINOR, &mRawPointerAxes.touchMinor);
-     getAbsoluteAxisInfo(ABS_MT_WIDTH_MAJOR, &mRawPointerAxes.toolMajor);
-     getAbsoluteAxisInfo(ABS_MT_WIDTH_MINOR, &mRawPointerAxes.toolMinor);
-     getAbsoluteAxisInfo(ABS_MT_ORIENTATION, &mRawPointerAxes.orientation);
-+#ifdef LEGACY_TOUCHSCREEN
-+    getAbsoluteAxisInfo(ABS_MT_TOUCH_MAJOR, &mRawPointerAxes.pressure);
-+#else
-     getAbsoluteAxisInfo(ABS_MT_PRESSURE, &mRawPointerAxes.pressure);
-+#endif
-     getAbsoluteAxisInfo(ABS_MT_DISTANCE, &mRawPointerAxes.distance);
-     getAbsoluteAxisInfo(ABS_MT_TRACKING_ID, &mRawPointerAxes.trackingId);
-     getAbsoluteAxisInfo(ABS_MT_SLOT, &mRawPointerAxes.slot);
 -- 
 2.17.1
 

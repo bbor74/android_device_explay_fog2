@@ -1,5 +1,5 @@
-From 2c7a66bfb6f160aba3b0601ddafd6003e445fa9f Mon Sep 17 00:00:00 2001
-From: zj <zj@rock-chips.com>
+From e96137420af6342b375e00e79ad19a9f2a7da015 Mon Sep 17 00:00:00 2001
+From: "zj@rock-chips.com" <zj@rock-chips.com>
 Date: Fri, 17 Mar 2017 15:37:46 +0800
 Subject: [PATCH] use BOARD_HAVE_BLUETOOTH to control apk compile
 
@@ -11,7 +11,7 @@ Change-Id: I0727d22ef080558facca0322189c04f73e069761
  1 file changed, 2 insertions(+)
 
 diff --git a/Android.mk b/Android.mk
-index b04137b2..cc90a16e 100644
+index 430edcde..0c4fa0df 100755
 --- a/Android.mk
 +++ b/Android.mk
 @@ -1,3 +1,4 @@
@@ -19,7 +19,7 @@ index b04137b2..cc90a16e 100644
  LOCAL_PATH:= $(call my-dir)
  include $(CLEAR_VARS)
  
-@@ -23,3 +24,4 @@ LOCAL_PROGUARD_ENABLED := disabled
+@@ -33,3 +34,4 @@ LOCAL_PROGUARD_ENABLED := disabled
  include $(BUILD_PACKAGE)
  
  include $(call all-makefiles-under,$(LOCAL_PATH))

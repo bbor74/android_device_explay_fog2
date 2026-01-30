@@ -1,51 +1,51 @@
-From 37d3ca06e45f1068c277a1dfede69818191cdefb Mon Sep 17 00:00:00 2001
+From 84623f668d8501063d3262c06fa72c05481c426e Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Tue, 23 Dec 2025 17:02:15 +0400
-Subject: [PATCH] init: modules in /system/lib/modules/
+Subject: [PATCH 3/4] init: modules in /system/lib/modules/
 
 Change-Id: If31b0fe1709b71108c5eaa7e28f730ae31cfbf3f
 ---
- init/builtins.c | 8 ++++----
+ init/builtins.cpp | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/init/builtins.c b/init/builtins.c
-index eed34f8e7..23f162168 100644
---- a/init/builtins.c
-+++ b/init/builtins.c
-@@ -1176,7 +1176,7 @@ ERROR("-----------rogge---------------do_insmod_modules");
+diff --git a/init/builtins.cpp b/init/builtins.cpp
+index 36751f32f..ccf175bef 100644
+--- a/init/builtins.cpp
++++ b/init/builtins.cpp
+@@ -1070,7 +1070,7 @@ ERROR("-----------rogge---------------do_insmod_modules");
          if (back_name_len > 0)
          {
              memset(str, 0, 128);
 -            sprintf(str, "/system/vendor/modules/%s.ko", back_name);
 +            sprintf(str, "/system/lib/modules/%s.ko", back_name);
-             ret = insmod(str, "");
+             ret = insmod(str, options);
              if(ret < 0)
              {
-@@ -1190,7 +1190,7 @@ ERROR("-----------rogge---------------do_insmod_modules");
+@@ -1084,7 +1084,7 @@ ERROR("-----------rogge---------------do_insmod_modules");
          if (front_name_len > 0)
          {
            memset(str, 0, 128);
 -            sprintf(str, "/system/vendor/modules/%s.ko", front_name);
 +            sprintf(str, "/system/lib/modules/%s.ko", front_name);
-             ret = insmod(str, "");
+             ret = insmod(str, options);
              if(ret < 0)
              {
-@@ -1204,7 +1204,7 @@ ERROR("-----------rogge---------------do_insmod_modules");
+@@ -1098,7 +1098,7 @@ ERROR("-----------rogge---------------do_insmod_modules");
          if (back_node_len > 0)
          {
              memset(str, 0, 128);
 -            sprintf(str, "/system/vendor/modules/%s.ko", back_node);
 +            sprintf(str, "/system/lib/modules/%s.ko", back_node);
-             ret = insmod(str, "");
+             ret = insmod(str, options);
              if(ret < 0)
              {
-@@ -1218,7 +1218,7 @@ ERROR("-----------rogge---------------do_insmod_modules");
+@@ -1112,7 +1112,7 @@ ERROR("-----------rogge---------------do_insmod_modules");
          if (front_node_len > 0)
          {
            memset(str, 0, 128);
 -            sprintf(str, "/system/vendor/modules/%s.ko", front_node);
 +            sprintf(str, "/system/lib/modules/%s.ko", front_node);
-             ret = insmod(str, "");
+             ret = insmod(str, options);
              if(ret < 0)
              {
 -- 
