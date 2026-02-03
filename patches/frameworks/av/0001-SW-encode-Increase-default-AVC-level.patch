@@ -1,7 +1,7 @@
 From 29da8315d5737e4c0ea30fcafb653d076b748312 Mon Sep 17 00:00:00 2001
 From: Robert Crabtree <robertx.l.crabtree@intel.com>
 Date: Wed, 25 Jul 2012 11:59:58 -0700
-Subject: [PATCH] SW encode: Increase default AVC level
+Subject: [PATCH 1/2] SW encode: Increase default AVC level
 
 The AVC SW encoder only supports up to level 2 which is insufficient
 for camera's VGA resolution. Increase default AVC level to 3.1 to support
