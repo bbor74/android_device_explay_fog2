@@ -93,6 +93,11 @@
 /*wifi display buffer size*/
 #define AF_BUFFER_SIZE 1024 * 80
 
+#define AUDIO_DEVICE_IN_AF (AUDIO_DEVICE_BIT_IN | 0x1000000)
+#define AUDIO_MODE_MODE_FACTORY_TEST 4
+#define AUDIO_MODE_FM 5
+#define AUDIO_PARAMETER_RAW_DATA_OUT "raw_data_output"
+
 enum tty_modes {
     TTY_MODE_OFF,
     TTY_MODE_VCO,
