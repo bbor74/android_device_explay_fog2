@@ -75,6 +75,7 @@ void c_plus_plus_grabPartialWakeLock()
         sp<IBinder> binder = new BBinder();
         status_t status = gPowerManager->acquireWakeLock(POWERMANAGER_PARTIAL_WAKE_LOCK,
                                                          binder,
+                                                         String16(ANDROID_WAKE_LOCK_NAME),
                                                          String16(ANDROID_WAKE_LOCK_NAME));
         if (status == NO_ERROR) {
             gWakeLockToken = binder;
