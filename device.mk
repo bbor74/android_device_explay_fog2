@@ -15,6 +15,11 @@ PRODUCT_PACKAGES += \
 	audio.a2dp.default \
 	audio.r_submix.default
 
+PRODUCT_PACKAGES += \
+	audio.primary.polaris \
+	libcodec_audio \
+	libril_audio
+
 # Camera
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.xml:system/etc/permissions/android.hardware.camera.xml \
