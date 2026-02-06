@@ -40,7 +40,7 @@ static int set_normal_path(struct codec_client *client, int path)
 	int headset_on=0, headphone_on=0, speaker_on=0, earpiece_on=0;
 	int switch_to_headset  =0;
 	int ret = -1, fd=0;
-	char prop_value[20]={0};
+	char prop_value[PROPERTY_VALUE_MAX]={0};
 	char h2w_state[2]={0};
 
 	headset_on = path & AUDIO_DEVICE_OUT_WIRED_HEADSET;  // hp4p
