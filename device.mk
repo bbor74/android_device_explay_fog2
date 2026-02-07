@@ -18,7 +18,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	audio.primary.polaris \
 	libcodec_audio \
-	libril_audio
+	libril_audio \
+	libtinyalsa
 
 # Camera
 PRODUCT_COPY_FILES += \
