@@ -17,9 +17,6 @@ LOCAL_PATH := device/explay/fog2
 
 USE_CAMERA_STUB := false
 
-# Audio
-BOARD_HAVE_PRE_KITKAT_AUDIO_BLOB := true
-
 # GPS
 # target board doesn't have a gps hardware module, use fakegps
 BOARD_HAVE_FAKE_GPS := true
