@@ -44,7 +44,6 @@ struct other_ops {
     int (*other_op)(char *name);
 };
 
-
 //===================================ril===========
 typedef enum {
 	RIL_AUDIO_PATH_EARPIECE = 0 ,

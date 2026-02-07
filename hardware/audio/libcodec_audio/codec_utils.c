@@ -115,6 +115,7 @@ int init_stream(struct dev_stream *dev_stream)
 			break;	
 		case FM:
 			dev_type = CARD_I2S;
+			break;
 		case CODEC:
 			dev_type = CARD_CODEC;
 			break;	
@@ -270,7 +271,7 @@ int get_mixer(struct mixer_ctls *mixer_ctls)
 	    ALOGE("Unable to find '%s' mixer control",MIXER_AUDIO_PHONE_OUT);
 	    goto error_out;
     }
-    
+
     mixer_ctls->audio_phone_in = mixer_get_ctl_by_name(mixer,
 		    MIXER_AUDIO_PHONE_IN);
     if (!mixer_ctls->audio_phone_in) {
@@ -284,14 +285,14 @@ int get_mixer(struct mixer_ctls *mixer_ctls)
 	    ALOGE("Unable to find '%s' mixer control",MIXER_AUDIO_EARPIECE_OUT);
 	    goto error_out;
     }
-    
+
     mixer_ctls->audio_headphone_out = mixer_get_ctl_by_name(mixer,
 		    MIXER_AUDIO_HEADPHONE_OUT);
     if (!mixer_ctls->audio_headphone_out) {
 	    ALOGE("Unable to find '%s' mixer control",MIXER_AUDIO_HEADPHONE_OUT);
 	    goto error_out;
     }
-    
+
     mixer_ctls->audio_speaker_out = mixer_get_ctl_by_name(mixer,
 		    MIXER_AUDIO_SPEAKER_OUT);
     if (!mixer_ctls->audio_speaker_out) {
@@ -305,6 +306,7 @@ int get_mixer(struct mixer_ctls *mixer_ctls)
 	    ALOGE("Unable to find '%s' mixer control",MIXER_AUDIO_ADC_PHONE_IN);
 	    goto error_out;
     }
+
     mixer_ctls->audio_dac_phone_out = mixer_get_ctl_by_name(mixer,
 		    MIXER_AUDIO_DAC_PHONE_OUT);
     if (!mixer_ctls->audio_dac_phone_out) {
