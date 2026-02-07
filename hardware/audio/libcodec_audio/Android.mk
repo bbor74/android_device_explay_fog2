@@ -19,7 +19,6 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := libcodec_audio
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/
 LOCAL_SRC_FILES := codec.c \
-			 pcm.c mixer.c \
 			codec_devices.c \
 			codec_utils.c volume_conf.c\
 			wakelock.cpp \
@@ -32,11 +31,12 @@ LOCAL_SRC_FILES := codec.c \
 		
 		
 LOCAL_C_INCLUDES += \
+	external/tinyalsa/include \
 	system/media/audio_utils/include \
 	frameworks/native/include \
 	$(LOCAL_PATH)/
 	
-LOCAL_SHARED_LIBRARIES += liblog libcutils libutils libdl libaudioutils libbinder libpowermanager
+LOCAL_SHARED_LIBRARIES += liblog libtinyalsa libcutils libutils libdl libaudioutils libbinder libpowermanager
 
 LOCAL_MODULE_TAGS := optional
 
