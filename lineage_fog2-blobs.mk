@@ -28,7 +28,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/_prebuilt/system/etc/audio_policy.conf:system/etc/audio_policy.conf \
     $(LOCAL_PATH)/_prebuilt/system/etc/phone_volume.conf:system/etc/phone_volume.conf \
     $(LOCAL_PATH)/_prebuilt/system/etc/media_codecs.xml:system/etc/media_codecs.xml \
-    $(LOCAL_PATH)/_prebuilt/system/lib/libtinyalsa.so:system/lib/libtinyalsa.so \
 
 # WiFi
 PRODUCT_COPY_FILES += \
