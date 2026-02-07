@@ -8,7 +8,7 @@
 #include <utils/Log.h>
 #include <cutils/properties.h>
 
-#include "asoundlib.h"
+#include <tinyalsa/asoundlib.h>
 
 #include "codec_utils.h"
 

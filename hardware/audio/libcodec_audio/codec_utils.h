@@ -2,7 +2,8 @@
 #ifndef __CODEC_UTILS_H__
 #define __CODEC_UTILS_H__
 
-#include "asoundlib.h"
+#include <tinyalsa/asoundlib.h>
+
 #include <pthread.h>
 #include <semaphore.h>
 
