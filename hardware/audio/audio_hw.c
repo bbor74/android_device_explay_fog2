@@ -190,6 +190,7 @@ struct sunxi_stream_out {
     struct echo_reference_itfe *echo_reference;
     struct sunxi_audio_device *dev;
     int write_threshold;
+    uint64_t written;
 };
 
 #define MAX_PREPROCESSORS 3 /* maximum one AGC + one NS + one AEC per input stream */
@@ -977,6 +978,31 @@ static int get_playback_delay(struct sunxi_stream_out *out,
     return 0;
 }
 
+static int out_get_presentation_position(const struct audio_stream_out *stream,
+                                   uint64_t *frames, struct timespec *timestamp)
+{
+    struct sunxi_stream_out *out = (struct sunxi_stream_out *)stream;
+    int ret = -1;
+
+    pthread_mutex_lock(&out->lock);
+
+    if (out->pcm) {
+        unsigned int avail;
+        if (pcm_get_htimestamp(out->pcm, &avail, timestamp) == 0) {
+            size_t kernel_buffer_size = out->config.period_size * out->config.period_count;
+            int64_t signed_frames = out->written - kernel_buffer_size + avail;
+            if (signed_frames >= 0) {
+                *frames = signed_frames;
+                ret = 0;
+            }
+        }
+    }
+
+    pthread_mutex_unlock(&out->lock);
+
+    return ret;
+}
+
 static uint32_t out_get_sample_rate(const struct audio_stream *stream)
 {
     return DEFAULT_OUT_SAMPLING_RATE;
@@ -1407,7 +1433,7 @@ static ssize_t out_write(struct audio_stream_out *stream, const void* buffer,
 	if(ret!=0)
 	{
 		do_output_standby(out);
-	}
+	}else out->written += out_frames;
 
 exit:
     pthread_mutex_unlock(&out->lock);
@@ -2208,6 +2234,7 @@ static int adev_open_output_stream(struct audio_hw_device *dev,
     out->stream.write 					= out_write;
     out->stream.get_render_position 	= out_get_render_position;
     out->stream.get_next_write_timestamp = out_get_next_write_timestamp;
+    out->stream.get_presentation_position = out_get_presentation_position;
 
     out->config 						= pcm_config_mm_out;
 
