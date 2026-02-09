@@ -46,7 +46,7 @@ static int mu509_get_tty_dev(char *name)
 	return 0;
 }
 
-static int mu509_set_call_volume(ril_audio_path_type_t path, int volume)
+static int mu509_set_call_volume(ril_audio_path_type_t path __unused, int volume)
 {
 	char tty_dev[32]={0};
 	char cmdline[30];

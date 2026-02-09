@@ -14,13 +14,13 @@
 
 static char tty_dev[32] = AT_PATH;
 
-static int em55_get_tty_dev(char *name)
+static int em55_get_tty_dev(char *name __unused)
 {
    ALOGD("em55_get_tty_dev\n");
    return 0;
 }
 
-static int em55_set_call_volume(ril_audio_path_type_t path, int vol)
+static int em55_set_call_volume(ril_audio_path_type_t path __unused, int vol __unused)
 {
    ALOGD("em55_set_call_volume\n");
    return 0;
