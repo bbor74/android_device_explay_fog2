@@ -167,7 +167,7 @@ int plan_two_stop_voice(void)
 }
 
 
-int plan_two_start_bt_voice(int up_vol)
+int plan_two_start_bt_voice(int up_vol __unused)
 {
 	g_bt_upload_voice.voice_thread_run_flag = 1;
 	g_bt_download_voice.voice_thread_run_flag = 1;
