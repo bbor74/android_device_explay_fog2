@@ -202,9 +202,9 @@ void ReduceVolume(char *buf, int size, int repeat)
                         data = data / 1.25;    
                         if(data < minData){
                                 data = minData; 
-                        } else if (data > 0x7fff){
+                        } /*else if (data > 0x7fff){
                                 data = maxData;
-                        }
+                        } */ // signed short is [-0x8000, 0x7fff]
                 }   
                 buf[i] = (data) & 0x00ff;
                 buf[i+1] = ((data)>>8) & 0xff;
