@@ -1022,7 +1022,7 @@ static size_t out_get_buffer_size(const struct audio_stream *stream)
     be a multiple of 16 frames */
     size_t size = (SHORT_PERIOD_SIZE * DEFAULT_OUT_SAMPLING_RATE) / out->config.rate;
     size = ((size + 15) / 16) * 16;
-    return size * audio_stream_frame_size((struct audio_stream *)stream);
+    return size * audio_stream_out_frame_size((const struct audio_stream_out *)stream);
 }
 
 static audio_channel_mask_t out_get_channels(const struct audio_stream *stream __unused)
@@ -1177,7 +1177,7 @@ static ssize_t out_write(struct audio_stream_out *stream, const void* buffer,
 	struct sunxi_stream_out *out = (struct sunxi_stream_out *)stream;
 	struct sunxi_audio_device *adev = out->dev;
 	bool force_input_standby = false;
-	size_t frame_size = audio_stream_frame_size(&out->stream.common);
+	size_t frame_size = audio_stream_out_frame_size(&out->stream);
 	size_t in_frames = bytes / frame_size;
 	size_t out_frames = RESAMPLER_BUFFER_SIZE / frame_size;
 	struct sunxi_stream_in *in;
@@ -1315,7 +1315,7 @@ static ssize_t out_write(struct audio_stream_out *stream, const void* buffer,
 	}
 	exit:
 	if (ret != 0) {
-		usleep(bytes * 1000000 / audio_stream_frame_size(&stream->common) /
+		usleep(bytes * 1000000 / audio_stream_out_frame_size(stream) /
 		out_get_sample_rate(&stream->common));
 	}
 	pthread_mutex_unlock(&out->lock);
@@ -1340,7 +1340,7 @@ static ssize_t out_write(struct audio_stream_out *stream, const void* buffer,
     int ret;
     struct sunxi_stream_out *out = (struct sunxi_stream_out *)stream;
     struct sunxi_audio_device *adev = out->dev;
-    size_t frame_size = audio_stream_frame_size(&out->stream.common);
+    size_t frame_size = audio_stream_out_frame_size(&out->stream);
     size_t in_frames = bytes / frame_size;
     size_t out_frames = RESAMPLER_BUFFER_SIZE / frame_size;
     bool force_input_standby = false;
@@ -1439,7 +1439,7 @@ exit:
     pthread_mutex_unlock(&out->lock);
 
     if (ret != 0) {
-        usleep(bytes * 1000000 / audio_stream_frame_size(&stream->common) /
+        usleep(bytes * 1000000 / audio_stream_out_frame_size(stream) /
                out_get_sample_rate(&stream->common));
     }
 
@@ -1886,13 +1886,13 @@ static int get_next_buffer(struct resampler_buffer_provider *buffer_provider,
         return -ENODEV;
     }
 
-//	ALOGV("get_next_buffer: in->config.period_size: %d, audio_stream_frame_size: %d",
-//		in->config.period_size, audio_stream_frame_size(&in->stream.common));
+//	ALOGV("get_next_buffer: in->config.period_size: %d, audio_stream_in_frame_size: %d",
+//		in->config.period_size, audio_stream_in_frame_size(&in->stream));
     if (in->frames_in == 0) {
         in->read_status = pcm_read(in->pcm,
                                    (void*)in->buffer,
                                    in->config.period_size *
-                                       audio_stream_frame_size(&in->stream.common));
+                                       audio_stream_in_frame_size(&in->stream));
         if (in->read_status != 0) {
             ALOGE("get_next_buffer() pcm_read error %d, %s", in->read_status, strerror(errno));
             buffer->raw = NULL;
@@ -1931,7 +1931,7 @@ static ssize_t read_frames(struct sunxi_stream_in *in, void *buffer, ssize_t fra
 {
 	// F_LOG;
     ssize_t frames_wr = 0;
-    size_t frame_size = audio_stream_frame_size(&in->stream.common);
+    size_t frame_size = audio_stream_in_frame_size(&in->stream);
     while (frames_wr < frames) {
         size_t frames_rd = frames - frames_wr;
         if (in->resampler != NULL) {
@@ -2040,7 +2040,7 @@ static ssize_t in_read(struct audio_stream_in *stream, void* buffer,
     int ret = 0;
     struct sunxi_stream_in *in 		= (struct sunxi_stream_in *)stream;
     struct sunxi_audio_device *adev = in->dev;
-    size_t frames_rq 				= bytes / audio_stream_frame_size(&stream->common);
+    size_t frames_rq 				= bytes /  audio_stream_in_frame_size(stream);
 
     if (adev->mode == AUDIO_MODE_IN_CALL) {
 	//ALOGD("in call mode, in_read, return ;");
@@ -2106,7 +2106,7 @@ static ssize_t in_read(struct audio_stream_in *stream, void* buffer,
 
 exit:
     if (ret < 0)
-        usleep(bytes * 1000000 / audio_stream_frame_size(&stream->common) /
+        usleep(bytes * 1000000 / audio_stream_in_frame_size(stream) /
                in_get_sample_rate(&stream->common));
 
     pthread_mutex_unlock(&in->lock);
@@ -2472,9 +2472,9 @@ static int adev_open_input_stream(struct audio_hw_device *dev,
 	in->config.in_init_channels = channel_count;
 
 	ALOGV("to malloc in-buffer: period_size: %d, frame_size: %d",
-		in->config.period_size, audio_stream_frame_size(&in->stream.common));
+		in->config.period_size, audio_stream_in_frame_size(&in->stream));
     in->buffer = malloc(in->config.period_size *
-                        audio_stream_frame_size(&in->stream.common) * 8);
+                        audio_stream_in_frame_size(&in->stream) * 8);
 
     if (!in->buffer) {
         ret = -ENOMEM;
