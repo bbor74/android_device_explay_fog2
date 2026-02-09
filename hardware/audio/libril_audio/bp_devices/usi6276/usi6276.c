@@ -1,6 +1,6 @@
 
 #define LOG_TAG "audio_ril_usi6276"
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 
 #include <stdlib.h>
 #include <string.h>

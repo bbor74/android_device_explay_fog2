@@ -9,7 +9,7 @@
 
 
 #define LOG_TAG "bluetooth voice"
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 #include <cutils/log.h>
 
 

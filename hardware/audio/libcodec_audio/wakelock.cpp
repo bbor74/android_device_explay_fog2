@@ -1,6 +1,6 @@
 
 #define LOG_TAG "Audio_WakeLock"
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 
 #include <utils/Log.h>
 
