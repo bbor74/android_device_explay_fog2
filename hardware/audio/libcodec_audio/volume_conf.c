@@ -4,7 +4,7 @@
 #include <string.h>
 
 #define LOG_TAG "codec_audio"
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 #include <utils/Log.h>
 
 #include "hal_codec.h"
