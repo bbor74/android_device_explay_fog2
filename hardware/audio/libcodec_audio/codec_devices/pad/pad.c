@@ -1,6 +1,6 @@
 
 #define LOG_TAG "codec_audio_pad"
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 
 #include <stdlib.h>
 #include <string.h>

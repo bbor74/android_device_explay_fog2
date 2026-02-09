@@ -1,6 +1,6 @@
 
 #define LOG_TAG "codec_audio_plan_two"
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 
 #include <stdlib.h>
 #include <string.h>
