@@ -55,7 +55,7 @@ void c_plus_plus_grabPartialWakeLock()
             virtual     ~PMDeathRecipient() {}
 
             // IBinder::DeathRecipient
-            virtual void  binderDied(const wp<IBinder>& who){
+            virtual void  binderDied(const wp<IBinder>& who __unused){
     				c_plus_plus_releaseWakeLock();
 				gPowerManager.clear();
     				ALOGW("power manager service died !!!");

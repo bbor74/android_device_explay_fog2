@@ -85,7 +85,7 @@ static int set_normal_path(struct codec_client *client, int path)
 	return 0;
 }
 
-static int set_normal_record_enable(struct codec_client *client, bool enable)
+static int set_normal_record_enable(struct codec_client *client, bool enable __unused)
 {
 	mixer_ctl_set_value(client->mixer_ctls->audio_fm_record, 0, 0);
 	mixer_ctl_set_value(client->mixer_ctls->audio_phone_voice_record, 0, 0);
@@ -93,7 +93,7 @@ static int set_normal_record_enable(struct codec_client *client, bool enable)
 	return 0;
 }
 
-static int set_normal_record(struct codec_client *client, int path)
+static int set_normal_record(struct codec_client *client __unused, int path __unused)
 {
 	ALOGV("normal record mode 4,****LINE:%d,FUNC:%s",__LINE__,__FUNCTION__);
 	return 0;
@@ -168,20 +168,20 @@ static int set_fm_record_enable(struct codec_client *client, bool enable)
 	return 0;
 }
 
-static int set_fm_record(struct codec_client *client, int path)
+static int set_fm_record(struct codec_client *client __unused, int path __unused)
 {
 	ALOGV("FM record mode 4, ****LINE:%d,FUNC:%s", __LINE__,__FUNCTION__);
 
 	return 0;
 }
 
-static int set_factory_volume(struct codec_client *client, int path, int vol)
+static int set_factory_volume(struct codec_client *client __unused, int path __unused, int vol __unused)
 {
 	ALOGV("****LINE:%d,FUNC:%s",__LINE__,__FUNCTION__);
 	return 0;
 }
 
-static int set_factory_path(struct codec_client *client, int path)
+static int set_factory_path(struct codec_client *client, int path __unused)
 {
 	mixer_ctl_set_value(client->mixer_ctls->audio_phone_end_call, 0, 1);
 	mixer_ctl_set_value(client->mixer_ctls->audio_linein_in, 0, 1);  
@@ -386,13 +386,13 @@ static int set_phone_record_enable(struct codec_client *client, bool enable)
 	return 0;
 }
 
-static int set_phone_record(struct codec_client *client, int path)
+static int set_phone_record(struct codec_client *client __unused, int path __unused)
 {
 	ALOGV("****LINE:%d,FUNC:%s",__LINE__,__FUNCTION__);
 	return 0;
 }
 
-static int record_read_pcm_buf(struct codec_client *client, void* buffer, int bytes)
+static int record_read_pcm_buf(struct codec_client *client __unused, void* buffer, int bytes)
 {
 	ALOGV("1****LINE:%d,FUNC:%s",__LINE__,__FUNCTION__);
 	
