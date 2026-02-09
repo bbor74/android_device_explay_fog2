@@ -1931,13 +1931,13 @@ static ssize_t read_frames(struct sunxi_stream_in *in, void *buffer, ssize_t fra
 {
 	// F_LOG;
     ssize_t frames_wr = 0;
-
+    size_t frame_size = audio_stream_frame_size(&in->stream.common);
     while (frames_wr < frames) {
         size_t frames_rd = frames - frames_wr;
         if (in->resampler != NULL) {
             in->resampler->resample_from_provider(in->resampler,
                     (int16_t *)((char *)buffer +
-                            frames_wr * audio_stream_frame_size(&in->stream.common)),
+                            frames_wr * frame_size),
                     &frames_rd);
         } else {
             struct resampler_buffer buf = {
@@ -1947,9 +1947,9 @@ static ssize_t read_frames(struct sunxi_stream_in *in, void *buffer, ssize_t fra
             get_next_buffer(&in->buf_provider, &buf);
             if (buf.raw != NULL) {
                 memcpy((char *)buffer +
-                           frames_wr * audio_stream_frame_size(&in->stream.common),
+                           frames_wr * frame_size,
                         buf.raw,
-                        buf.frame_count * audio_stream_frame_size(&in->stream.common));
+                        buf.frame_count * frame_size);
                 frames_rd = buf.frame_count;
             }
             release_buffer(&in->buf_provider, &buf);
