@@ -31,7 +31,7 @@ static int main_mic_vol[]={1,2,3,4,5,6};
 static int headset_mic_vol[]={1,2,3,4,5,6};
 
 //��ͬ·����,�������õ���
-static int demo_set_call_volume(ril_audio_path_type_t path, int volume)
+static int demo_set_call_volume(ril_audio_path_type_t path __unused, int volume)
 {
 	char tty_dev[32]={0};
 	char cmdline[30];
@@ -85,7 +85,7 @@ static int demo_set_call_volume(ril_audio_path_type_t path, int volume)
 }
 
 //·���л�����
-static int demo_set_call_path(ril_audio_path_type_t path)
+static int demo_set_call_path(ril_audio_path_type_t path __unused)
 {
 	int channel = 0;
 	char cmdline[50]={0};
@@ -151,7 +151,7 @@ static int demo_set_call_path(ril_audio_path_type_t path)
 }
 
 //��������atָ��
-static int demo_set_call_at(char *at)
+static int demo_set_call_at(char *at __unused)
 {
     char tty_dev[32]={0};
 
