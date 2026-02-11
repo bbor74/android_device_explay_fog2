@@ -18,7 +18,7 @@ allow sensors_exec selinuxfs:filesystem getattr;
 allow sensors_exec sysfs:dir { open read search };
 allow sensors_exec sysfs:file { getattr setattr };
 allow sensors_exec system_file:dir search;
-allow sensors_exec system_file:file { entrypoint execute execute_no_trans getattr open read };
+allow sensors_exec system_file:file { execute execute_no_trans getattr open read };
 allow sensors_exec system_file:lnk_file read;
 
 #============= sensors_exec ==============
