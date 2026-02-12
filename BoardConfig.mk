@@ -48,6 +48,7 @@ TARGET_KERNEL_CONFIG := explay_fog_defconfig
 BOARD_KERNEL_CMDLINE := console=ttyS0,115200 rw init=/init loglevel=4 androidboot.hardware=sun8i androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x40000000
 # TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/kernel
+KERNEL_HAS_FINIT_MODULE := false
 
 # Enable dex-preoptimization to speed up first boot sequence
 WITH_DEXPREOPT := true
