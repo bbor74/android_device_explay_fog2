@@ -1,0 +1,2 @@
+#============= cameraserver ==============
+allow cameraserver proc_meminfo:file { open read };

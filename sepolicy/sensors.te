@@ -30,3 +30,16 @@ allow sensors_exec self:lnk_file read;
 allow sensors_exec shell_exec:file { read entrypoint };
 allow sensors_exec toolbox_exec:file { read getattr open execute execute_no_trans };
 
+
+#============= sensors_exec ==============
+allow sensors_exec default_prop:file { getattr open read };
+allow sensors_exec properties_device:dir getattr;
+allow sensors_exec properties_serial:file { getattr open read };
+allow sensors_exec property_contexts:file { getattr open read };
+allow sensors_exec rootfs:lnk_file getattr;
+allow sensors_exec shell_exec:file getattr;
+allow sensors_exec sysfs_devices_system_cpu:dir search;
+allow sensors_exec sysfs_devices_system_cpu:file { getattr open read };
+allow sensors_exec system_file:dir getattr;
+allow sensors_exec urandom_device:chr_file { getattr ioctl open read };
+

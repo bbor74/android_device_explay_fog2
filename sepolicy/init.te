@@ -17,3 +17,7 @@ allow init block_device:blk_file write;
 #============= init ==============
 allow init kernel:system module_request;
 
+#============= init ==============
+allow init debugfs:file write;
+allow init ram_device:blk_file write;
+
