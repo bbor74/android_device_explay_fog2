@@ -1307,7 +1307,7 @@ bool CameraHardware::checkFocusArea(const char * area)
 	char temp[128];
 	strcpy(temp, area);
 	char *pval = temp;
-	char *seps = "(,)";
+	const char *seps = "(,)";
 	int offset = 0;
 	pval = strtok(pval, seps);
 	while (pval != NULL)
