@@ -2277,7 +2277,7 @@ void CameraHardware::releaseCamera()
     cleanupCamera();
 }
 
-status_t CameraHardware::dumpCamera(int fd)
+status_t CameraHardware::dumpCamera(int fd __unused)
 {
     LOGV("%s", __FUNCTION__);
 

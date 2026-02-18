@@ -50,7 +50,7 @@ BufferListManager::~BufferListManager()
 	}
 }
 
-buffer_node * BufferListManager::allocBuffer(uint32_t id, uint32_t min_size)
+buffer_node * BufferListManager::allocBuffer(uint32_t id __unused, uint32_t min_size)
 {
 	Mutex::Autolock locker(&mLock);
 	

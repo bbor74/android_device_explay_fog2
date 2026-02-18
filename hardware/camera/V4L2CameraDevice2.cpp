@@ -1810,7 +1810,7 @@ int V4L2CameraDevice::setExposureWind(int num, void *wind)
 }
 
 // flash mode
-int V4L2CameraDevice::setFlashMode(int mode)
+int V4L2CameraDevice::setFlashMode(int mode __unused)
 {
 	F_LOG;
 	int ret = -1;

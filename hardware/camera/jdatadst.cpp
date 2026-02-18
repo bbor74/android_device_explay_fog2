@@ -57,7 +57,7 @@ typedef my_mem_destination_mgr * my_mem_dest_ptr;
  */
 
 METHODDEF(void)
-init_mem_destination (j_compress_ptr cinfo)
+init_mem_destination (j_compress_ptr cinfo __unused)
 {
   /* no work necessary here */
 }

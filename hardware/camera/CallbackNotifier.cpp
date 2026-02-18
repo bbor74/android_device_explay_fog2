@@ -443,7 +443,7 @@ void CallbackNotifier::disableVideoRecording()
     mVideoRecEnabled = false;
 }
 
-status_t CallbackNotifier::storeMetaDataInBuffers(bool enable)
+status_t CallbackNotifier::storeMetaDataInBuffers(bool enable __unused)
 {
     /* Return INVALID_OPERATION means HAL does not support metadata. So HAL will
      * return actual frame data with CAMERA_MSG_VIDEO_FRAME. Return
@@ -760,7 +760,7 @@ void CallbackNotifier::setContinuousPictureCnt(int cnt)
 	mSavePictureMax = cnt;
 }
 
-bool CallbackNotifier::takePicture(const void* frame, bool is_continuous)
+bool CallbackNotifier::takePicture(const void* frame, bool is_continuous __unused)
 {
 	V4L2BUF_t * pbuf = (V4L2BUF_t *)frame;
 	int framesize =0;
