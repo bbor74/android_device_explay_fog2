@@ -1941,8 +1941,8 @@ static ssize_t read_frames(struct sunxi_stream_in *in, void *buffer, ssize_t fra
                     &frames_rd);
         } else {
             struct resampler_buffer buf = {
-                    { raw : NULL, },
-                    frame_count : frames_rd,
+                    { .raw = NULL, },
+                    .frame_count = frames_rd,
             };
             get_next_buffer(&in->buf_provider, &buf);
             if (buf.raw != NULL) {
