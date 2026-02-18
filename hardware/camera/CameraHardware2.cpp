@@ -304,7 +304,7 @@ bool CameraHardware::autoFocusThread()
 			// do nothing
 			new_status = FOCUS_STATUS_IDLE;
 		}
-		else if (status == 0xFF000000)
+		else if (status == (int)0xFF000000)
 		{
 			LOGV("getAutoFocusStatus, status = 0xFF000000");
 			ret = false;		// exit thread
