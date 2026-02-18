@@ -335,9 +335,9 @@ private:
 	/* Checks if it's the time to push new frame to continuous picture.
 	 * Note that this method must be called while object is locked. */
 	bool isContinuousPictureTime();
-	
+#ifdef SUPPORT_FACE_DETECTION
 	void waitFaceDectectTime();
-	
+#endif
 	void singalDisconnect();
 public:
 #ifdef USE_MP_CONVERT
@@ -493,13 +493,14 @@ private:
 
     /* Preview frequency in microseconds. */
     uint32_t                        mContinuousPictureAfter;
-	
+#ifdef SUPPORT_FACE_DETECTION
     uint64_t                        mFaceDectectLast;
     uint32_t                        mFaceDectectAfter;
 
 	V4L2BUF_t *						mCurrentV4l2buf;
 
 	bool							mVideoHint;
+#endif
 	bool                            mIsThumbUsedForVideo;
 	int	                            mVideoWidth;			// for cts
 	int	                            mVideoHeight;

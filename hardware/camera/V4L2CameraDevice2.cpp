@@ -217,7 +217,6 @@ V4L2CameraDevice::V4L2CameraDevice(CameraHardware* camera_hal,
 #ifdef USE_MP_CONVERT
 	  ,mG2DHandle(0)
 #endif
-	  ,mCurrentV4l2buf(NULL)
 	  ,mCanBeDisconnected(false)
 	  ,mContinuousPictureStarted(false)
 	  ,mContinuousPictureCnt(0)
@@ -225,9 +224,12 @@ V4L2CameraDevice::V4L2CameraDevice(CameraHardware* camera_hal,
 	  ,mContinuousPictureStartTime(0)
 	  ,mContinuousPictureLast(0)
 	  ,mContinuousPictureAfter(0)
+#ifdef SUPPORT_FACE_DETECTION
 	  ,mFaceDectectLast(0)
 	  ,mFaceDectectAfter(0)
+	  ,mCurrentV4l2buf(NULL)
 	  ,mVideoHint(false)
+#endif
 	  ,mIsThumbUsedForVideo(false)
 	  ,mVideoWidth(640)
 	  ,mVideoHeight(480)
@@ -473,7 +475,11 @@ status_t V4L2CameraDevice::disconnectDevice()
 status_t V4L2CameraDevice::startDevice(int width,
                                        int height,
                                        uint32_t pix_fmt,
+#ifdef SUPPORT_FACE_DETECTION
                                        bool video_hint)
+#else
+                                       bool video_hint __unused)
+#endif
 {
 	LOGD("%s, wxh: %dx%d, fmt: %d", __FUNCTION__, width, height, pix_fmt);
 	
@@ -493,9 +499,11 @@ status_t V4L2CameraDevice::startDevice(int width,
 
 	// VE encoder need this format
 	mVideoFormat = pix_fmt;
+#ifdef SUPPORT_FACE_DETECTION
 	mCurrentV4l2buf = NULL;
 
 	mVideoHint = video_hint;
+#endif
 	mCanBeDisconnected = false;
 
 	// set capture mode and fps
@@ -519,8 +527,9 @@ status_t V4L2CameraDevice::startDevice(int width,
 	mCameraDeviceState = STATE_STARTED;
 
 	mContinuousPictureAfter = 1000000 / 10;
+#ifdef SUPPORT_FACE_DETECTION
 	mFaceDectectAfter = 1000000 / 15;
-	
+#endif
     return NO_ERROR;
 }
 
@@ -558,9 +567,9 @@ status_t V4L2CameraDevice::stopDevice()
 	mCameraDeviceState = STATE_CONNECTED;
 
 	mLastZoom = -1;
-	
+#ifdef SUPPORT_FACE_DETECTION
 	mCurrentV4l2buf = NULL;
-	
+#endif
     return NO_ERROR;
 }
 
@@ -844,12 +853,13 @@ bool V4L2CameraDevice::captureThread()
 	
 	v4l2_buf.refCnt = 1;
 	memcpy(&mV4l2buf[v4l2_buf.index], &v4l2_buf, sizeof(V4L2BUF_t));
+#ifdef SUPPORT_FACE_DETECTION
 	if (!mVideoHint)
 	{
 		// face detection only use when picture mode
 		mCurrentV4l2buf = &mV4l2buf[v4l2_buf.index];
 	}
-
+#endif
 	if (mTakePictureState == TAKE_PICTURE_NORMAL)
 	{
 		//copy picture buffer
@@ -1153,7 +1163,7 @@ bool V4L2CameraDevice::isContinuousPictureTime()
     }
     return false;
 }
-
+#ifdef SUPPORT_FACE_DETECTION
 void V4L2CameraDevice::waitFaceDectectTime()
 {
     timeval cur_time;
@@ -1215,7 +1225,7 @@ int V4L2CameraDevice::getCurrentFaceFrame(void * frame)
 
 	return 0;
 }
-
+#endif
 // -----------------------------------------------------------------------------
 // extended interfaces here <***** star *****>
 // -----------------------------------------------------------------------------

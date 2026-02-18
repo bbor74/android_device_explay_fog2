@@ -396,9 +396,10 @@ public:
 	void setNewCrop(Rect * rect);
 	int setAutoFocusMode();
 	int setAutoFocusCtrl(int af_ctrl, void *areas);
+#ifdef SUPPORT_FACE_DETECTION
 	int getCurrentFaceFrame(void * frame);
 	int faceDetection(camera_frame_metadata_t *face);
-    
+#endif
     int parse_focus_areas(const char * str);
 	bool checkFocusArea(const char * area);
 	bool checkFocusMode(const char * mode);
