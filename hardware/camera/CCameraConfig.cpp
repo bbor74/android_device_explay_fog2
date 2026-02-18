@@ -309,7 +309,7 @@ void CCameraConfig::getValue(char *line, char *value)
 	}
 
 	char *pval = ptemp;
-	char *seps = " \n\r\t";
+	const char *seps = " \n\r\t";
 	int offset = 0;
 	pval = strtok(pval, seps);
 	while (pval != NULL)
@@ -321,7 +321,7 @@ void CCameraConfig::getValue(char *line, char *value)
 	*(value + offset) = 0;
 }
 
-bool CCameraConfig::readKey(char *key, char *value)
+bool CCameraConfig::readKey(const char *key, char *value)
 {
 	bool bRet = false;
 	bool bFlagBegin = false;
