@@ -680,7 +680,7 @@ status_t CallbackNotifier::autoFocusContinuousMsg(bool success)
 	}
     return NO_ERROR;
 }
-
+#ifdef SUPPORT_FACE_DETECTION
 status_t CallbackNotifier::faceDetectionMsg(camera_frame_metadata_t *face)
 {
 	if (isMessageEnabled(CAMERA_MSG_PREVIEW_METADATA))
@@ -691,7 +691,7 @@ status_t CallbackNotifier::faceDetectionMsg(camera_frame_metadata_t *face)
 	}
     return NO_ERROR;
 }
-
+#endif
 void CallbackNotifier::notifyPictureMsg(const void* frame)
 {
 	F_LOG;
