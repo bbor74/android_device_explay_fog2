@@ -278,8 +278,9 @@ public:
 
 	status_t autoFocusMsg(bool success);
 	status_t autoFocusContinuousMsg(bool success);
+#ifdef SUPPORT_FACE_DETECTION
 	status_t faceDetectionMsg(camera_frame_metadata_t *face);
-
+#endif
 	bool takePicture(const void* frame, bool is_continuous = false);
 	void startContinuousPicture();
 	void stopContinuousPicture();
