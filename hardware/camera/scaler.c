@@ -62,7 +62,7 @@ typedef struct ISP_CTX
 void SC_hor_filter(ISP_CTX *ispctx,unsigned char *dst_buf,unsigned char *src_ptr,int src_width,int dst_width,int ratio,int init_phase,int filter_type)
 {
 	int j;
-	int base_pixel,hphase,r;
+	int base_pixel,hphase,r = 0;
 	unsigned char x[4],*td_buf;
 	int *C;
 
@@ -124,8 +124,8 @@ void do_scaler(ISP_CTX *ispctx,unsigned char * psrc, unsigned char * pdst, int s
 	unsigned char *scline_buf[2],*lastline,*curline;
 	int line_num[2],base_line,base_linep1;
 	unsigned char *dst_ptr,*CbPtr,*CrPtr,*DstBuf;
-	int vphase,hratio,vratio,init_vphase;
-	int src_height,src_width,dst_width,dst_height = 0;
+	int vphase,hratio = 0,vratio,init_vphase;
+	int src_height = 0,src_width = 0,dst_width = 0,dst_height = 0;
 	int align_width,sub_num,cro_align_width,cro_sub_num;
 
 	scline_buf[0] = (unsigned char *)malloc(ispctx->SC_dst_width*2);
