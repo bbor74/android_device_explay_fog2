@@ -1026,9 +1026,10 @@ status_t CameraHardware::startPreview()
 void CameraHardware::stopPreview()
 {
 	F_LOG;
-	
+#ifdef SUPPORT_FACE_DETECTION
 	mQueueElement[CMD_QUEUE_STOP_FACE_DETECTE].cmd = CMD_QUEUE_STOP_FACE_DETECTE;
 	OSAL_Queue(&mQueueCommand, &mQueueElement[CMD_QUEUE_STOP_FACE_DETECTE]);
+#endif
 	pthread_cond_signal(&mCommandCond);
 	
     Mutex::Autolock locker(&mObjectLock);
