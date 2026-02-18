@@ -394,24 +394,24 @@ int HALCameraFactory::device_open(const hw_module_t* module,
 
 /* Entry point for camera HAL API. */
 struct hw_module_methods_t HALCameraFactory::mCameraModuleMethods = {
-    open: HALCameraFactory::device_open
+    .open = HALCameraFactory::device_open
 };
 
 }; /* namespace android */
 
 camera_module_t HAL_MODULE_INFO_SYM = {
-    common: {
-         tag:           		HARDWARE_MODULE_TAG,
-		 module_api_version:	CAMERA_DEVICE_API_VERSION_1_0,
-		 hal_api_version:	 	HARDWARE_HAL_API_VERSION,
-         id:            		CAMERA_HARDWARE_MODULE_ID,
-         name:          		"V4L2Camera Module",
-         author:        		"XSJ",
-         methods:       		&android::HALCameraFactory::mCameraModuleMethods,
-         dso:           		NULL,
-         reserved:      		{0},
+    .common = {
+         .tag =           		HARDWARE_MODULE_TAG,
+		 .module_api_version =	CAMERA_DEVICE_API_VERSION_1_0,
+		 .hal_api_version =	 	HARDWARE_HAL_API_VERSION,
+         .id =            		CAMERA_HARDWARE_MODULE_ID,
+         .name =          		"V4L2Camera Module",
+         .author =        		"XSJ",
+         .methods =       		&android::HALCameraFactory::mCameraModuleMethods,
+         .dso =           		NULL,
+         .reserved =      		{0},
     },
-    get_number_of_cameras:  	android::HALCameraFactory::get_number_of_cameras,
-    get_camera_info:        	android::HALCameraFactory::get_camera_info,
+    .get_number_of_cameras =  	android::HALCameraFactory::get_number_of_cameras,
+    .get_camera_info =        	android::HALCameraFactory::get_camera_info,
 };
 
