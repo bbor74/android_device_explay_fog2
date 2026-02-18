@@ -1617,7 +1617,7 @@ int V4L2CameraDevice::tryFmt(int format)
 		LOGV("format index = %d, name = %s, v4l2 pixel format = %x\n",
 			i, fmtdesc.description, fmtdesc.pixelformat);
 
-		if (fmtdesc.pixelformat == format)
+		if (fmtdesc.pixelformat == (unsigned int)format)
 		{
 			return OK;
 		}
