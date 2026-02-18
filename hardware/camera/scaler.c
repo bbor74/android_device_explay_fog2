@@ -122,7 +122,7 @@ void do_scaler(ISP_CTX *ispctx,unsigned char * psrc, unsigned char * pdst, int s
 	int line_num[2],base_line,base_linep1;
 	unsigned char *dst_ptr,*CbPtr,*CrPtr,*DstBuf;
 	int vphase,hratio,vratio,init_vphase;
-	int src_height,src_width,dst_width,dst_height;
+	int src_height,src_width,dst_width,dst_height = 0;
 	int align_width,sub_num,cro_align_width,cro_sub_num;
 
 	scline_buf[0] = (unsigned char *)malloc(ispctx->SC_dst_width*2);
