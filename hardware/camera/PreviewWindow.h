@@ -125,8 +125,8 @@ protected:
     /*
      * Cached preview window frame dimensions.
      */
-    int                             mPreviewFrameWidth;
-    int                             mPreviewFrameHeight;
+    unsigned int                             mPreviewFrameWidth;
+    unsigned int                             mPreviewFrameHeight;
 	int								mPreviewFrameSize;
 	int								mCurPixelFormat;
 
