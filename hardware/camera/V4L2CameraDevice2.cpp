@@ -21,9 +21,9 @@
 
 #define CHECK_NO_ERROR(a)						\
 	if (a != NO_ERROR) {						\
-		if (mCameraFd != NULL) {				\
+		if (mCameraFd != (int)NULL) {				\
 			close(mCameraFd);					\
-			mCameraFd = NULL;					\
+			mCameraFd = (int)NULL;					\
 		}										\
 		return EINVAL;							\
 	}
@@ -422,10 +422,10 @@ status_t V4L2CameraDevice::disconnectDevice()
 	closeCameraDev();
 	
 #ifdef USE_MP_CONVERT
-	if(mG2DHandle != NULL)
+	if(mG2DHandle != (int)NULL)
 	{
 		close(mG2DHandle);
-		mG2DHandle = NULL;
+		mG2DHandle = (int)NULL;
 	}
 #endif
 
@@ -1303,10 +1303,10 @@ int V4L2CameraDevice::openCameraDev(HALCameraInfo * halInfo)
 
 END_ERROR:
 
-	if (mCameraFd != NULL)
+	if (mCameraFd != (int)NULL)
 	{
 		close(mCameraFd);
-		mCameraFd = NULL;
+		mCameraFd = (int)NULL;
 	}
 	
 	return -1;
@@ -1316,10 +1316,10 @@ void V4L2CameraDevice::closeCameraDev()
 {
 	F_LOG;
 	
-	if (mCameraFd != NULL)
+	if (mCameraFd != (int)NULL)
 	{
 		close(mCameraFd);
-		mCameraFd = NULL;
+		mCameraFd = (int)NULL;
 	}
 }
 
@@ -1959,7 +1959,7 @@ int V4L2CameraDevice::getAutoFocusStatus()
 	int ret = -1;
 	struct v4l2_control ctrl;
 
-	if (mCameraFd == NULL)
+	if (mCameraFd == (int)NULL)
 	{
 		return 0xFF000000;
 	}
