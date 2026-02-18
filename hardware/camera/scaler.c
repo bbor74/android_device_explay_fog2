@@ -56,7 +56,7 @@ typedef struct ISP_CTX
 }ISP_CTX;
 
 
-void SC_hor_filter(ISP_CTX *ispctx,unsigned char *dst_buf,unsigned char *src_ptr,int src_width,int dst_width,int ratio,int init_phase,int filter_type,int isLuma)
+void SC_hor_filter(ISP_CTX *ispctx,unsigned char *dst_buf,unsigned char *src_ptr,int src_width,int dst_width,int ratio,int init_phase,int filter_type)
 {
 	int j;
 	int base_pixel,hphase,r;
@@ -115,7 +115,7 @@ void SC_hor_filter(ISP_CTX *ispctx,unsigned char *dst_buf,unsigned char *src_ptr
 	free(td_buf);
 }
 
-void do_scaler(ISP_CTX *ispctx,unsigned char * psrc, unsigned char * pdst, int src_w, int src_h, int dst_w, int dst_h, int fmt, int align)
+void do_scaler(ISP_CTX *ispctx,unsigned char * psrc, unsigned char * pdst, int src_w, int fmt, int align)
 {
 	int i,j,*C,r;
 	unsigned char *scline_buf[2],*lastline,*curline;
@@ -168,7 +168,7 @@ void do_scaler(ISP_CTX *ispctx,unsigned char * psrc, unsigned char * pdst, int s
 			line_num[0] = base_line;
 
 			//need to fill
-			SC_hor_filter(ispctx,lastline,psrc+base_line*align_width,ispctx->width,ispctx->SC_dst_width,ispctx->SC_luma_hor_ratio,ispctx->SC_luma_hor_init_phase,0,1);
+			SC_hor_filter(ispctx,lastline,psrc+base_line*align_width,ispctx->width,ispctx->SC_dst_width,ispctx->SC_luma_hor_ratio,ispctx->SC_luma_hor_init_phase,0);
 		}
 
 		if(base_linep1 == line_num[0])
@@ -194,7 +194,7 @@ void do_scaler(ISP_CTX *ispctx,unsigned char * psrc, unsigned char * pdst, int s
 
 			//need to fill
 
-			SC_hor_filter(ispctx,curline,psrc+base_linep1*align_width,ispctx->width,ispctx->SC_dst_width,ispctx->SC_luma_hor_ratio,ispctx->SC_luma_hor_init_phase,0,1);
+			SC_hor_filter(ispctx,curline,psrc+base_linep1*align_width,ispctx->width,ispctx->SC_dst_width,ispctx->SC_luma_hor_ratio,ispctx->SC_luma_hor_init_phase,0);
 		}
 
 		//vertical filter
@@ -259,7 +259,7 @@ void do_scaler(ISP_CTX *ispctx,unsigned char * psrc, unsigned char * pdst, int s
 			line_num[0] = base_line;
 
 			//need to fill
-			SC_hor_filter(ispctx,lastline,CbPtr+base_line*cro_align_width,src_width,dst_width,hratio,ispctx->SC_chroma_hor_init_phase,0,0);
+			SC_hor_filter(ispctx,lastline,CbPtr+base_line*cro_align_width,src_width,dst_width,hratio,ispctx->SC_chroma_hor_init_phase,0);
 		}
 
 		if(base_linep1 == line_num[0])
@@ -284,7 +284,7 @@ void do_scaler(ISP_CTX *ispctx,unsigned char * psrc, unsigned char * pdst, int s
 			}
 
 			//need to fill
-			SC_hor_filter(ispctx,curline,CbPtr+base_linep1*cro_align_width,src_width,dst_width,hratio,ispctx->SC_chroma_hor_init_phase,0,0);
+			SC_hor_filter(ispctx,curline,CbPtr+base_linep1*cro_align_width,src_width,dst_width,hratio,ispctx->SC_chroma_hor_init_phase,0);
 		}
 
 		//vertical filter
@@ -332,7 +332,7 @@ void do_scaler(ISP_CTX *ispctx,unsigned char * psrc, unsigned char * pdst, int s
 			line_num[0] = base_line;
 
 			//need to fill
-			SC_hor_filter(ispctx,lastline,CrPtr+base_line*cro_align_width,src_width,dst_width,hratio,ispctx->SC_chroma_hor_init_phase,0,0);
+			SC_hor_filter(ispctx,lastline,CrPtr+base_line*cro_align_width,src_width,dst_width,hratio,ispctx->SC_chroma_hor_init_phase,0);
 		}
 
 		if(base_linep1 == line_num[0])
@@ -358,7 +358,7 @@ void do_scaler(ISP_CTX *ispctx,unsigned char * psrc, unsigned char * pdst, int s
 
 			//need to fill
 
-			SC_hor_filter(ispctx,curline,CrPtr+base_linep1*cro_align_width,src_width,dst_width,hratio,ispctx->SC_chroma_hor_init_phase,0,0);
+			SC_hor_filter(ispctx,curline,CrPtr+base_linep1*cro_align_width,src_width,dst_width,hratio,ispctx->SC_chroma_hor_init_phase,0);
 		}
 
 		//vertical filter
@@ -413,6 +413,6 @@ int scaler(unsigned char * psrc, unsigned char * pdst, int src_w, int src_h, int
 
 	ispctx->SC_luma_hor_ratio = (src_w*256 + (dst_w/2))/dst_w;
 	ispctx->SC_luma_ver_ratio = (src_h*256 + (dst_h/2))/dst_h;
-	do_scaler(ispctx,psrc,pdst,src_w,src_h,dst_w,dst_h,fmt,align);
+	do_scaler(ispctx,psrc,pdst,src_w,fmt,align);
 	return 0;
 }
