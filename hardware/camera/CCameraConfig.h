@@ -211,7 +211,7 @@ public:
 	}
 
 private:
-	bool readKey(char *key, char *value);
+	bool readKey(const char *key, char *value);
 	void getValue(char *line, char *value);
 	bool usedKey(char *value);
 
