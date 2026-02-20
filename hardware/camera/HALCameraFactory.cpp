@@ -11,6 +11,7 @@
 
 #include "HALCameraFactory.h"
 #include "CCameraConfig.h"
+#include <sys/syscall.h>
 
 extern camera_module_t HAL_MODULE_INFO_SYM;
 
@@ -21,8 +22,8 @@ android::HALCameraFactory  gEmulatedCameraFactory;
 
 namespace android {
 
-
-#define GET_CALLING_PID	(IPCThreadState::self()->getCallingPid())
+//#define GET_CALLING_PID	(IPCThreadState::self()->getCallingPid())
+#define GET_CALLING_PID	(syscall(__NR_gettid))
 
 void getCallingProcessName(char *name)
 {
@@ -35,7 +36,7 @@ void getCallingProcessName(char *name)
 	}
 	
 	memset(proc_node, 0, sizeof(proc_node));
-	sprintf(proc_node, "/proc/%d/cmdline", GET_CALLING_PID);
+	sprintf(proc_node, "/proc/%ld/cmdline", GET_CALLING_PID);
 	int fp = ::open(proc_node, O_RDONLY);
 	if (fp > 0) 
 	{
