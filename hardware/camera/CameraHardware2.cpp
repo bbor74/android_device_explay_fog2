@@ -1044,9 +1044,17 @@ int CameraHardware::isPreviewEnabled()
 
 status_t CameraHardware::storeMetaDataInBuffers(int enable)
 {
-	F_LOG;
+	ALOGD("CameraHardware::storeMetaDataInBuffers, %s", enable ? "true" : "false");
+
+	// Do not accept to store metadata in buffers - We will always store
+	//  YUV data on video buffers. Metadata, in the case of Nvidia Tegra2
+	//  is a descriptor of an OpenMax endpoint that was filled with the
+	//  data.
+    return (enable) ? INVALID_OPERATION : NO_ERROR;
+
+//	F_LOG;
     /* Callback should return a negative errno. */
-    return -mCallbackNotifier.storeMetaDataInBuffers(enable);
+//    return -mCallbackNotifier.storeMetaDataInBuffers(enable);
 }
 
 status_t CameraHardware::startRecording()
