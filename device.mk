@@ -141,6 +141,14 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # APP CONFIGS
 PRODUCT_CHARACTERISTICS := tablet
-PRODUCT_AAPT_CONFIG := ldpi mdpi hdpi
+
+# Set the physical display size with PRODUCT_AAPT_CONFIG
+# Options are small(~2"-3"), normal(~3"-4"), large(~4"-7"), xlarge(~7" and larger)
+PRODUCT_AAPT_CONFIG := large
+# Set the preferred asset density with PRODUCT_AAPT_PREF_CONFIG
+# See android CCD for valid options
 PRODUCT_AAPT_PREF_CONFIG := mdpi
+# A list of dpis to select prebuilt apk, in precedence order.
+# See android CCD for valid options
+PRODUCT_AAPT_PREBUILT_DPI := mdpi hdpi tvdpi ldpi
 
