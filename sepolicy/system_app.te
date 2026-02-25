@@ -1,0 +1,2 @@
+#============= system_app ==============
+allow system_app radio_data_file:dir getattr;
