@@ -2,9 +2,6 @@
 allow system_server disp_device:chr_file { ioctl open read };
 
 #============= system_server ==============
-allow system_server recovery_cache_file:dir rmdir;
-
-#============= system_server ==============
 allow system_server sensors_exec:dir search;
 allow system_server sensors_exec:file { read getattr open };
 

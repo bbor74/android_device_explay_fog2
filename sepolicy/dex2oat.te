@@ -1,2 +1,0 @@
-#============= dex2oat ==============
-allow dex2oat dalvikcache_profiles_data_file:file { getattr open read };
