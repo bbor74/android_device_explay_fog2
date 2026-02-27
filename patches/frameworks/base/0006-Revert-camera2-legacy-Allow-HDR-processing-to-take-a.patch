@@ -1,0 +1,48 @@
+From 9759f11faed558dcd49c018a098dc3217daeba62 Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Thu, 26 Feb 2026 15:50:08 +0400
+Subject: [PATCH 6/6] Revert "camera2 legacy: Allow HDR processing to take a
+ while"
+
+This reverts commit b47a1c5b2acec0fc12fcab98369faf340436467b.
+
+Fix:
+01-01 04:28:09.366  1705  1783 E RequestThread-0: Received device exception during capture call:
+01-01 04:28:09.366  1705  1783 E RequestThread-0: java.lang.NullPointerException: Attempt to invoke virtual method 'boolean java.lang.String.equals(java.lang.Object)' on a null object reference
+01-01 04:28:09.366  1705  1783 E RequestThread-0: 	at android.hardware.camera2.legacy.RequestThreadManager$5.handleMessage(RequestThreadManager.java:830)
+01-01 04:28:09.366  1705  1783 E RequestThread-0: 	at android.os.Handler.dispatchMessage(Handler.java:98)
+01-01 04:28:09.366  1705  1783 E RequestThread-0: 	at android.os.Looper.loop(Looper.java:148)
+01-01 04:28:09.366  1705  1783 E RequestThread-0: 	at android.os.HandlerThread.run(HandlerThread.java:61)
+01-01 04:28:09.366  1705  1783 I CameraDeviceState: Legacy camera service transitioning to state ERROR
+
+Change-Id: I0e609155e8c786d6b7eb4c398b126d361c09cd75
+---
+ .../hardware/camera2/legacy/RequestThreadManager.java        | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/core/java/android/hardware/camera2/legacy/RequestThreadManager.java b/core/java/android/hardware/camera2/legacy/RequestThreadManager.java
+index c26d07d2bc2..a0a03b101ef 100644
+--- a/core/java/android/hardware/camera2/legacy/RequestThreadManager.java
++++ b/core/java/android/hardware/camera2/legacy/RequestThreadManager.java
+@@ -81,7 +81,6 @@ public class RequestThreadManager {
+ 
+     private static final int PREVIEW_FRAME_TIMEOUT = 1000; // ms
+     private static final int JPEG_FRAME_TIMEOUT = 4000; // ms (same as CTS for API2)
+-    private static final int HDR_TIMEOUT = 20000; //ms
+     private static final int REQUEST_COMPLETE_TIMEOUT = JPEG_FRAME_TIMEOUT;
+ 
+     private static final float ASPECT_RATIO_TOLERANCE = 0.01f;
+@@ -826,9 +825,7 @@ public class RequestThreadManager {
+ 
+                             if (holder.hasJpegTargets()) {
+                                 doJpegCapture(holder);
+-                                if (!mReceivedJpeg.block(
+-                                        mParams.getSceneMode().equals(mParams.SCENE_MODE_HDR)
+-                                        ? HDR_TIMEOUT : JPEG_FRAME_TIMEOUT)) {
++                                if (!mReceivedJpeg.block(JPEG_FRAME_TIMEOUT)) {
+                                     Log.e(TAG, "Hit timeout for jpeg callback!");
+                                     mCaptureCollector.failNextJpeg();
+                                 }
+-- 
+2.17.1
+

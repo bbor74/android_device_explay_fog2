@@ -1,7 +1,7 @@
 From 26d5ed5908f320b27bb789797bc50efc2799f217 Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Tue, 4 Mar 2025 13:12:20 +0400
-Subject: [PATCH 2/5] Add the option to flip the navigation bar in portrait
+Subject: [PATCH 2/6] Add the option to flip the navigation bar in portrait
  mode
 
 Change-Id: Ic74ccadef82e9319edf2e43a8c59785a1a70cf5d

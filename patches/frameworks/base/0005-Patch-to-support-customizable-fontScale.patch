@@ -1,7 +1,7 @@
 From 9a3634c1ff048de553b2a8cae21314f46d188204 Mon Sep 17 00:00:00 2001
 From: Yonghua Zheng <yonghua.zheng@esimtek.com>
 Date: Thu, 13 Jul 2017 17:56:56 +0800
-Subject: [PATCH 5/5] Patch to support customizable fontScale
+Subject: [PATCH 5/6] Patch to support customizable fontScale
 
 Due to low density, fonts look small and hard to read
 so provide this patch for customization to set the

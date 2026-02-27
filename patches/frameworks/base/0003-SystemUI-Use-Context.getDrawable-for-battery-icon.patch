@@ -1,7 +1,7 @@
 From 73a471c08e8f5dfa80083d54980c5ddf228e962a Mon Sep 17 00:00:00 2001
 From: LuK1337 <priv.luk@gmail.com>
 Date: Sat, 11 Feb 2017 13:39:00 +0100
-Subject: [PATCH 3/5] SystemUI: Use Context.getDrawable for battery icon
+Subject: [PATCH 3/6] SystemUI: Use Context.getDrawable for battery icon
 
 Fixes:
 02-11 13:36:21.859 28053 28053 W Resources: Drawable com.android.systemui:drawable/ic_battery_portrait
