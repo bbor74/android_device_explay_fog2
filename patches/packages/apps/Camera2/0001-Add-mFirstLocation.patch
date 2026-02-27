@@ -1,0 +1,57 @@
+From 13b04cd179c2c669cf41b1277efcada0f1571bcc Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Mon, 28 Apr 2025 17:37:23 +0400
+Subject: [PATCH 1/2] Add mFirstLocation
+
+Fix error:
+D/CAM_LcyLocProvider( 1692): No location received yet.
+
+Change-Id: I4874ac52efe3bbac00c355fa256ae3d415e97b10
+---
+ src/com/android/camera/app/LegacyLocationProvider.java | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/src/com/android/camera/app/LegacyLocationProvider.java b/src/com/android/camera/app/LegacyLocationProvider.java
+index 3ba2be352..30e55e69a 100644
+--- a/src/com/android/camera/app/LegacyLocationProvider.java
++++ b/src/com/android/camera/app/LegacyLocationProvider.java
+@@ -33,6 +33,7 @@ public class LegacyLocationProvider implements LocationProvider {
+     private Context mContext;
+     private android.location.LocationManager mLocationManager;
+     private boolean mRecordLocation;
++    private Location mFirstLocation;
+ 
+     LocationListener [] mLocationListeners = new LocationListener[] {
+             new LocationListener(android.location.LocationManager.GPS_PROVIDER),
+@@ -41,6 +42,7 @@ public class LegacyLocationProvider implements LocationProvider {
+ 
+     public LegacyLocationProvider(Context context) {
+         mContext = context;
++        mFirstLocation = new Location(android.location.LocationManager.GPS_PROVIDER);
+     }
+ 
+     @Override
+@@ -57,6 +59,10 @@ public class LegacyLocationProvider implements LocationProvider {
+             }
+         }
+         Log.d(TAG, "No location received yet.");
++        if (mFirstLocation != null) {
++            Log.d(TAG, "Use first location.");
++            return mFirstLocation;
++        }
+         return null;
+     }
+ 
+@@ -144,7 +150,8 @@ public class LegacyLocationProvider implements LocationProvider {
+                 return;
+             }
+             if (!mValid) {
+-                Log.d(TAG, "Got first location.");
++                Log.d(TAG, "Got first location:" + newLocation);
++                mFirstLocation.set(newLocation);
+             }
+             mLastLocation.set(newLocation);
+             mValid = true;
+-- 
+2.17.1
+

@@ -1,0 +1,32 @@
+From a66d916729dc8938269a46f574b389d0689bc392 Mon Sep 17 00:00:00 2001
+From: "shawn.xu" <shawn.xu@rock-chips.com>
+Date: Wed, 23 Mar 2016 16:13:16 +0800
+Subject: [PATCH 2/2] 2. fix single front camera can not open when No
+ back-facing camera found,check whether have front-facing camera.
+
+Change-Id: Id28c406176040d3f6ab9d60f3a513720445843e5
+Signed-off-by: shawn.xu <shawn.xu@rock-chips.com>
+---
+ src/com/android/camera/one/v2/Camera2OneCameraManagerImpl.java | 3 +++
+ 1 file changed, 3 insertions(+)
+ mode change 100644 => 100755 src/com/android/camera/one/v2/Camera2OneCameraManagerImpl.java
+
+diff --git a/src/com/android/camera/one/v2/Camera2OneCameraManagerImpl.java b/src/com/android/camera/one/v2/Camera2OneCameraManagerImpl.java
+old mode 100644
+new mode 100755
+index a4b5a9b1d..fb74e55e3
+--- a/src/com/android/camera/one/v2/Camera2OneCameraManagerImpl.java
++++ b/src/com/android/camera/one/v2/Camera2OneCameraManagerImpl.java
+@@ -135,6 +135,9 @@ public class Camera2OneCameraManagerImpl implements OneCameraManager {
+         String cameraId = findFirstCameraIdFacing(CameraCharacteristics.LENS_FACING_BACK);
+         if (cameraId == null) {
+             Log.w(TAG, "No back-facing camera found.");
++            Log.d(TAG, "Getting First FRONT Camera");
++            //xcq add
++            cameraId = findFirstCameraIdFacing(CameraCharacteristics.LENS_FACING_FRONT);
+         }
+         return cameraId;
+     }
+-- 
+2.17.1
+
