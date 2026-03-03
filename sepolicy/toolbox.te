@@ -1,2 +1,5 @@
 #============= toolbox ==============
 dontaudit toolbox block_device:blk_file { read write open };
+
+#============= toolbox ==============
+allow toolbox ram_device:blk_file { getattr open read write };
