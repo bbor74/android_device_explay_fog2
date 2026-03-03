@@ -1,0 +1,51 @@
+From 3dcc1d7377fb113792b11a11768c2b9c88257b12 Mon Sep 17 00:00:00 2001
+From: Xiaohui Chen <xiaohuic@google.com>
+Date: Tue, 22 Nov 2016 10:34:38 -0800
+Subject: [PATCH 3/7] Fix vertical nav button direction issue
+
+Bug: 32516898
+Change-Id: I00d5478b9bef87918d59f3021a9368fd3f2e0c20
+Test: locally on device
+Merged-In: Id94f08c066db101f630e69874bcdefb177e6f0f5
+---
+ .../systemui/statusbar/phone/ButtonDispatcher.java     | 10 ++++++++++
+ .../systemui/statusbar/phone/NavigationBarView.java    |  2 ++
+ 2 files changed, 12 insertions(+)
+
+diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/ButtonDispatcher.java b/packages/SystemUI/src/com/android/systemui/statusbar/phone/ButtonDispatcher.java
+index 5014c614343..32630c821db 100644
+--- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/ButtonDispatcher.java
++++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/ButtonDispatcher.java
+@@ -218,6 +218,16 @@ public class ButtonDispatcher implements Drawable.Callback {
+         }
+     }
+ 
++    public void setLandscape(boolean landscape) {
++        final int N = mViews.size();
++        for (int i = 0; i < N; i++) {
++            final View view = mViews.get(i);
++            if (view instanceof ButtonInterface) {
++                ((ButtonInterface) view).setLandscape(landscape);
++            }
++        }
++    }
++
+     /**
+      * Interface for button actions.
+      */
+diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavigationBarView.java b/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavigationBarView.java
+index deea261cdf9..6dfa8bbf6a0 100644
+--- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavigationBarView.java
++++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavigationBarView.java
+@@ -602,6 +602,8 @@ public class NavigationBarView extends LinearLayout implements TunerService.Tuna
+ 
+         updateTaskSwitchHelper();
+         setNavigationIconHints(mNavigationIconHints, true);
++
++        getHomeButton().setLandscape(mVertical);
+     }
+ 
+     private void updateTaskSwitchHelper() {
+-- 
+2.17.1
+

@@ -1,4 +1,4 @@
-From 66adeac2c58bf7f6a2afaecceed81892cd70a467 Mon Sep 17 00:00:00 2001
+From 3c524739df2bf19d4b0f54e167b44e5d8bf8a026 Mon Sep 17 00:00:00 2001
 From: Robert Crabtree <robertx.l.crabtree@intel.com>
 Date: Wed, 25 Jul 2012 11:59:58 -0700
 Subject: [PATCH 1/2] SW encode: Increase default AVC level

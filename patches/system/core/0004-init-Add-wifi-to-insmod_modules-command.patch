@@ -1,37 +1,37 @@
-From d94b93e2883be0ffdc6215732804bc36383b85c4 Mon Sep 17 00:00:00 2001
+From b2752d9a305a151cff35f9ebcb13777131f47e55 Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
-Date: Tue, 20 Jan 2026 14:09:10 +0400
+Date: Sat, 28 Feb 2026 10:35:31 +0400
 Subject: [PATCH 4/4] init: Add 'wifi' to insmod_modules command
 
-Change-Id: Idf558730c286fc20008ed272814acafd3e587bab
+Change-Id: I2eb31a82c0c0d2fe19a1985ce61aac2b4071356a
 ---
- init/builtins.cpp | 34 +++++++++++++++++++++++++++++++++-
- 1 file changed, 33 insertions(+), 1 deletion(-)
+ init/builtins.cpp | 43 ++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 42 insertions(+), 1 deletion(-)
 
 diff --git a/init/builtins.cpp b/init/builtins.cpp
-index ccf175be..796d01b4 100644
+index 7f2b83791..6d18ab607 100755
 --- a/init/builtins.cpp
 +++ b/init/builtins.cpp
-@@ -962,6 +962,8 @@ int do_insmod_modules(int argc, char **argv)
+@@ -1179,6 +1179,8 @@ static int do_insmod_modules(const std::vector<std::string>& args)
  {
  ERROR("-----------rogge---------------do_insmod_modules");
-     const char *modules = argv[1];
-+    const char *arg2 = argv[2];
-+    const char *arg3 = argv[3];
+     const char *modules = args[1].c_str();
++    const char *arg2 = args[2].c_str();
++    const char *arg3 = args[3].c_str();
      int ret = 0;
      char options[1];
  
-@@ -981,6 +983,9 @@ ERROR("-----------rogge---------------do_insmod_modules");
+@@ -1198,6 +1200,9 @@ ERROR("-----------rogge---------------do_insmod_modules");
      //char num[1];
  
      char str[128];
 +    char opt[128];
 +
-+    char wlan_type[PROP_VALUE_MAX];
++//    char wlan_type[PROP_VALUE_MAX];
  
      memset(back_name, 0, 64);
      memset(back_node, 0, 64);
-@@ -989,9 +994,11 @@ ERROR("-----------rogge---------------do_insmod_modules");
+@@ -1206,9 +1211,11 @@ ERROR("-----------rogge---------------do_insmod_modules");
      //memset(num, 0, 1);
  
      memset(str, 0, 128);
@@ -43,26 +43,35 @@ index ccf175be..796d01b4 100644
          //fopen back_name
          fp = fopen("/sys/devices/camera/back_name", "r");
          if (NULL == fp )
-@@ -1122,9 +1129,34 @@ ERROR("-----------rogge---------------do_insmod_modules");
+@@ -1339,9 +1346,43 @@ ERROR("-----------rogge---------------do_insmod_modules");
              }
          }
      }
 +    else if (strstr(modules, "wifi"))
 +    {
 +        ERROR("insmod_modules: wifi \n");
-+        ret = property_get("ro.inet.wlan.type", wlan_type);
-+        if (!ret)
++//        ret = property_get("ro.inet.wlan.type", wlan_type);
++        std::string wlan_type = property_get("ro.inet.wlan.type");
++        if (wlan_type.empty())
++            {
++               wlan_type = "8189es";
++                ERROR("(wifi) no 'ro.inet.wlan.type' found, use default: %s \n", wlan_type.c_str());
++            } else {
++                ERROR("(wifi) 'ro.inet.wlan.type' found, use: %s \n", wlan_type.c_str());
++            }
++
++/*        if (!ret)
 +            {
 +                strcpy(wlan_type, "8189es");
 +                ERROR("(wifi) no 'ro.inet.wlan.type' found, use default: %s \n", wlan_type);
 +            } else {
 +                ERROR("(wifi) 'ro.inet.wlan.type' found, use: %s \n", wlan_type);
-+            }
++            }*/
 +
 +          memset(str, 0, 128);
 +          memset(opt, 0, 128);
 +
-+            sprintf(str, "/system/lib/modules/%s.ko", wlan_type);
++            sprintf(str, "/system/lib/modules/%s.ko", wlan_type.c_str());
 +            sprintf(opt, "%s %s", arg2, arg3);
 +            ret = insmod(str, opt);
 +            if(ret < 0)

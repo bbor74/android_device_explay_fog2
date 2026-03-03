@@ -1,4 +1,4 @@
-From 138be91436cbe22266975cb3209d520aea14954e Mon Sep 17 00:00:00 2001
+From e3731feb319c09aa4c2e6865e494308f6ea35e70 Mon Sep 17 00:00:00 2001
 From: yugers <yugers@gmail.com>
 Date: Sun, 9 Oct 2016 22:18:43 +0300
 Subject: [PATCH 2/3] Add legacy touchscreen support - part 2

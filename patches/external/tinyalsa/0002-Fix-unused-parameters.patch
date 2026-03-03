@@ -1,0 +1,34 @@
+From 2c698611c6c2f4ee626da33e42cef941cb4230bb Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Wed, 11 Feb 2026 17:43:32 +0400
+Subject: [PATCH 2/2] Fix unused parameters
+
+external/tinyalsa/pcm.c:281:50: error: unused parameter 'p' [-Werror,-Wunused-parameter]
+static void param_dump(struct snd_pcm_hw_params *p) {}
+                                                 ^
+external/tinyalsa/pcm.c:282:44: error: unused parameter 'info' [-Werror,-Wunused-parameter]
+static void info_dump(struct snd_pcm_info *info) {}
+
+Change-Id: Ib1e180a11277edd35a47dcdd53c76d1cc2709710
+---
+ pcm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pcm.c b/pcm.c
+index eaf8c3b..1d68336 100644
+--- a/pcm.c
++++ b/pcm.c
+@@ -278,8 +278,8 @@ static void info_dump(struct snd_pcm_info *info)
+     ALOGV("subdevices_avail = %d\n", info->subdevices_avail);
+ }
+ #else
+-static void param_dump(struct snd_pcm_hw_params *p) {}
+-static void info_dump(struct snd_pcm_info *info) {}
++static void param_dump(struct snd_pcm_hw_params *p __attribute__((unused))) {}
++static void info_dump(struct snd_pcm_info *info __attribute__((unused))) {}
+ #endif
+ 
+ static void param_init(struct snd_pcm_hw_params *p)
+-- 
+2.17.1
+

@@ -1,4 +1,4 @@
-From cde6121db07e339d5393c267d85f26bd2ad0facb Mon Sep 17 00:00:00 2001
+From 328f579d4d87a6dd9985ad0ed0481b9b56d1ee9a Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Tue, 13 Jan 2026 16:17:57 +0400
 Subject: [PATCH] Fix FATAL EXCEPTION on exit
@@ -26,26 +26,24 @@ Subject: [PATCH] Fix FATAL EXCEPTION on exit
 
 Change-Id: Iaec4b3661b2478bae43858a18f271805b66de483
 ---
- src/com/android/soundrecorder/SoundRecorder.java | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ src/com/android/soundrecorder/SoundRecorder.java | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/src/com/android/soundrecorder/SoundRecorder.java b/src/com/android/soundrecorder/SoundRecorder.java
-index 7071cff..c6b5d64 100644
+index f4b62ce..8aa77d8 100644
 --- a/src/com/android/soundrecorder/SoundRecorder.java
 +++ b/src/com/android/soundrecorder/SoundRecorder.java
-@@ -1787,9 +1787,9 @@ public class SoundRecorder extends Activity
-      */
+@@ -1783,7 +1783,9 @@ public class SoundRecorder extends Activity
      @Override
      public void onDestroy() {
--
+ 
 -        mBluetoothAdapter.closeProfileProxy(BluetoothProfile.HEADSET, mBluetoothHeadset);
--
 +        if (mBluetoothHeadset != null && mBluetoothAdapter != null ) {
 +            mBluetoothAdapter.closeProfileProxy(BluetoothProfile.HEADSET, mBluetoothHeadset);
 +        }
-         if (mSDCardMountEventReceiver != null) {
-             unregisterReceiver(mSDCardMountEventReceiver);
-             mSDCardMountEventReceiver = null;
+ 
+         if (mBluetoothReceiver != null) {
+             unregisterReceiver(mBluetoothReceiver);
 -- 
 2.17.1
 

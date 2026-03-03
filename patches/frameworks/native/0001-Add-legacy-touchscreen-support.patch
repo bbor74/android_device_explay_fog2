@@ -1,4 +1,4 @@
-From a7a1a65f8ec330696bd2a2502899a59387220d71 Mon Sep 17 00:00:00 2001
+From 5175cd49e48b3655fd1705612b35f5f95397d372 Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Mon, 2 Jun 2025 16:47:17 +0400
 Subject: [PATCH 1/3] Add legacy touchscreen support
@@ -26,10 +26,10 @@ index ed867d844..8a5b48142 100644
  
  include $(call all-makefiles-under,$(LOCAL_PATH))
 diff --git a/services/inputflinger/InputReader.cpp b/services/inputflinger/InputReader.cpp
-index 6cfdcebfc..23e329cf1 100644
+index 768c8f88d..2c74f2b4a 100644
 --- a/services/inputflinger/InputReader.cpp
 +++ b/services/inputflinger/InputReader.cpp
-@@ -6544,7 +6544,11 @@ void MultiTouchInputMapper::syncTouch(nsecs_t when, RawState* outState) {
+@@ -6708,7 +6708,11 @@ void MultiTouchInputMapper::syncTouch(nsecs_t when, RawState* outState) {
          if (!inSlot->isInUse()) {
              continue;
          }
@@ -42,7 +42,7 @@ index 6cfdcebfc..23e329cf1 100644
          if (outCount >= MAX_POINTERS) {
  #if DEBUG_POINTERS
              ALOGD("MultiTouch device %s emitted more than maximum of %d pointers; "
-@@ -6578,8 +6582,11 @@ void MultiTouchInputMapper::syncTouch(nsecs_t when, RawState* outState) {
+@@ -6742,8 +6746,11 @@ void MultiTouchInputMapper::syncTouch(nsecs_t when, RawState* outState) {
          bool isHovering = mTouchButtonAccumulator.getToolType() != AMOTION_EVENT_TOOL_TYPE_MOUSE
                  && (mTouchButtonAccumulator.isHovering()
                          || (mRawPointerAxes.pressure.valid && inSlot->getPressure() <= 0));
@@ -55,7 +55,7 @@ index 6cfdcebfc..23e329cf1 100644
          // Assign pointer id using tracking id if available.
          mHavePointerIds = true;
          int32_t trackingId = inSlot->getTrackingId();
-@@ -6604,7 +6611,11 @@ void MultiTouchInputMapper::syncTouch(nsecs_t when, RawState* outState) {
+@@ -6768,7 +6775,11 @@ void MultiTouchInputMapper::syncTouch(nsecs_t when, RawState* outState) {
          } else {
              outPointer.id = id;
              outState->rawPointerData.idToIndex[id] = outCount;
