@@ -31,9 +31,6 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.xml:system/etc/permissions/android.hardware.camera.xml \
     frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml
 
-PRODUCT_PACKAGES += \
-	Snap
-
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
 	config.disable_bluetooth=true
