@@ -1,4 +1,4 @@
-From 1b8c83a2dae615ec88c2e9df1b287dc5274c1028 Mon Sep 17 00:00:00 2001
+From b52c21298f35387a154435eb183507fd07bbc224 Mon Sep 17 00:00:00 2001
 From: EoflaOE <eoflaoevicecity@gmail.com>
 Date: Wed, 22 Mar 2023 22:35:56 +0300
 Subject: [PATCH] Fixed FC when rendering the Next button

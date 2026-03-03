@@ -1,33 +1,31 @@
-From f872f37a493617ddf621bfe9f0b54f41d7de2c95 Mon Sep 17 00:00:00 2001
+From 3e69312a1469b35e7dbe3e388ac3ddae868848c3 Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Tue, 3 Jun 2025 13:26:24 +0400
 Subject: [PATCH 2/4] init: Add format_userdata and insmod_modules commands
 
 Change-Id: Iedcc52fdc880efc66597ddd2f99fa39a8c7ebe56
 ---
- init/builtins.cpp    | 210 +++++++++++++++++++++++++++++++++++++++++++
- init/init_parser.cpp |   4 +
- init/keywords.h      |   4 +
- 3 files changed, 218 insertions(+)
+ init/builtins.cpp | 212 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 212 insertions(+)
 
 diff --git a/init/builtins.cpp b/init/builtins.cpp
-index 1681d1707..36751f32f 100644
+index 949e139ff..b81f5d441 100755
 --- a/init/builtins.cpp
 +++ b/init/builtins.cpp
-@@ -920,6 +920,216 @@ int do_wait(int nargs, char **args)
+@@ -1149,6 +1149,216 @@ static int do_wait(const std::vector<std::string>& args) {
          return -1;
  }
  
-+int do_format_userdata(int nargs, char **args)
++static int do_format_userdata(const std::vector<std::string>& args)
 +{
 +ERROR("-----------rogge---------------do_format_userdata");
-+    const char * devicePath = args[1];
++    const char * devicePath = args[1].c_str();
 +    char bootsector[512];
 +    int fd;
 +    pid_t child;
 +    int status;
 +
-+    property_set("ro.udisk.label", args[2]);
++    property_set("ro.udisk.label", args[2].c_str());
 +    fd = open(devicePath, O_RDONLY);
 +    if (fd <= 0) {
 +        ERROR("open device error: %s", strerror(errno));
@@ -46,7 +44,7 @@ index 1681d1707..36751f32f 100644
 +        if (child == 0) {
 +            ERROR("fork to format %s", devicePath);
 +            execl("/system/bin/logwrapper", "/system/bin/logwrapper", "/system/bin/newfs_msdos",
-+                    "-F", "32", "-O", "android", "-c", "8", "-L", args[2], args[1], NULL);
++                    "-F", "32", "-O", "android", "-c", "8", "-L", args[2].c_str(), args[1].c_str(), NULL);
 +            exit(-1);
 +        }
 +        ERROR("wait for format %s", devicePath);
@@ -56,10 +54,10 @@ index 1681d1707..36751f32f 100644
 +    }
 +}
 +
-+int do_insmod_modules(int argc, char **argv)
++static int do_insmod_modules(const std::vector<std::string>& args)
 +{
 +ERROR("-----------rogge---------------do_insmod_modules");
-+    const char *modules = argv[1];
++    const char *modules = args[1].c_str();
 +    int ret = 0;
 +    char options[1];
 +
@@ -231,50 +229,19 @@ index 1681d1707..36751f32f 100644
  /*
   * Callback to make a directory from the ext4 code
   */
-diff --git a/init/init_parser.cpp b/init/init_parser.cpp
-index c36d36e2e..3227cc09d 100644
---- a/init/init_parser.cpp
-+++ b/init/init_parser.cpp
-@@ -140,6 +140,9 @@ static int lookup_keyword(const char *s)
-         if (!strcmp(s, "xec")) return K_exec;
-         if (!strcmp(s, "xport")) return K_export;
-         break;
-+    case 'f':
-+        if(!strcmp(s, "ormat_userdata")) return K_format_userdata;
-+        break;
-     case 'g':
-         if (!strcmp(s, "roup")) return K_group;
-         break;
-@@ -152,6 +155,7 @@ static int lookup_keyword(const char *s)
-         if (!strcmp(s, "nsmod")) return K_insmod;
-         if (!strcmp(s, "mport")) return K_import;
-         if (!strcmp(s, "nstallkey")) return K_installkey;
-+        if (!strcmp(s, "nsmod_modules")) return K_insmod_modules;
-         break;
-     case 'k':
-         if (!strcmp(s, "eycodes")) return K_keycodes;
-diff --git a/init/keywords.h b/init/keywords.h
-index 303685d47..291a9cd9c 100644
---- a/init/keywords.h
-+++ b/init/keywords.h
-@@ -39,6 +39,8 @@ int do_load_system_props(int nargs, char **args);
- int do_verity_load_state(int nargs, char **args);
- int do_verity_update_state(int nargs, char **args);
- int do_wait(int nargs, char **args);
-+int do_format_userdata(int nargs, char **args);
-+int do_insmod_modules(int nargs, char **args);
- #define __MAKE_KEYWORD_ENUM__
- #define KEYWORD(symbol, flags, nargs, func) K_##symbol,
- enum {
-@@ -102,6 +104,8 @@ enum {
-     KEYWORD(wait,        COMMAND, 1, do_wait)
-     KEYWORD(write,       COMMAND, 2, do_write)
-     KEYWORD(writepid,    OPTION,  0, 0)
-+    KEYWORD(format_userdata,COMMAND, 1, do_format_userdata)
-+    KEYWORD(insmod_modules,COMMAND, 1, do_insmod_modules)
- #ifdef __MAKE_KEYWORD_ENUM__
-     KEYWORD_COUNT,
- };
+@@ -1191,10 +1401,12 @@ BuiltinFunctionMap::Map& BuiltinFunctionMap::map() const {
+         {"enable",                  {1,     1,    do_enable}},
+         {"exec",                    {1,     kMax, do_exec}},
+         {"export",                  {2,     2,    do_export}},
++        {"format_userdata",         {1,     kMax, do_format_userdata}},
+         {"hostname",                {1,     1,    do_hostname}},
+         {"ifup",                    {1,     1,    do_ifup}},
+         {"init_user0",              {0,     0,    do_init_user0}},
+         {"insmod",                  {1,     kMax, do_insmod}},
++        {"insmod_modules",          {1,     kMax, do_insmod_modules}},
+         {"install_keyring",         {0,     0,    do_install_keyring}},
+         {"installkey",              {1,     1,    do_installkey}},
+         {"load_persist_props",      {0,     0,    do_load_persist_props}},
 -- 
 2.17.1
 

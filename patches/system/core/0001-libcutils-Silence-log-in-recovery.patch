@@ -1,4 +1,4 @@
-From ec842745c3a829d61023c2495b93a2b97f9a08d2 Mon Sep 17 00:00:00 2001
+From 7d51cd59c85e190eacc6e7c30ba22cb04d4c35e0 Mon Sep 17 00:00:00 2001
 From: cjh1249131356 <cjh1249131356@gmail.com>
 Date: Sun, 1 May 2022 16:40:50 +0800
 Subject: [PATCH 1/4] libcutils: Silence log in recovery
@@ -12,12 +12,12 @@ Signed-off-by: cjh1249131356 <cjh1249131356@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/libcutils/trace-dev.c b/libcutils/trace-dev.c
-index a06987ec0..6b17a386e 100644
+index 778e4f03b..2d16d1f53 100644
 --- a/libcutils/trace-dev.c
 +++ b/libcutils/trace-dev.c
-@@ -175,7 +175,7 @@ static void atrace_init_once()
+@@ -168,7 +168,7 @@ static void atrace_init_once()
  {
-     atrace_marker_fd = open("/sys/kernel/debug/tracing/trace_marker", O_WRONLY);
+     atrace_marker_fd = open("/sys/kernel/debug/tracing/trace_marker", O_WRONLY | O_CLOEXEC);
      if (atrace_marker_fd == -1) {
 -        ALOGE("Error opening trace file: %s (%d)", strerror(errno), errno);
 +        if (errno != 2) ALOGE("Error opening trace file: %s (%d)", strerror(errno), errno);

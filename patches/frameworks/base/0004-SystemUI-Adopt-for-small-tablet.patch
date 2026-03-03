@@ -1,0 +1,54 @@
+From c910889955ec1165d0975b0726a2b07dfbb5704d Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Wed, 25 Feb 2026 11:46:55 +0400
+Subject: [PATCH 4/5] SystemUI: Adopt for small tablet
+
+Change-Id: I9ed2b929c89ec50ed55b7a6a9bf8bcce3e03e634
+---
+ .../src/com/android/systemui/qs/customize/QSCustomizer.java     | 2 +-
+ .../src/com/android/systemui/recents/ScreenPinningRequest.java  | 2 +-
+ .../SystemUI/src/com/android/systemui/tuner/NavBarTuner.java    | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/packages/SystemUI/src/com/android/systemui/qs/customize/QSCustomizer.java b/packages/SystemUI/src/com/android/systemui/qs/customize/QSCustomizer.java
+index 77da6d4c7b2..a8631e13d2d 100644
+--- a/packages/SystemUI/src/com/android/systemui/qs/customize/QSCustomizer.java
++++ b/packages/SystemUI/src/com/android/systemui/qs/customize/QSCustomizer.java
+@@ -110,7 +110,7 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
+         super.onConfigurationChanged(newConfig);
+         View navBackdrop = findViewById(R.id.nav_bar_background);
+         if (navBackdrop != null) {
+-            boolean shouldShow = newConfig.smallestScreenWidthDp >= 600
++            boolean shouldShow = newConfig.smallestScreenWidthDp >= 480
+                     || newConfig.orientation != Configuration.ORIENTATION_LANDSCAPE;
+             navBackdrop.setVisibility(shouldShow ? View.VISIBLE : View.GONE);
+         }
+diff --git a/packages/SystemUI/src/com/android/systemui/recents/ScreenPinningRequest.java b/packages/SystemUI/src/com/android/systemui/recents/ScreenPinningRequest.java
+index 5868b3a5dc6..1f364dd7044 100644
+--- a/packages/SystemUI/src/com/android/systemui/recents/ScreenPinningRequest.java
++++ b/packages/SystemUI/src/com/android/systemui/recents/ScreenPinningRequest.java
+@@ -199,7 +199,7 @@ public class ScreenPinningRequest implements View.OnClickListener {
+         private boolean isLandscapePhone(Context context) {
+             Configuration config = mContext.getResources().getConfiguration();
+             return config.orientation == Configuration.ORIENTATION_LANDSCAPE
+-                    && config.smallestScreenWidthDp < 600;
++                    && config.smallestScreenWidthDp < 480;
+         }
+ 
+         private void inflateView(boolean isLandscape) {
+diff --git a/packages/SystemUI/src/com/android/systemui/tuner/NavBarTuner.java b/packages/SystemUI/src/com/android/systemui/tuner/NavBarTuner.java
+index b199dff8086..18b44943e2e 100644
+--- a/packages/SystemUI/src/com/android/systemui/tuner/NavBarTuner.java
++++ b/packages/SystemUI/src/com/android/systemui/tuner/NavBarTuner.java
+@@ -98,7 +98,7 @@ public class NavBarTuner extends Fragment implements TunerService.Tunable {
+                 || display.getRotation() == Surface.ROTATION_270;
+ 
+         Configuration config = new Configuration(getContext().getResources().getConfiguration());
+-        boolean isPhoneLandscape = isRotated && (config.smallestScreenWidthDp < 600);
++        boolean isPhoneLandscape = isRotated && (config.smallestScreenWidthDp < 480);
+         final float scale = isPhoneLandscape ? PREVIEW_SCALE_LANDSCAPE : PREVIEW_SCALE;
+         config.densityDpi = (int) (config.densityDpi * scale);
+ 
+-- 
+2.17.1
+

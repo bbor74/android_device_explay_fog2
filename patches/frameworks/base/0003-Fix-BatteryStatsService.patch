@@ -1,0 +1,72 @@
+From 3c0b08c96274d91c16e7cda0f9a0694e777e0377 Mon Sep 17 00:00:00 2001
+From: LineageOS-MTK <luzejij@binka.me>
+Date: Mon, 9 Oct 2017 23:54:00 +0300
+Subject: [PATCH 3/5] Fix BatteryStatsService
+
+Fix errors:
+BatteryStatsService: Timeout reading modem stats
+BatteryStatsService: power: Missing API
+
+Change-Id: I1468ae4af83a461580886fd67b0c6341c92cbc91
+---
+ .../com/android/server/am/BatteryStatsService.java   | 12 ------------
+ .../com_android_server_am_BatteryStatsService.cpp    |  6 ------
+ 2 files changed, 18 deletions(-)
+
+diff --git a/services/core/java/com/android/server/am/BatteryStatsService.java b/services/core/java/com/android/server/am/BatteryStatsService.java
+index ff13125a841..97652a3d142 100644
+--- a/services/core/java/com/android/server/am/BatteryStatsService.java
++++ b/services/core/java/com/android/server/am/BatteryStatsService.java
+@@ -1443,7 +1443,6 @@ public final class BatteryStatsService extends IBatteryStats.Stub
+     void updateExternalStatsSync(final String reason, int updateFlags) {
+         SynchronousResultReceiver wifiReceiver = null;
+         SynchronousResultReceiver bluetoothReceiver = null;
+-        SynchronousResultReceiver modemReceiver = null;
+ 
+         synchronized (mExternalStatsLock) {
+             if (mContext == null) {
+@@ -1479,11 +1478,6 @@ public final class BatteryStatsService extends IBatteryStats.Stub
+                 if (mTelephony == null) {
+                     mTelephony = TelephonyManager.from(mContext);
+                 }
+-
+-                if (mTelephony != null) {
+-                    modemReceiver = new SynchronousResultReceiver();
+-                    mTelephony.requestModemActivityInfo(modemReceiver);
+-                }
+             }
+ 
+             WifiActivityEnergyInfo wifiInfo = null;
+@@ -1501,12 +1495,6 @@ public final class BatteryStatsService extends IBatteryStats.Stub
+                 Slog.w(TAG, "Timeout reading bt stats");
+             }
+ 
+-            try {
+-                modemInfo = awaitControllerInfo(modemReceiver);
+-            } catch (TimeoutException e) {
+-                Slog.w(TAG, "Timeout reading modem stats");
+-            }
+-
+             synchronized (mStats) {
+                 mStats.addHistoryEventLocked(
+                         SystemClock.elapsedRealtime(),
+diff --git a/services/core/jni/com_android_server_am_BatteryStatsService.cpp b/services/core/jni/com_android_server_am_BatteryStatsService.cpp
+index ecdc71e6127..daa6444cc90 100644
+--- a/services/core/jni/com_android_server_am_BatteryStatsService.cpp
++++ b/services/core/jni/com_android_server_am_BatteryStatsService.cpp
+@@ -191,12 +191,6 @@ static jint getPlatformLowPowerStats(JNIEnv* env, jobject /* clazz */, jobject o
+         goto error;
+     }
+ 
+-    if (! (gPowerModule->get_platform_low_power_stats && gPowerModule->get_number_of_platform_modes
+-       && gPowerModule->get_voter_list)) {
+-        ALOGE("%s: Missing API", POWER_HARDWARE_MODULE_ID);
+-        goto error;
+-    }
+-
+     if (gPowerModule->get_number_of_platform_modes) {
+         num_modes = gPowerModule->get_number_of_platform_modes(gPowerModule);
+     }
+-- 
+2.17.1
+
