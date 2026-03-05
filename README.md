@@ -6,7 +6,7 @@ Hardware	: sun8i
 
 To initialize your local repository using the CyanogenMod trees, use a command like this:
 
-    $ repo init -u git://github.com/LineageOS/android.git -b cm-12.1
+    $ repo init -u https://github.com/LineageOS/android.git -b cm-12.1
 
 Then to sync up:
 
