@@ -1,0 +1,26 @@
+From e8308397e04d43d782193482eb18297df2e104fb Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Wed, 11 Mar 2026 10:43:43 +0400
+Subject: [PATCH] Use Jelly browser
+
+Change-Id: I706f38a1465bf9d494fc290b8f1c22fe0662bdff
+---
+ config/common.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/config/common.mk b/config/common.mk
+index 3b08f370..b64c4a33 100644
+--- a/config/common.mk
++++ b/config/common.mk
+@@ -125,7 +125,7 @@ PRODUCT_PACKAGES += \
+     LineageSetupWizard \
+     Eleven \
+     ExactCalculator \
+-    Fulguris \
++    Jelly \
+     LockClock \
+     Trebuchet \
+     Updater \
+-- 
+2.17.1
+
