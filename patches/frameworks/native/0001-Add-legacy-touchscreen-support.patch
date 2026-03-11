@@ -1,7 +1,7 @@
 From 8df211d7036727c11a0943aed85e76bc633284a6 Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Mon, 2 Jun 2025 16:47:17 +0400
-Subject: [PATCH 1/3] Add legacy touchscreen support
+Subject: [PATCH 1/3] Add legacy touchscreen support - part 1
 
 Change-Id: I2a801c289a91b3d7d7910589b808abd130df0703
 ---
