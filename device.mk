@@ -69,7 +69,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # System Configuration
 PRODUCT_PROPERTY_OVERRIDES += \
-	ro.sf.lcd_density=140 \
+	ro.sf.lcd_density=120 \
 	ro.property.fontScale=1.4 \
 	ro.navbar.flip=false \
 	persist.sys.timezone=Europe/Moscow \
