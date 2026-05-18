@@ -27,3 +27,8 @@ allow untrusted_app userinit_exec:file getattr;
 allow untrusted_app vdc_exec:file getattr;
 allow untrusted_app vold_exec:file getattr;
 allow untrusted_app wpa_exec:file getattr;
+
+
+#============= untrusted_app ==============
+allow untrusted_app sysfs_zram:dir search;
+allow untrusted_app sysfs_zram:file { getattr open read };
