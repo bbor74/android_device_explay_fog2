@@ -9,19 +9,19 @@ Change-Id: If2aaf95ac8c3c5863151a72a5cf5e712a7e8ce10
  1 file changed, 3 insertions(+)
 
 diff --git a/services/core/java/com/android/server/policy/PhoneWindowManager.java b/services/core/java/com/android/server/policy/PhoneWindowManager.java
-index 6a22c505beb..541523412dd 100644
+index cf3cb31c906..285fe8d4ce5 100644
 --- a/services/core/java/com/android/server/policy/PhoneWindowManager.java
 +++ b/services/core/java/com/android/server/policy/PhoneWindowManager.java
-@@ -2415,6 +2415,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
+@@ -2630,6 +2630,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
          // Allow the navigation bar to move on non-square small devices (phones).
          mNavigationBarCanMove = width != height && shortSizeDp < 600;
  
 +        if (SystemProperties.get("ro.build.characteristics").contains("tablet")) {
 +            mNavigationBarCanMove = false;
 +        }
-         mHasNavigationBar = res.getBoolean(com.android.internal.R.bool.config_showNavigationBar);
+         // reflects original device state from config or build prop, regardless of user settings
+         mHasNavigationBar = DUActionUtils.hasNavbarByDefault(mContext);
  
-         // Allow a system property to override this. Used by the emulator.
 -- 
 2.17.1
 

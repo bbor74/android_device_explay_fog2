@@ -16,50 +16,49 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cm="http://schemas.android.com/apk/res/cyanogenmod.platform"
+    xmlns:rr="http://schemas.android.com/apk/res/com.android.settings"
     xmlns:settings="http://schemas.android.com/apk/res-auto"
     android:title="@string/about_settings"
   >
 
         <!-- System update settings - launches activity -->
+        <!--PreferenceScreen android:key="system_update_settings"
+                android:title="@string/system_update_settings_list_item_title"
+                android:summary="@string/system_update_settings_list_item_summary">
+            <intent android:action="android.settings.SYSTEM_UPDATE_SETTINGS" />
+        </PreferenceScreen-->
+
+
+        <!--PreferenceScreen android:key="additional_system_update_settings"
+                          android:title="@string/additional_system_update_settings_list_item_title">
+            <intent android:action="android.intent.action.MAIN"
+                    android:targetPackage="@string/additional_system_update"
+                    android:targetClass="@string/additional_system_update_menu" />
+        </PreferenceScreen-->
+
+        <Preference
+      android:key="mod_version"
+      style="?android:preferenceInformationStyle"
+      android:title="@string/rr_mod_version"
+      android:summary="@string/mod_version_default"
+      android:icon="@drawable/rr_mod_version_icon"
+  />
+
+        <!-- About Resurrection -->        
         <PreferenceScreen
-      android:key="system_update_settings"
-      android:title="@string/system_update_settings_list_item_title"
-      android:summary="@string/system_update_settings_list_item_summary"
-    >
-            <intent
-        android:action="android.settings.SYSTEM_UPDATE_SETTINGS"
-    />
-        </PreferenceScreen
-  >
-
-
-        <PreferenceScreen
-      android:key="additional_system_update_settings"
-      android:title="@string/wifi_show_advanced"
-    >
-            <intent
-        android:action="android.intent.action.MAIN"
-        android:targetPackage="@string/additional_system_update"
-        android:targetClass="@string/additional_system_update_menu"
-    />
-        </PreferenceScreen
-  >
-
-        <!-- LineageOS Updates -->
-        <cyanogenmod.preference.SelfRemovingPreference
-      android:key="cm_updates"
-      android:title="@string/cmupdate_settings_title"
-      android:summary="@string/system_update_settings_list_item_summary"
-      cm:requiresOwner="true"
-      cm:requiresPackage="org.lineageos.updater"
-    >
-            <intent
-        android:action="android.intent.action.MAIN"
-        android:targetPackage="org.lineageos.updater"
-        android:targetClass="org.lineageos.updater.UpdatesActivity"
-    />
-        </cyanogenmod.preference.SelfRemovingPreference
-  >
+      android:key="about_rom"
+      android:fragment="com.android.settings.rr.About"
+      android:title="@string/about_rr_settings"
+      android:summary="@string/about_r0m_summary"
+  />
+        
+        <!-- Build date -->
+        <Preference
+      android:key="build_date"
+      style="?android:preferenceInformationStyle"
+      android:title="@string/build_date"
+      android:summary="@string/device_info_default"
+  />
 
         <!-- Device status - launches activity -->
         <PreferenceScreen
@@ -117,14 +116,27 @@
         </PreferenceScreen
   >
 
-        <!-- Contributors cloud -->
-        <org.cyanogenmod.internal.cmparts.CMPartsPreference
-      android:key="contributors"
+        <!-- Detailed build version -->
+        <Preference
+      android:key="rr_build_type"
+      android:enabled="false"
+      android:shouldDisableView="false"
+      android:title="@string/rr_build_type_title"
+      android:summary="@string/rr_build_type_default"
+  />
+
+        <!-- Detailed build version -->
+        <Preference
+      android:key="rr_maintainer"
+      android:enabled="false"
+      android:shouldDisableView="false"
+      android:title="@string/rr_maintainer_title"
+      android:summary="@string/rr_maintainer_default"
   />
 
         <!-- Device name -->
         <Preference
-      android:key="device_name"
+      android:key="rr_device_name"
       android:enabled="false"
       android:shouldDisableView="false"
       android:title="@string/device_name"
@@ -152,27 +164,6 @@
       android:summary="@string/device_info_default"
   />
 
-        <!-- Mod version -->
-        <Preference
-      android:key="mod_version"
-      android:enabled="false"
-      android:shouldDisableView="false"
-      android:title="@string/mod_version"
-      android:summary="@string/mod_version_default"
-  />
-
-        <!-- CyanogenMod API Version -->
-        <com.android.settings.DividerPreference
-      android:key="mod_api_level"
-      android:enabled="false"
-      android:selectable="false"
-      android:shouldDisableView="false"
-      android:title="@string/mod_api_level"
-      android:summary="@string/mod_api_level_default"
-      settings:allowDividerAbove="true"
-      settings:allowDividerBelow="true"
-  />
-
         <!-- Security patch level -->
         <PreferenceScreen
       android:key="security_patch"
@@ -186,13 +177,6 @@
         </PreferenceScreen
   >
 
-        <!-- Unofficial/custom patch level -->
-        <Preference
-      android:key="custom_patch"
-      android:title="@string/custom_patch"
-      android:summary="@string/device_info_default"
-  />
-
         <!-- Device FCC equipment id -->
         <com.android.settings.DividerPreference
       android:key="fcc_equipment_id"
@@ -203,15 +187,6 @@
       android:summary="@string/device_info_default"
       settings:allowDividerAbove="true"
       settings:allowDividerBelow="true"
-  />
-
-        <!-- Device MBN version -->
-        <Preference
-      android:key="mbn_version"
-      android:enabled="false"
-      android:shouldDisableView="false"
-      android:title="@string/mbn_version"
-      android:summary="@string/device_info_default"
   />
 
         <!-- Device Baseband version -->
@@ -226,28 +201,42 @@
       settings:allowDividerBelow="true"
   />
 
+
+        <!-- Device MBN version -->
+        <Preference
+      android:key="mbn_version"
+      android:enabled="false"
+      android:shouldDisableView="false"
+      android:title="@string/mbn_version"
+      android:summary="@string/device_info_default"
+  />
+
         <!-- Device Kernel version -->
         <com.android.settings.DividerPreference
       android:key="kernel_version"
       android:enabled="false"
       android:shouldDisableView="false"
-      android:selectable="false"
+      android:selectable="true"
       android:title="@string/kernel_version"
       android:summary="@string/device_info_default"
       settings:allowDividerAbove="true"
       settings:allowDividerBelow="true"
   />
 
-        <!-- Build date -->
-        <com.android.settings.DividerPreference
-      android:key="build_date"
-      android:enabled="false"
-      android:selectable="false"
-      android:shouldDisableView="false"
-      android:title="@string/build_date"
-      android:summary="@string/build_date_default"
-      settings:allowDividerAbove="true"
-      settings:allowDividerBelow="true"
+        <!-- Device cpu info -->
+        <Preference
+      android:key="rr_device_cpu"
+      style="?android:preferenceInformationStyle"
+      android:title="@string/cpu_info"
+      android:summary="@string/device_info_default"
+  />
+
+        <!-- Device mem info -->
+        <Preference
+      android:key="device_memory"
+      style="?android:preferenceInformationStyle"
+      android:title="@string/mem_info"
+      android:summary="@string/device_info_default"
   />
 
         <!-- Detailed build version -->

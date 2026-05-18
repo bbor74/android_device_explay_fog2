@@ -8,7 +8,7 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 OPTOUT_FOSS := true
 
 #Root in lineageOS
-WITH_SU := true
+# WITH_SU := true
 
 # wifi features
 PRODUCT_COPY_FILES += \
