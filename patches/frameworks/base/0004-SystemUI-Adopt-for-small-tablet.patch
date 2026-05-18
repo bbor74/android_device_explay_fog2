@@ -1,7 +1,7 @@
-From 10a384c262af153714f6c8b8c80260d357adb63b Mon Sep 17 00:00:00 2001
+From 60c102556051cd813f243787720da777d99d5d19 Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Wed, 25 Feb 2026 11:46:55 +0400
-Subject: [PATCH 4/5] SystemUI: Adopt for small tablet
+Subject: [PATCH 4/6] SystemUI: Adopt for small tablet
 
 Change-Id: I9ed2b929c89ec50ed55b7a6a9bf8bcce3e03e634
 ---
@@ -10,7 +10,7 @@ Change-Id: I9ed2b929c89ec50ed55b7a6a9bf8bcce3e03e634
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/packages/SystemUI/src/com/android/systemui/qs/customize/QSCustomizer.java b/packages/SystemUI/src/com/android/systemui/qs/customize/QSCustomizer.java
-index f56e8f34c44..1fd4fdb8286 100644
+index f56e8f34..1fd4fdb8 100644
 --- a/packages/SystemUI/src/com/android/systemui/qs/customize/QSCustomizer.java
 +++ b/packages/SystemUI/src/com/android/systemui/qs/customize/QSCustomizer.java
 @@ -126,7 +126,7 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
@@ -23,7 +23,7 @@ index f56e8f34c44..1fd4fdb8286 100644
              navBackdrop.setVisibility(shouldShow ? View.VISIBLE : View.GONE);
          }
 diff --git a/packages/SystemUI/src/com/android/systemui/recents/ScreenPinningRequest.java b/packages/SystemUI/src/com/android/systemui/recents/ScreenPinningRequest.java
-index 5868b3a5dc6..1f364dd7044 100644
+index 5868b3a5..1f364dd7 100644
 --- a/packages/SystemUI/src/com/android/systemui/recents/ScreenPinningRequest.java
 +++ b/packages/SystemUI/src/com/android/systemui/recents/ScreenPinningRequest.java
 @@ -199,7 +199,7 @@ public class ScreenPinningRequest implements View.OnClickListener {

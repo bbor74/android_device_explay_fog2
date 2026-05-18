@@ -1,7 +1,7 @@
-From 75d5f5bcc8d9a8e8a17ac59d6513a8407931f566 Mon Sep 17 00:00:00 2001
+From a5c8ad3ffd4146ae6ba1337e91028c2d1417e342 Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Tue, 4 Mar 2025 13:11:31 +0400
-Subject: [PATCH 1/5] Do not move the navigation bar for the tablet
+Subject: [PATCH 1/6] Do not move the navigation bar for the tablet
 
 Change-Id: If2aaf95ac8c3c5863151a72a5cf5e712a7e8ce10
 ---
@@ -9,7 +9,7 @@ Change-Id: If2aaf95ac8c3c5863151a72a5cf5e712a7e8ce10
  1 file changed, 3 insertions(+)
 
 diff --git a/services/core/java/com/android/server/policy/PhoneWindowManager.java b/services/core/java/com/android/server/policy/PhoneWindowManager.java
-index cf3cb31c906..285fe8d4ce5 100644
+index 3b5093b2..c4de7c21 100644
 --- a/services/core/java/com/android/server/policy/PhoneWindowManager.java
 +++ b/services/core/java/com/android/server/policy/PhoneWindowManager.java
 @@ -2630,6 +2630,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
