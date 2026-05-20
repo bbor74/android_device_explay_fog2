@@ -1,7 +1,7 @@
 From c54b925af64df3346d90a164b76a36495a18b9e4 Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Mon, 18 May 2026 11:04:00 +0400
-Subject: [PATCH 6/6] Fix animation smartbar Button
+Subject: [PATCH 6/7] Fix animation smartbar Button
 
  W PropertyValuesHolder: Method setGlowScale() with type float not found on target class class com.android.systemui.navigation.smartbar.SmartButtonRipple
  W PropertyValuesHolder: Method setGlowAlpha() with type float not found on target class class com.android.systemui.navigation.smartbar.SmartButtonRipple

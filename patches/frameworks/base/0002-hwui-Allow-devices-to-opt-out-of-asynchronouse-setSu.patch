@@ -1,7 +1,7 @@
 From 696f7c4812544dd9a0775a354768abca715dee79 Mon Sep 17 00:00:00 2001
 From: Shilin Victor <chrono.monochrome@gmail.com>
 Date: Sun, 17 Sep 2017 12:30:52 +0300
-Subject: [PATCH 2/6] hwui: Allow devices to opt-out of asynchronouse
+Subject: [PATCH 2/7] hwui: Allow devices to opt-out of asynchronouse
  setSurface initialization
 
 Not all devices seem to be able to deal with this so let them opt

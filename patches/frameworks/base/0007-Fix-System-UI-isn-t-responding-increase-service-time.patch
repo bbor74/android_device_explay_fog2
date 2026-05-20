@@ -1,0 +1,28 @@
+From 8910e5e4c2cb5b7e1e0e9c027dae9d86c84716d7 Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Wed, 20 May 2026 10:31:35 +0400
+Subject: [PATCH 7/7] Fix "System UI isn't responding" - increase service
+ timeout
+
+E ActivityManager: ANR in com.android.systemui
+E ActivityManager: Reason: executing service com.android.systemui/.keyguard.KeyguardService
+---
+ services/core/java/com/android/server/am/ActiveServices.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/services/core/java/com/android/server/am/ActiveServices.java b/services/core/java/com/android/server/am/ActiveServices.java
+index 3c0d6cf1..6afb4b04 100755
+--- a/services/core/java/com/android/server/am/ActiveServices.java
++++ b/services/core/java/com/android/server/am/ActiveServices.java
+@@ -88,7 +88,7 @@ public final class ActiveServices {
+     private static final boolean LOG_SERVICE_START_STOP = false;
+ 
+     // How long we wait for a service to finish executing.
+-    static final int SERVICE_TIMEOUT = 20*1000;
++    static final int SERVICE_TIMEOUT = 20*1000*10;
+ 
+     // How long we wait for a service to finish executing.
+     static final int SERVICE_BACKGROUND_TIMEOUT = SERVICE_TIMEOUT * 10;
+-- 
+2.17.1
+

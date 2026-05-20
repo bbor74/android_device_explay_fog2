@@ -1,7 +1,7 @@
 From 60c102556051cd813f243787720da777d99d5d19 Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Wed, 25 Feb 2026 11:46:55 +0400
-Subject: [PATCH 4/6] SystemUI: Adopt for small tablet
+Subject: [PATCH 4/7] SystemUI: Adopt for small tablet
 
 Change-Id: I9ed2b929c89ec50ed55b7a6a9bf8bcce3e03e634
 ---
