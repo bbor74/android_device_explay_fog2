@@ -19,9 +19,9 @@ index 6a22c505beb..541523412dd 100644
 +        if (SystemProperties.get("ro.build.characteristics").contains("tablet")) {
 +            mNavigationBarCanMove = false;
 +        }
-         mHasNavigationBar = res.getBoolean(com.android.internal.R.bool.config_showNavigationBar);
+         // reflects original device state from config or build prop, regardless of user settings
+         mHasNavigationBar = DUActionUtils.hasNavbarByDefault(mContext);
  
-         // Allow a system property to override this. Used by the emulator.
 -- 
 2.17.1
 

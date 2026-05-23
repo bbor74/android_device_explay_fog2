@@ -54,8 +54,8 @@ BOARD_KERNEL_BASE := 0x40000000
 KERNEL_HAS_FINIT_MODULE := false
 
 # Enable dex-preoptimization to speed up first boot sequence
-WITH_DEXPREOPT := true
-DONT_DEXPREOPT_PREBUILTS := true
+WITH_DEXPREOPT := false
+#DONT_DEXPREOPT_PREBUILTS := true
 
 # Memory
 BOARD_FLASH_BLOCK_SIZE := 4096

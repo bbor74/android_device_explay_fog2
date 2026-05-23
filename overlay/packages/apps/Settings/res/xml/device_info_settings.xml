@@ -20,47 +20,6 @@
     android:title="@string/about_settings"
   >
 
-        <!-- System update settings - launches activity -->
-        <PreferenceScreen
-      android:key="system_update_settings"
-      android:title="@string/system_update_settings_list_item_title"
-      android:summary="@string/system_update_settings_list_item_summary"
-    >
-            <intent
-        android:action="android.settings.SYSTEM_UPDATE_SETTINGS"
-    />
-        </PreferenceScreen
-  >
-
-
-        <PreferenceScreen
-      android:key="additional_system_update_settings"
-      android:title="@string/wifi_show_advanced"
-    >
-            <intent
-        android:action="android.intent.action.MAIN"
-        android:targetPackage="@string/additional_system_update"
-        android:targetClass="@string/additional_system_update_menu"
-    />
-        </PreferenceScreen
-  >
-
-        <!-- LineageOS Updates -->
-        <cyanogenmod.preference.SelfRemovingPreference
-      android:key="cm_updates"
-      android:title="@string/cmupdate_settings_title"
-      android:summary="@string/system_update_settings_list_item_summary"
-      cm:requiresOwner="true"
-      cm:requiresPackage="org.lineageos.updater"
-    >
-            <intent
-        android:action="android.intent.action.MAIN"
-        android:targetPackage="org.lineageos.updater"
-        android:targetClass="org.lineageos.updater.UpdatesActivity"
-    />
-        </cyanogenmod.preference.SelfRemovingPreference
-  >
-
         <!-- Device status - launches activity -->
         <PreferenceScreen
       android:key="status_info"
@@ -117,11 +76,6 @@
         </PreferenceScreen
   >
 
-        <!-- Contributors cloud -->
-        <org.cyanogenmod.internal.cmparts.CMPartsPreference
-      android:key="contributors"
-  />
-
         <!-- Device name -->
         <Preference
       android:key="device_name"
@@ -143,6 +97,24 @@
       settings:allowDividerBelow="true"
   />
 
+        <!-- Device mem info -->
+        <Preference
+      android:key="device_memory"
+      android:enabled="false"
+      android:shouldDisableView="false"
+      android:title="@string/mem_info"
+      android:summary="@string/device_info_default"
+  />
+
+        <!-- Device soc processor -->
+        <Preference
+      android:key="device_processor"
+      android:enabled="false"
+      android:shouldDisableView="false"
+      android:title="@string/processor_info"
+      android:summary="@string/device_info_default"
+  />
+
         <!-- Device firmware version -->
         <Preference
       android:key="firmware_version"
@@ -161,17 +133,16 @@
       android:summary="@string/mod_version_default"
   />
 
-        <!-- CyanogenMod API Version -->
+        <!-- CyanogenMod API Version
         <com.android.settings.DividerPreference
-      android:key="mod_api_level"
-      android:enabled="false"
-      android:selectable="false"
-      android:shouldDisableView="false"
-      android:title="@string/mod_api_level"
-      android:summary="@string/mod_api_level_default"
-      settings:allowDividerAbove="true"
-      settings:allowDividerBelow="true"
-  />
+                android:key="mod_api_level"
+                android:enabled="false"
+                android:selectable="false"
+                android:shouldDisableView="false"
+                android:title="@string/mod_api_level"
+                android:summary="@string/mod_api_level_default"
+                settings:allowDividerAbove="true"
+                asettings:allowDividerBelow="true" /> -->
 
         <!-- Security patch level -->
         <PreferenceScreen
@@ -185,13 +156,6 @@
     />
         </PreferenceScreen
   >
-
-        <!-- Unofficial/custom patch level -->
-        <Preference
-      android:key="custom_patch"
-      android:title="@string/custom_patch"
-      android:summary="@string/device_info_default"
-  />
 
         <!-- Device FCC equipment id -->
         <com.android.settings.DividerPreference
