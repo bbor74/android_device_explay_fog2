@@ -2,3 +2,6 @@
 allow cameraserver cache_file:dir { add_name remove_name write };
 allow cameraserver cache_file:file { create getattr open read setattr unlink write };
 allow cameraserver proc_meminfo:file { open read };
+
+#============= cameraserver ==============
+allow cameraserver proc:file { open read };

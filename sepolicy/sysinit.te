@@ -1,0 +1,2 @@
+#============= sysinit ==============
+allow sysinit proc:file { open read };
