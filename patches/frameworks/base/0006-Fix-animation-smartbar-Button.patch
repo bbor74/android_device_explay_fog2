@@ -1,0 +1,32 @@
+From df051a8c7e37f71a4e9aab367b95f8e618ee8b29 Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Mon, 18 May 2026 11:04:00 +0400
+Subject: [PATCH 6/6] Fix animation smartbar Button
+
+ W PropertyValuesHolder: Method setGlowScale() with type float not found on target class class com.android.systemui.navigation.smartbar.SmartButtonRipple
+ W PropertyValuesHolder: Method setGlowAlpha() with type float not found on target class class com.android.systemui.navigation.smartbar.SmartButtonRipple
+---
+ packages/SystemUI/proguard.flags | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/packages/SystemUI/proguard.flags b/packages/SystemUI/proguard.flags
+index ab85e7d3..900fe6b6 100644
+--- a/packages/SystemUI/proguard.flags
++++ b/packages/SystemUI/proguard.flags
+@@ -15,6 +15,13 @@
+   public void setRotation(float);
+ }
+ 
++-keep class com.android.systemui.navigation.smartbar.SmartButtonRipple {
++  public float getGlowAlpha();
++  public float getGlowScale();
++  public void setGlowAlpha(float);
++  public void setGlowScale(float);
++}
++
+ -keep class com.android.systemui.statusbar.car.CarStatusBar
+ -keep class com.android.systemui.statusbar.phone.PhoneStatusBar
+ -keep class com.android.systemui.statusbar.tv.TvStatusBar
+-- 
+2.17.1
+
