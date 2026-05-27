@@ -20,3 +20,7 @@ allow init kernel:system module_request;
 #============= init ==============
 allow init ram_device:blk_file write;
 
+#============= init ==============
+allow init app_data_file:dir { getattr relabelfrom };
+allow init app_data_file:file { getattr relabelfrom };
+
