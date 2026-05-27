@@ -1,7 +1,7 @@
-From 1958127109efac6018d699ea0a76534d62c24744 Mon Sep 17 00:00:00 2001
+From c83af9dc79efaaefaa0dcde4a8657fcad3fd9534 Mon Sep 17 00:00:00 2001
 From: yugers <yugers@gmail.com>
 Date: Sun, 9 Oct 2016 22:18:43 +0300
-Subject: [PATCH 2/3] Add legacy touchscreen support - part 2
+Subject: [PATCH 2/4] Add legacy touchscreen support - part 2
 
 Change-Id: I380a5a8c1676c14ee8cd65b7db6e5e0a124b0d68
 ---
@@ -10,7 +10,7 @@ Change-Id: I380a5a8c1676c14ee8cd65b7db6e5e0a124b0d68
  2 files changed, 23 insertions(+)
 
 diff --git a/include/input/InputDevice.h b/include/input/InputDevice.h
-index 1ea69d352..204b9e7fe 100644
+index 1ea69d3..204b9e7 100644
 --- a/include/input/InputDevice.h
 +++ b/include/input/InputDevice.h
 @@ -22,6 +22,17 @@
@@ -32,7 +32,7 @@ index 1ea69d352..204b9e7fe 100644
   * Identifies a device.
   */
 diff --git a/libs/input/InputDevice.cpp b/libs/input/InputDevice.cpp
-index d755ed30a..3dfab27f0 100644
+index d755ed3..3dfab27 100644
 --- a/libs/input/InputDevice.cpp
 +++ b/libs/input/InputDevice.cpp
 @@ -24,6 +24,7 @@

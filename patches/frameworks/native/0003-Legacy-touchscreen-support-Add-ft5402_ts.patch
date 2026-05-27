@@ -1,7 +1,7 @@
-From 1f3191dde514824307c0b610177c2c8fc343a65d Mon Sep 17 00:00:00 2001
+From 604c082b11287c47215a32fe2e6471f1153161ca Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Wed, 19 Feb 2025 09:30:42 +0400
-Subject: [PATCH 3/3] Legacy touchscreen support: Add ft5402_ts
+Subject: [PATCH 3/4] Legacy touchscreen support: Add ft5402_ts
 
 Change-Id: Ib5b6be59a50f4e68af9295f735f1c9184672ea6e
 ---
@@ -9,7 +9,7 @@ Change-Id: Ib5b6be59a50f4e68af9295f735f1c9184672ea6e
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/include/input/InputDevice.h b/include/input/InputDevice.h
-index 204b9e7fe..ea25beda0 100644
+index 204b9e7..ea25bed 100644
 --- a/include/input/InputDevice.h
 +++ b/include/input/InputDevice.h
 @@ -24,14 +24,14 @@ namespace android {
