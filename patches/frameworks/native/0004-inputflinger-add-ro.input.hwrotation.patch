@@ -1,0 +1,87 @@
+From 119e3aa57e235aaed6577c626fcf295d5d20600d Mon Sep 17 00:00:00 2001
+From: Liu Xiaowen <b37945@freescale.com>
+Date: Mon, 27 Jan 2014 10:40:03 +0800
+Subject: [PATCH 4/4] inputflinger: add ro.input.hwrotation
+
+Adjust touchscreen input rotation.  Useful when
+correction in the kernel source is not an option.
+
+*********
+Adapted original[1] for lollipop (Brian Beloshapka)
+- Account for file relocation
+- Switch prop to ro.input.hwrotation to prevent
+    interfering with devices already using ro.sf.hwrotation
+
+[1] https://github.com/android/platform_frameworks_base/commit/6b0f49a381a9a40e78f80b25eebbcf56eee7513a
+
+ENGR44307472 add ro.sf.hwrotation back to kitkat.
+
+modify touch screen area when set ro.sf.hwrotation.
+
+Signed-off-by: Liu Xiaowen <b37945@freescale.com>
+
+Change-Id: Ib00f5cf8bbbd7b0b6d052df8577a2b8e1520f9c8
+---
+ services/inputflinger/InputReader.cpp | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+
+diff --git a/services/inputflinger/InputReader.cpp b/services/inputflinger/InputReader.cpp
+index a95a9dd01..75194cbde 100644
+--- a/services/inputflinger/InputReader.cpp
++++ b/services/inputflinger/InputReader.cpp
+@@ -13,6 +13,7 @@
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  */
++/* Copyright (C) 2014 Freescale Semiconductor, Inc. */
+ 
+ #define LOG_TAG "InputReader"
+ 
+@@ -45,6 +46,7 @@
+ #include "InputReader.h"
+ 
+ #include <cutils/log.h>
++#include <cutils/properties.h>
+ #include <input/Keyboard.h>
+ #include <input/VirtualKeyMap.h>
+ 
+@@ -3310,6 +3312,19 @@ void TouchInputMapper::configureSurface(nsecs_t when, bool* outResetNeeded) {
+     int32_t rawWidth = mRawPointerAxes.x.maxValue - mRawPointerAxes.x.minValue + 1;
+     int32_t rawHeight = mRawPointerAxes.y.maxValue - mRawPointerAxes.y.minValue + 1;
+ 
++    char hwrotBuf[PROPERTY_VALUE_MAX];
++    int32_t hwrotation = DISPLAY_ORIENTATION_0;
++    if (property_get("ro.input.hwrotation", hwrotBuf, NULL) > 0) {
++        switch (atoi(hwrotBuf)) {
++            case 90:
++                hwrotation = DISPLAY_ORIENTATION_90;
++                break;
++            case 270:
++                hwrotation = DISPLAY_ORIENTATION_270;
++                break;
++        }
++    }
++
+     // Get associated display dimensions.
+     DisplayViewport newViewport;
+     if (mParameters.hasAssociatedDisplay) {
+@@ -3321,8 +3336,16 @@ void TouchInputMapper::configureSurface(nsecs_t when, bool* outResetNeeded) {
+             mDeviceMode = DEVICE_MODE_DISABLED;
+             return;
+         }
++        newViewport.orientation = (newViewport.orientation + hwrotation) % 4;
+     } else {
++        if ((hwrotation == DISPLAY_ORIENTATION_90 ||
++                hwrotation == DISPLAY_ORIENTATION_270)) {
++            int tmp = rawWidth;
++            rawWidth = rawHeight;
++            rawHeight = tmp;
++        }
+         newViewport.setNonDisplayViewport(rawWidth, rawHeight);
++        newViewport.orientation = hwrotation;
+     }
+     bool viewportChanged = mViewport != newViewport;
+     if (viewportChanged) {
+-- 
+2.17.1
+
