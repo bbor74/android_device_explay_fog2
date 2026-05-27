@@ -73,6 +73,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	ro.sf.rotation=270 \
 	ro.sf.hwrotation=270 \
 	ro.input.hwrotation=270 \
+	lockscreen.rot_override=true \
 	ro.property.fontScale=1.4 \
 	ro.navbar.flip=false \
 	persist.sys.timezone=Europe/Moscow \
