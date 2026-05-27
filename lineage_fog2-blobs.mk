@@ -1,6 +1,10 @@
 
 LOCAL_PATH := device/explay/fog2
 
+# Bootanimation
+PRODUCT_COPY_FILES +=  \
+    $(LOCAL_PATH)/_prebuilt/system/media/bootanimation.zip:system/media/bootanimation.zip
+
 #egl
 PRODUCT_COPY_FILES += \
 	$(call find-copy-subdir-files,*,$(LOCAL_PATH)/_prebuilt/system/lib/egl,system/lib/egl) \
