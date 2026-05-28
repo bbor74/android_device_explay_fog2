@@ -1,0 +1,26 @@
+From b20cba7a247521b495035392a23a845eed10a930 Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Thu, 28 May 2026 14:38:58 +0400
+Subject: [PATCH] DUtils: Adopt for small tablet
+
+Change-Id: Ia3167d37786d221dd3c2d3e4c3537af242b51bfe
+---
+ src/com/android/internal/utils/du/DUActionUtils.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/com/android/internal/utils/du/DUActionUtils.java b/src/com/android/internal/utils/du/DUActionUtils.java
+index 1e8534a..30a54f9 100644
+--- a/src/com/android/internal/utils/du/DUActionUtils.java
++++ b/src/com/android/internal/utils/du/DUActionUtils.java
+@@ -111,7 +111,7 @@ public final class DUActionUtils {
+     }
+ 
+     public static boolean navigationBarCanMove() {
+-        return Resources.getSystem().getConfiguration().smallestScreenWidthDp < 600;
++        return Resources.getSystem().getConfiguration().smallestScreenWidthDp < 480;
+     }
+ 
+     public static boolean hasNavbarByDefault(Context context) {
+-- 
+2.17.1
+
