@@ -47,6 +47,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_PACKAGES += explay_settings
 
+# Email
+PRODUCT_PACKAGES += \
+    Email
+
 # HAL
 PRODUCT_PACKAGES += \
    camera.polaris \
