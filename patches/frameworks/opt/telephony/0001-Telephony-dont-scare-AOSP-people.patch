@@ -1,0 +1,86 @@
+From d6f0dee1396680661c26f5357b25128a84cd1f1c Mon Sep 17 00:00:00 2001
+From: maxwen <max.weninger@gmail.com>
+Date: Tue, 28 Nov 2017 17:25:07 +0100
+Subject: [PATCH] Telephony: dont scare AOSP people
+
+* On AOSP it's ok to not have QtiTelephonyComponentFactory
+  so don't scare them with a stack trace but a nice message only
+
+Change-Id: I6644c4df91f1fbb775c368c62ef1ad90e1874cf7
+
+telephony: Construct TelephonyComponentFactory correctly wo qti jar.
+
+* In the absence of the file "/system/frameworks/qti-telephony-common.jar",
+  the default TelephonyComponentFactory shall be instantiated.
+  This fails in the current version, since the ClassLoader already
+  produces an exception in the absence of the jar. Hence, place
+  the ClassLoader construction in the try statement such that
+  a TelephonyComponentFactory is constructed for the singleton.
+* No stack trace is shown when the jar is abscent, but an
+  informative message as intended before.
+
+Change-Id: I3b7970ac3f58483d9a044a4252775bf7d32ac217
+Signed-off-by: Alexander Diewald <Diewi@diewald-net.com>
+---
+ .../telephony/TelephonyComponentFactory.java  | 28 +++++--------------
+ 1 file changed, 7 insertions(+), 21 deletions(-)
+
+diff --git a/src/java/com/android/internal/telephony/TelephonyComponentFactory.java b/src/java/com/android/internal/telephony/TelephonyComponentFactory.java
+index c15402c5..39b28d89 100644
+--- a/src/java/com/android/internal/telephony/TelephonyComponentFactory.java
++++ b/src/java/com/android/internal/telephony/TelephonyComponentFactory.java
+@@ -33,15 +33,11 @@ import com.android.internal.telephony.imsphone.ImsExternalCallTracker;
+ import com.android.internal.telephony.imsphone.ImsPhone;
+ import com.android.internal.telephony.imsphone.ImsPhoneCallTracker;
+ import com.android.internal.telephony.imsphone.ImsPullCall;
+-import com.android.internal.telephony.PhoneConstants;
+-import com.android.internal.telephony.SubscriptionController;
+ import com.android.internal.telephony.uicc.IccCardProxy;
+ 
+ import dalvik.system.PathClassLoader;
+ 
+-import java.lang.reflect.Method;
+ import java.lang.reflect.Constructor;
+-import java.io.File;
+ 
+ /**
+  * This class has one-line methods to instantiate objects only. The purpose is to make code
+@@ -58,28 +54,18 @@ public class TelephonyComponentFactory {
+             String fullClsName = "com.qualcomm.qti.internal.telephony.QtiTelephonyComponentFactory";
+             String libPath = "/system/framework/qti-telephony-common.jar";
+ 
+-            PathClassLoader classLoader = new PathClassLoader(libPath,
+-                    ClassLoader.getSystemClassLoader());
+-            Rlog.d(LOG_TAG, "classLoader = " + classLoader);
+-
+-            if (fullClsName == null || fullClsName.length() == 0) {
+-                Rlog.d(LOG_TAG, "No customized TelephonyPlugin available, fallback to default");
+-                fullClsName = "com.android.internal.telephony.TelephonyComponentFactory";
+-            }
+-            Class<?> cls = null;
+             try {
+-                cls = Class.forName(fullClsName, false, classLoader);
+-                Rlog.d(LOG_TAG, "cls = " + cls);
++                PathClassLoader classLoader = new PathClassLoader(libPath,
++                        ClassLoader.getSystemClassLoader());
++                Class<?> cls = Class.forName(fullClsName, false, classLoader);
+                 Constructor custMethod = cls.getConstructor();
+-                Rlog.d(LOG_TAG, "constructor method = " + custMethod);
+                 sInstance = (TelephonyComponentFactory) custMethod.newInstance();
+-            } catch (NoClassDefFoundError e) {
+-                e.printStackTrace();
+-                Rlog.e(LOG_TAG, "Error loading TelephonyComponentFactory");
++                Rlog.i(LOG_TAG, "Using QtiTelephonyComponentFactory");
++            } catch (NoClassDefFoundError | ClassNotFoundException e) {
++                Rlog.e(LOG_TAG, "QtiTelephonyComponentFactory not used - fallback to default");
+                 sInstance = new TelephonyComponentFactory();
+             } catch (Exception  e) {
+-                e.printStackTrace();
+-                Rlog.e(LOG_TAG, "Error loading TelephonyComponentFactory");
++                Rlog.e(LOG_TAG, "Error loading QtiTelephonyComponentFactory - fallback to default");
+                 sInstance = new TelephonyComponentFactory();
+             }
+         }
+-- 
+2.17.1
+
