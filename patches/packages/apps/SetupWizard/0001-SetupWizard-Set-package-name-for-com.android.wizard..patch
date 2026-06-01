@@ -1,0 +1,31 @@
+From 3cbf18977c6cd22ad613f32767a9354ad82bee5d Mon Sep 17 00:00:00 2001
+From: Michael Bestas <mkbestas@lineageos.org>
+Date: Sat, 28 Oct 2023 23:45:07 +0300
+Subject: [PATCH] SetupWizard: Set package name for com.android.wizard.LOAD 
+ intent
+
+https://developer.android.com/about/versions/14/behavior-changes-14#safer-intents
+
+Fixes:
+java.lang.RuntimeException: Unable to start activity ComponentInfo{com.cyanogenmod.setupwizard/com.cyanogenmod.setupwizard.SetupWizardActivity}: android.content.ActivityNotFoundException: No Activity found to handle Intent { act=com.android.wizard.LOAD flg=0x10000001 (has extras) }
+
+Change-Id: Ia15bc000011acb05b2db06299d142cabdf4e30c8
+---
+ src/com/cyanogenmod/setupwizard/SetupWizardActivity.java | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/com/cyanogenmod/setupwizard/SetupWizardActivity.java b/src/com/cyanogenmod/setupwizard/SetupWizardActivity.java
+index c138235..b7478b1 100644
+--- a/src/com/cyanogenmod/setupwizard/SetupWizardActivity.java
++++ b/src/com/cyanogenmod/setupwizard/SetupWizardActivity.java
+@@ -60,6 +60,7 @@ public class SetupWizardActivity extends BaseSetupWizardActivity {
+                 intent.putExtra(EXTRA_SCRIPT_URI, getString(R.string.cm_wizard_script_user_uri));
+             }
+             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | FLAG_GRANT_READ_URI_PERMISSION);
++            intent.setPackage(getPackageName());
+             startActivity(intent);
+             finish();
+         }
+-- 
+2.17.1
+
