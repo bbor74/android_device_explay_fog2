@@ -1,0 +1,31 @@
+From 68086ab32bbf7f926b47e17e9d7208045d4dc649 Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Mon, 1 Jun 2026 09:58:27 +0400
+Subject: [PATCH] Needed for explay_settings
+
+Change-Id: I00283d32373fb155401bc63dac31b7821bc4585f
+---
+ res/xml/device_info_settings.xml | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/res/xml/device_info_settings.xml b/res/xml/device_info_settings.xml
+index 8cecc14..951447e 100644
+--- a/res/xml/device_info_settings.xml
++++ b/res/xml/device_info_settings.xml
+@@ -19,6 +19,13 @@
+         xmlns:settings="http://schemas.android.com/apk/res-auto"
+         android:title="@string/about_settings">
+ 
++        <PreferenceScreen android:key="additional_system_update_settings"
++                          android:title="@string/additional_system_update_settings_list_item_title">
++            <intent android:action="android.intent.action.MAIN"
++                    android:targetPackage="@string/additional_system_update"
++                    android:targetClass="@string/additional_system_update_menu" />
++        </PreferenceScreen>
++
+         <!-- Device status - launches activity -->
+         <PreferenceScreen android:key="status_info"
+                 android:title="@string/device_status"
+-- 
+2.17.1
+
