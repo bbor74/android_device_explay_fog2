@@ -51,6 +51,11 @@ PRODUCT_PACKAGES += explay_settings
 PRODUCT_PACKAGES += \
     Email
 
+# Weather
+PRODUCT_PACKAGES += \
+    OmniStyle \
+    OmniJaws
+
 # HAL
 PRODUCT_PACKAGES += \
    camera.polaris \
