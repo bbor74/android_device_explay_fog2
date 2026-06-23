@@ -1,0 +1,5 @@
+#============= priv_app ==============
+allow priv_app cache_private_backup_file:dir getattr;
+
+#============= priv_app ==============
+allow priv_app storage_stub_file:dir getattr;

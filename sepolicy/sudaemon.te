@@ -1,0 +1,2 @@
+#============= sudaemon ==============
+allow sudaemon mount_service:service_manager find;

@@ -1,0 +1,6 @@
+# Default type for anything under /databk
+type databk_file, file_type;
+
+#============= databk_file ==============
+allow databk_file self:filesystem associate;
+

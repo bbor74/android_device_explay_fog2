@@ -5,3 +5,6 @@ allow system_server disp_device:chr_file { ioctl open read };
 allow system_server sensors_exec:dir search;
 allow system_server sensors_exec:file { read getattr open };
 
+#============= system_server ==============
+allow system_server unlabeled:file unlink;
+

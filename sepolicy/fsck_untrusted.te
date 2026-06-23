@@ -1,0 +1,3 @@
+#============= fsck_untrusted ==============
+allow fsck_untrusted kernel:system module_request;
+

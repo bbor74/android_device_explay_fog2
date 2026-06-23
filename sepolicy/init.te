@@ -20,3 +20,6 @@ allow init kernel:system module_request;
 #============= init ==============
 allow init ram_device:blk_file write;
 
+#============= init ==============
+allow init databk_file:filesystem { mount relabelfrom relabelto };
+
