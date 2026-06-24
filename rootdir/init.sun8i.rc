@@ -12,7 +12,7 @@ on init
 	# Support legacy paths
 	symlink /sdcard /storage/sdcard0
 
-	mkdir /databk 0700 root  system
+	# mkdir /databk 0700 root  system
 
 on early-fs
 	mount_all /fstab.sun8i
@@ -25,7 +25,7 @@ on early-fs
 on post-fs-data
 	#mkdir /data/media 0770 media_rw media_rw
 	#mkdir /mnt/media/sdcard 0770 media_rw media_rw
-	restorecon_recursive /databk
+	#restorecon_recursive /databk
 	# Set indication (checked by vold) that we have finished this action
 	setprop vold.post_fs_data_done 1
 
