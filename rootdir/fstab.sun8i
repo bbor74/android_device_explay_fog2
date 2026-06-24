@@ -4,10 +4,11 @@
 # specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
 
 
-
+/dev/block/nandc	/boot               emmc      defaults                                          defaults
 /dev/block/nandd	/system             ext4      ro                                            	wait
+/dev/block/nande	/misc               emmc      defaults                                          defaults
+/dev/block/nandf	/recovery           emmc      defaults                                          defaults
 /dev/block/nandg	/cache              ext4      noatime,nosuid,nodev,nomblk_io_submit,barrier=1	wait,check
-/dev/block/nandh	/databk             ext4      noatime,nosuid,nodev,nomblk_io_submit,barrier=1	wait,check
 /dev/block/nandi	/data		    ext4      noatime,nosuid,nodev,nomblk_io_submit,barrier=1,noauto_da_alloc wait,check,encryptable=/dev/block/nandh
 #/devices/virtual/block/nandj    /mnt/sdcard         vfat      rw,relatime,fmask=0000,dmask=0000                 wait,check,noemulatedsd,voldmanaged=sdcard:auto
 #/devices/platform/sunxi-mmc.2/mmc_host  /mnt/sdcard         vfat    rw,relatime,fmask=0000,dmask=0000                                       wait,check,voldmanaged=sdcard:auto

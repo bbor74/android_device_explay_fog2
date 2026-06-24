@@ -11,9 +11,11 @@
 
 /system/bin/sensors.sh     u:object_r:sensors_exec:s0
 
-/databk(/.*)?		u:object_r:databk_file:s0
-
+# Block labeling
+/dev/block/nandc                   u:object_r:boot_block_device:s0
 /dev/block/nandd                   u:object_r:system_block_device:s0
+/dev/block/nande                   u:object_r:misc_block_device:s0
+/dev/block/nandf                   u:object_r:recovery_block_device:s0
 /dev/block/nandg                   u:object_r:cache_block_device:s0
-/dev/block/nandh                   u:object_r:databk_block_device:s0
+/dev/block/nandh                   u:object_r:metadata_block_device:s0
 /dev/block/nandi                   u:object_r:userdata_block_device:s0
