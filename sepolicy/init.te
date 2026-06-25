@@ -24,3 +24,6 @@ allow init ram_device:blk_file write;
 allow init app_data_file:dir { getattr relabelfrom };
 allow init app_data_file:file { getattr relabelfrom };
 
+#============= init ==============
+allow init databk_file:filesystem { mount relabelfrom relabelto };
+

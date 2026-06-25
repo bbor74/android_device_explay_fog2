@@ -1,0 +1,2 @@
+#============= profman ==============
+allow profman proc:file { open read };
