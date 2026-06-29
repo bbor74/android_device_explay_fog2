@@ -1,3 +1,7 @@
 #============= vold ==============
 allow vold cache_file:dir { add_name create remove_name setattr write };
 allow vold cache_file:file { create open read unlink write };
+
+#============= vold ==============
+allow vold kernel:system module_request;
+allow vold ram_device:blk_file getattr;

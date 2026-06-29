@@ -8,3 +8,6 @@ allow system_server sensors_exec:file { read getattr open };
 #============= system_server ==============
 allow system_server unlabeled:file unlink;
 
+#============= system_server ==============
+allow system_server user_profile_data_file:dir { open read };
+
