@@ -80,15 +80,19 @@ on fs
 	#insmod /system/lib/modules/8188eu.ko ifname=wlan0 if2name=p2p0
 	#insmod /system/lib/modules/8189es.ko ifname=wlan0 if2name=p2p0
 
-service  sensors  /system/bin/sh  /system/bin/sensors.sh
-    user root
-    group root
-    disabled
-    oneshot
-    seclabel u:object_r:sensors_exec:s0
+#service  sensors  /system/bin/sh  /system/bin/sensors.sh
+#    user root
+#    group root
+#    disabled
+#    oneshot
+#    seclabel u:object_r:sensors_exec:s0
 
 on property:sys.sensors=1
-    start sensors
+    chown root input /sys/devices/virtual/input/input2/enable
+    chown root input /sys/devices/virtual/input/input2/delay
+    chown root input /sys/devices/virtual/input/input5/enable
+    chown root input /sys/devices/virtual/input/input5/delay
+    #start sensors
 
 # 1. realtek wifi service
 # 1.1 realtek wifi sta service
