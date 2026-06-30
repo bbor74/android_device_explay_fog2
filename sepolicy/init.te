@@ -5,7 +5,7 @@ allow init self:capability sys_module;
 allow init sensors_exec:process { noatsecure rlimitinh siginh };
 
 #============= init ==============
-dontaudit init sensors_exec:process transition;
+# dontaudit init sensors_exec:process transition;
 
 #============= init ==============
 allow init debugfs:dir mounton;
