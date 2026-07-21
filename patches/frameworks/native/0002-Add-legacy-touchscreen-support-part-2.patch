@@ -1,7 +1,7 @@
 From d14c71d6359be03f4aebce51ddfc899a148c99a5 Mon Sep 17 00:00:00 2001
 From: yugers <yugers@gmail.com>
 Date: Sun, 9 Oct 2016 22:18:43 +0300
-Subject: [PATCH 2/4] Add legacy touchscreen support - part 2
+Subject: [PATCH 2/5] Add legacy touchscreen support - part 2
 
 Change-Id: I380a5a8c1676c14ee8cd65b7db6e5e0a124b0d68
 ---

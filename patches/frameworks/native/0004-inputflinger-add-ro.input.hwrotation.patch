@@ -1,7 +1,7 @@
 From 119e3aa57e235aaed6577c626fcf295d5d20600d Mon Sep 17 00:00:00 2001
 From: Liu Xiaowen <b37945@freescale.com>
 Date: Mon, 27 Jan 2014 10:40:03 +0800
-Subject: [PATCH 4/4] inputflinger: add ro.input.hwrotation
+Subject: [PATCH 4/5] inputflinger: add ro.input.hwrotation
 
 Adjust touchscreen input rotation.  Useful when
 correction in the kernel source is not an option.

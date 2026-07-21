@@ -1,7 +1,7 @@
 From 16ff1b2f9e7287bfd21fc325f7a0a0ab4d3153e9 Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Wed, 19 Feb 2025 09:30:42 +0400
-Subject: [PATCH 3/4] Legacy touchscreen support: Add ft5402_ts
+Subject: [PATCH 3/5] Legacy touchscreen support: Add ft5402_ts
 
 Change-Id: Ib5b6be59a50f4e68af9295f735f1c9184672ea6e
 ---
