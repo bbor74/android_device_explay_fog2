@@ -1,0 +1,6 @@
+#============= mediacodec ==============
+allow mediacodec cedar_device:chr_file { ioctl open read write };
+allow mediacodec system_file:dir { open read };
+
+#============= mediacodec ==============
+allow mediacodec proc_meminfo:file { open read };

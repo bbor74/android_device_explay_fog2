@@ -9,6 +9,8 @@
 
 /dev/rfkill                  u:object_r:rfkill_device:s0
 
+/dev/cedar_dev    u:object_r:cedar_device:s0
+
 /system/bin/sensors.sh     u:object_r:sensors_exec:s0
 
 # Block labeling
