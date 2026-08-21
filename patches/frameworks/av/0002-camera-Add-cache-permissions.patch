@@ -1,7 +1,7 @@
-From c28a9a9abc0cd4d3dc204ba10d200178ff7ac9f4 Mon Sep 17 00:00:00 2001
+From 2974f2638ce14519b8248a1950ba4e6968c5af60 Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Fri, 20 Feb 2026 14:19:50 +0400
-Subject: [PATCH 2/2] camera: Add cache permissions
+Subject: [PATCH 2/3] camera: Add cache permissions
 
 Change-Id: I746ec3a2ce3da218de923b4d54e35ce183b15e23
 ---
@@ -34,5 +34,5 @@ index f6c325c98..fabdd3583 100644
      ioprio rt 4
      writepid /dev/cpuset/foreground/tasks /dev/stune/foreground/tasks
 -- 
-2.17.1
+2.43.0
 

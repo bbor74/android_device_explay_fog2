@@ -1,0 +1,932 @@
+From 9188915b2036779f23bd98aac4651ad295789547 Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Fri, 21 Aug 2026 10:05:10 +0400
+Subject: [PATCH 3/3] MediaPlayerService: Adopt for Allwinner
+
+From https://github.com/BPI-SINOVOIP/BPI-H3-New-Android7/tree/master/android/frameworks/av/media/libmediaplayerservice
+
+Change-Id: Ice5dd7b089be133c1459af2453d1afed5ceeebeb
+---
+ include/media/MediaPlayerInterface.h          |   4 +-
+ media/libmediaplayerservice/Android.mk        |   6 +
+ .../MediaPlayerFactory.cpp                    | 209 +++++++-
+ .../MetadataRetrieverClient.cpp               |   6 +
+ .../SimpleMediaFormatProbe.cpp                | 482 ++++++++++++++++++
+ .../SimpleMediaFormatProbe.h                  |  55 ++
+ 6 files changed, 754 insertions(+), 8 deletions(-)
+ create mode 100755 media/libmediaplayerservice/SimpleMediaFormatProbe.cpp
+ create mode 100755 media/libmediaplayerservice/SimpleMediaFormatProbe.h
+
+diff --git a/include/media/MediaPlayerInterface.h b/include/media/MediaPlayerInterface.h
+index 3bab78403..245aebefd 100644
+--- a/include/media/MediaPlayerInterface.h
++++ b/include/media/MediaPlayerInterface.h
+@@ -52,7 +52,9 @@ enum player_type {
+     // The shared library with the test player is passed passed as an
+     // argument to the 'test:' url in the setDataSource call.
+     TEST_PLAYER = 5,
+-    DASH_PLAYER = 6,
++
++    AW_PLAYER = 6,
++    DASH_PLAYER = 7,
+ };
+ 
+ 
+diff --git a/media/libmediaplayerservice/Android.mk b/media/libmediaplayerservice/Android.mk
+index d556ec9eb..7d50116f2 100644
+--- a/media/libmediaplayerservice/Android.mk
++++ b/media/libmediaplayerservice/Android.mk
+@@ -18,6 +18,7 @@ LOCAL_PATH:= $(call my-dir)
+ #
+ 
+ include $(CLEAR_VARS)
++include $(LOCAL_PATH)/../libcedarx/config.mk
+ 
+ LOCAL_SRC_FILES:=               \
+     ActivityManager.cpp         \
+@@ -29,6 +30,7 @@ LOCAL_SRC_FILES:=               \
+     RemoteDisplay.cpp           \
+     StagefrightRecorder.cpp     \
+     TestPlayerStub.cpp          \
++    SimpleMediaFormatProbe.cpp
+ 
+ LOCAL_SHARED_LIBRARIES :=       \
+     libbinder                   \
+@@ -50,6 +52,8 @@ LOCAL_SHARED_LIBRARIES :=       \
+     libstagefright_wfd          \
+     libutils                    \
+     libvorbisidec               \
++    libawmetadataretriever      \
++    libawplayer                 \
+ 
+ LOCAL_STATIC_LIBRARIES :=       \
+     libstagefright_nuplayer     \
+@@ -70,6 +74,8 @@ LOCAL_C_INCLUDES :=                                                 \
+     $(TOP)/frameworks/native/include/media/hardware                 \
+     $(TOP)/external/tremolo/Tremolo                                 \
+     libcore/include                                                 \
++    $(TOP)/frameworks/av/media/libcedarx/android_adapter/awplayer/   \
++    $(TOP)/frameworks/av/media/libcedarx/android_adapter/metadataretriever/       \
+     $(TOP)/frameworks/av/media/libavextensions                      \
+     $(TOP)/frameworks/av/media/libstagefright/mpeg2ts               \
+ 
+diff --git a/media/libmediaplayerservice/MediaPlayerFactory.cpp b/media/libmediaplayerservice/MediaPlayerFactory.cpp
+index c04183bb0..dfc639a72 100644
+--- a/media/libmediaplayerservice/MediaPlayerFactory.cpp
++++ b/media/libmediaplayerservice/MediaPlayerFactory.cpp
+@@ -24,6 +24,7 @@
+ #include <media/stagefright/DataSource.h>
+ #include <media/stagefright/FileSource.h>
+ #include <media/stagefright/foundation/ADebug.h>
++#include <media/stagefright/Utils.h>
+ #include <utils/Errors.h>
+ #include <utils/misc.h>
+ #include <../libstagefright/include/WVMExtractor.h>
+@@ -32,6 +33,10 @@
+ 
+ #include "TestPlayerStub.h"
+ #include "nuplayer/NuPlayerDriver.h"
++
++#include "SimpleMediaFormatProbe.h"
++#include "awplayer.h"
++
+ #include <mediaplayerservice/AVMediaServiceExtensions.h>
+ 
+ namespace android {
+@@ -40,6 +45,144 @@ Mutex MediaPlayerFactory::sLock;
+ MediaPlayerFactory::tFactoryMap MediaPlayerFactory::sFactoryMap;
+ bool MediaPlayerFactory::sInitComplete = false;
+ 
++// TODO: Temp hack until we can register players
++typedef struct
++{
++    const char *extension;
++    player_type playertype;
++} extmap;
++
++static extmap FILE_EXTS [] =
++{
++	{".ogg",  AW_PLAYER},
++	{".mp3",  AW_PLAYER},
++	{".wav",  AW_PLAYER},
++	{".amr",  AW_PLAYER},
++	{".flac", AW_PLAYER},
++	{".m4a",  AW_PLAYER},
++	{".m4r",  AW_PLAYER},
++	{".3gpp", AW_PLAYER},
++	{".out",  AW_PLAYER},
++	{".3gp",  AW_PLAYER},
++	{".aac",  AW_PLAYER},
++
++	{".mid",  NU_PLAYER},
++	{".midi", NU_PLAYER},
++	{".smf",  NU_PLAYER},
++	{".xmf",  NU_PLAYER},
++	{".mxmf", NU_PLAYER},
++	{".imy",  NU_PLAYER},
++	{".rtttl",NU_PLAYER},
++	{".rtx",  NU_PLAYER},
++	{".ota",  NU_PLAYER},
++	{".wvm",  NU_PLAYER},
++
++	{".ape", AW_PLAYER},
++	{".ac3", AW_PLAYER},
++	{".dts", AW_PLAYER},
++	{".wma", AW_PLAYER},
++	{".aac", AW_PLAYER},
++	{".mp2", AW_PLAYER},
++    {".mp1", AW_PLAYER},
++    {".ra", AW_PLAYER},
++
++};
++
++player_type getPlayerType_l(int fd, int64_t offset, int64_t /*length*/)
++{
++	int r_size;
++	int file_format;
++
++	char buf[4096] = {0};
++	lseek(fd, offset, SEEK_SET);
++	r_size = read(fd, buf, sizeof(buf));
++	lseek(fd, offset, SEEK_SET);
++
++	// Ogg vorbis?
++	if (!memcmp(buf, "OggS", 4)) {
++		return NU_PLAYER;
++	} else if (!memcmp(buf, "MThd", 4)) {
++		return NU_PLAYER;
++	}
++
++	// Modify for CTS
++	if(property_get_bool("media.stagefright.mode", false))
++	{
++		file_format = audio_format_detect((unsigned char*)buf, r_size, fd, offset);
++		ALOGD("cts.media  audio_format_detect[%d]",file_format);
++		if (file_format == MEDIA_FORMAT_MP3 || file_format == MEDIA_FORMAT_M4A ||
++		    file_format == MEDIA_FORMAT_WAV || file_format == MEDIA_FORMAT_STAGEFRIGHT_MIN)
++		{
++			ALOGD("cts.media using NU_PLAYER");
++			return NU_PLAYER;
++		}
++	}
++
++    AString filePath = nameForFd(fd);
++    for (size_t i = 0; i < ARRAY_SIZE(FILE_EXTS); ++i)
++    {
++        if (filePath.endsWithIgnoreCase(FILE_EXTS[i].extension))
++            return FILE_EXTS[i].playertype;
++    }
++
++	return AW_PLAYER;
++}
++
++player_type getPlayerType_l(const char* url)
++{
++	char *strpos;
++
++	if (TestPlayerStub::canBeUsed(url))
++	{
++	        return TEST_PLAYER;
++	}
++
++	if (!strncasecmp("http://", url, 7) || !strncasecmp("https://", url, 8))
++	{
++		if((strpos = strrchr(url,'?')) != NULL)
++		{
++			for (int i = 0; i < NELEM(FILE_EXTS); ++i)
++			{
++				int len = strlen(FILE_EXTS[i].extension);
++				if (!strncasecmp(strpos -len, FILE_EXTS[i].extension, len))
++				{
++					return FILE_EXTS[i].playertype;
++				}
++			}
++		}
++	}
++
++    if (!strncmp("widevine://", url, strlen("widevine://")))
++    {
++        ALOGD("widevine stream using NU_PLAYER");
++        return NU_PLAYER;
++    }
++
++	if (!strncmp("data:;base64", url, strlen("data:;base64")))
++	{
++		return NU_PLAYER;
++	}
++
++	// use MidiFile for MIDI extensions
++	int lenURL = strlen(url);
++	int len;
++	int start;
++	for (int i = 0; i < NELEM(FILE_EXTS); ++i)
++	{
++	    len = strlen(FILE_EXTS[i].extension);
++	    start = lenURL - len;
++	    if (start > 0)
++	    {
++	        if (!strncasecmp(url + start, FILE_EXTS[i].extension, len))
++	        {
++	            return FILE_EXTS[i].playertype;
++	        }
++	    }
++	}
++
++	return AW_PLAYER;
++}
++
+ status_t MediaPlayerFactory::registerFactory_l(IFactory* factory,
+                                                player_type type) {
+     if (NULL == factory) {
+@@ -64,7 +207,11 @@ status_t MediaPlayerFactory::registerFactory_l(IFactory* factory,
+ }
+ 
+ static player_type getDefaultPlayerType() {
++#if 0
+     return NU_PLAYER;
++#else
++    return AW_PLAYER;
++#endif
+ }
+ 
+ status_t MediaPlayerFactory::registerFactory(IFactory* factory,
+@@ -81,7 +228,7 @@ void MediaPlayerFactory::unregisterFactory(player_type type) {
+ #define GET_PLAYER_TYPE_IMPL(a...)                      \
+     Mutex::Autolock lock_(&sLock);                      \
+                                                         \
+-    player_type ret = STAGEFRIGHT_PLAYER;               \
++    player_type ret = AW_PLAYER;               \
+     float bestScore = 0.0;                              \
+                                                         \
+     for (size_t i = 0; i < sFactoryMap.size(); ++i) {   \
+@@ -102,26 +249,44 @@ void MediaPlayerFactory::unregisterFactory(player_type type) {
+                                                         \
+     return ret;
+ 
+-player_type MediaPlayerFactory::getPlayerType(const sp<IMediaPlayer>& client,
++player_type MediaPlayerFactory::getPlayerType(const sp<IMediaPlayer>& /*client*/,
+                                               const char* url) {
++    ALOGV("MediaPlayerFactory::getPlayerType: url = %s", url);
++
++    return android::getPlayerType_l(url);
++
++#if 0
+     GET_PLAYER_TYPE_IMPL(client, url);
++#endif
++
+ }
+ 
+-player_type MediaPlayerFactory::getPlayerType(const sp<IMediaPlayer>& client,
++player_type MediaPlayerFactory::getPlayerType(const sp<IMediaPlayer>& /*client*/,
+                                               int fd,
+                                               int64_t offset,
+                                               int64_t length) {
++
++#if 0
+     GET_PLAYER_TYPE_IMPL(client, fd, offset, length);
++#else
++    return android::getPlayerType_l(fd, offset, length);
++#endif
+ }
+ 
+-player_type MediaPlayerFactory::getPlayerType(const sp<IMediaPlayer>& client,
+-                                              const sp<IStreamSource> &source) {
++player_type MediaPlayerFactory::getPlayerType(const sp<IMediaPlayer>& /*client*/,
++                                              const sp<IStreamSource> & /*source*/) {
++#if 0
+     GET_PLAYER_TYPE_IMPL(client, source);
++#endif
++    return getDefaultPlayerType(); // default using AW_PLAYER
+ }
+ 
+-player_type MediaPlayerFactory::getPlayerType(const sp<IMediaPlayer>& client,
+-                                              const sp<DataSource> &source) {
++player_type MediaPlayerFactory::getPlayerType(const sp<IMediaPlayer>& /*client*/,
++                                              const sp<DataSource> & /*source*/) {
++#if 0
+     GET_PLAYER_TYPE_IMPL(client, source);
++#endif
++    return NU_PLAYER;
+ }
+ 
+ #undef GET_PLAYER_TYPE_IMPL
+@@ -240,6 +405,34 @@ class TestPlayerFactory : public MediaPlayerFactory::IFactory {
+     }
+ };
+ 
++class AwPlayerFactory : public MediaPlayerFactory::IFactory {
++  public:
++    virtual float scoreFactory(const sp<IMediaPlayer>& /*client*/,
++                               int /*fd*/,
++                               int64_t /*offset*/,
++                               int64_t /*length*/,
++                               float /*curScore*/) {
++
++        return 0.0;
++    }
++
++    virtual sp<MediaPlayerBase> createPlayer(pid_t /* pid */) {
++        ALOGV(" create AwPlayer");
++        return new AwPlayer();
++    }
++};
++
++static void updateFILE_EXTS()
++{
++    if (!property_get_bool("media.stagefright.mode", false))
++        return;
++
++    for (size_t i = 0; i < ARRAY_SIZE(FILE_EXTS); ++i) {
++        if (!strcmp(FILE_EXTS[i].extension, ".mp3"))
++            FILE_EXTS[i].playertype = NU_PLAYER;
++    }
++}
++
+ void MediaPlayerFactory::registerBuiltinFactories() {
+ 
+     MediaPlayerFactory::IFactory* pCustomFactory = NULL;
+@@ -248,6 +441,8 @@ void MediaPlayerFactory::registerBuiltinFactories() {
+     if (sInitComplete)
+         return;
+ 
++    updateFILE_EXTS();
++    registerFactory_l(new AwPlayerFactory(), AW_PLAYER);
+     registerFactory_l(new NuPlayerFactory(), NU_PLAYER);
+     registerFactory_l(new TestPlayerFactory(), TEST_PLAYER);
+     AVMediaServiceUtils::get()->getDashPlayerFactory(pCustomFactory, DASH_PLAYER);
+diff --git a/media/libmediaplayerservice/MetadataRetrieverClient.cpp b/media/libmediaplayerservice/MetadataRetrieverClient.cpp
+index 9d634ecc3..830c820ff 100644
+--- a/media/libmediaplayerservice/MetadataRetrieverClient.cpp
++++ b/media/libmediaplayerservice/MetadataRetrieverClient.cpp
+@@ -41,6 +41,7 @@
+ #include "MetadataRetrieverClient.h"
+ #include "StagefrightMetadataRetriever.h"
+ #include "MediaPlayerFactory.h"
++#include "awmetadataretriever.h"
+ 
+ namespace android {
+ 
+@@ -92,6 +93,11 @@ static sp<MediaMetadataRetrieverBase> createRetriever(player_type playerType)
+             p = new StagefrightMetadataRetriever;
+             break;
+         }
++        case AW_PLAYER:
++        {
++            p = new AwMetadataRetriever;
++            break;
++        }
+         default:
+             // TODO:
+             // support for TEST_PLAYER
+diff --git a/media/libmediaplayerservice/SimpleMediaFormatProbe.cpp b/media/libmediaplayerservice/SimpleMediaFormatProbe.cpp
+new file mode 100755
+index 000000000..e4528a60b
+--- /dev/null
++++ b/media/libmediaplayerservice/SimpleMediaFormatProbe.cpp
+@@ -0,0 +1,482 @@
++/*******************************************************************************
++--                                                                            --
++--                    CedarX Multimedia Framework                             --
++--                                                                            --
++--          the Multimedia Framework for Linux/Android System                 --
++--                                                                            --
++--       This software is confidential and proprietary and may be used        --
++--        only as expressly authorized by a licensing agreement from          --
++--                         Softwinner Products.                               --
++--                                                                            --
++--                   (C) COPYRIGHT 2011 SOFTWINNER PRODUCTS                   --
++--                            ALL RIGHTS RESERVED                             --
++--                                                                            --
++--                 The entire notice above must be reproduced                 --
++--                  on all copies and should not be removed.                  --
++--                                                                            --
++*******************************************************************************/
++
++//#define ALOG_NDEBUG 0
++#define ALOG_TAG "MediaPlayerServiceMediaFormatProbe"
++#include <utils/Log.h>
++#include <string.h>
++#include "SimpleMediaFormatProbe.h"
++
++namespace android {
++
++#define AVPROBE_SCORE_MAX 100
++
++
++#define AV_RB32(x)  ((((const unsigned char*)(x))[0] << 24) | \
++    (((const unsigned char*)(x))[1] << 16) | \
++    (((const unsigned char*)(x))[2] <<  8) | \
++                      ((const unsigned char*)(x))[3])
++
++#define AV_RL32(x) ((((const unsigned char*)(x))[3] << 24) | \
++    (((const unsigned char*)(x))[2] << 16) | \
++    (((const unsigned char*)(x))[1] <<  8) | \
++                     ((const unsigned char*)(x))[0])
++
++#define FFMAX(a,b) ((a) > (b) ? (a) : (b))
++
++#define MKTAG(a,b,c,d) (a | (b << 8) | (c << 16) | (d << 24))
++
++#define EBML_ID_HEADER      0x1A45DFA3
++
++//---------------------------- Audio stream format probe -----------------------------------
++#define ID3v2_HEADER_SIZE 10
++#define MPA_STEREO  0
++#define MPA_JSTEREO 1
++#define MPA_DUAL    2
++#define MPA_MONO    3
++
++const uint16_t ff_mpa_freq_tab[3] = { 44100, 48000, 32000 };
++
++const uint16_t ff_mpa_bitrate_tab[2][3][15] = {
++    { {0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448 },
++      {0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384 },
++      {0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320 } },
++    { {0, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256},
++      {0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160},
++      {0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160}
++    }
++};
++
++#define MPA_DECODE_HEADER \
++    int frame_size; \
++    int error_protection; \
++    int layer; \
++    int sample_rate; \
++    int sample_rate_index; /* between 0 and 8 */ \
++    int bit_rate; \
++    int nb_channels; \
++    int mode; \
++    int mode_ext; \
++    int lsf;
++
++typedef struct MPADecodeHeader {
++  MPA_DECODE_HEADER
++} MPADecodeHeader;
++
++
++static int ff_id3v2_match(const uint8_t *buf)
++{
++    return  buf[0]         ==  'I' &&
++            buf[1]         ==  'D' &&
++            buf[2]         ==  '3' &&
++            buf[3]         != 0xff &&
++            buf[4]         != 0xff &&
++           (buf[6] & 0x80) ==    0 &&
++           (buf[7] & 0x80) ==    0 &&
++           (buf[8] & 0x80) ==    0 &&
++           (buf[9] & 0x80) ==    0;
++}
++
++static int ff_id3v2_tag_len(const uint8_t * buf)
++{
++    int len = ((buf[6] & 0x7f) << 21) +
++              ((buf[7] & 0x7f) << 14) +
++              ((buf[8] & 0x7f) << 7) +
++               (buf[9] & 0x7f) +
++              ID3v2_HEADER_SIZE;
++    if (buf[5] & 0x10)
++        len += ID3v2_HEADER_SIZE;
++    return len;
++}
++
++/* fast header check for resync */
++static inline int ff_mpa_check_header(uint32_t header){
++    /* header */
++    if ((header & 0xffe00000) != 0xffe00000)
++        return -1;
++    /* layer check */
++    if ((header & (3<<17)) == 0)
++        return -1;
++    /* bit rate */
++    if ((header & (0xf<<12)) == 0xf<<12)
++        return -1;
++    /* frequency */
++    if ((header & (3<<10)) == 3<<10)
++        return -1;
++    return 0;
++}
++
++static int ff_mpegaudio_decode_header(MPADecodeHeader *s, uint32_t header)
++{
++    int sample_rate, frame_size, mpeg25, padding;
++    int sample_rate_index, bitrate_index;
++    if (header & (1<<20)) {
++        s->lsf = (header & (1<<19)) ? 0 : 1;
++        mpeg25 = 0;
++    } else {
++        s->lsf = 1;
++        mpeg25 = 1;
++    }
++
++    s->layer = 4 - ((header >> 17) & 3);
++    /* extract frequency */
++    sample_rate_index = (header >> 10) & 3;
++    sample_rate = ff_mpa_freq_tab[sample_rate_index] >> (s->lsf + mpeg25);
++    sample_rate_index += 3 * (s->lsf + mpeg25);
++    s->sample_rate_index = sample_rate_index;
++    s->error_protection = ((header >> 16) & 1) ^ 1;
++    s->sample_rate = sample_rate;
++
++    bitrate_index = (header >> 12) & 0xf;
++    padding = (header >> 9) & 1;
++    //extension = (header >> 8) & 1;
++    s->mode = (header >> 6) & 3;
++    s->mode_ext = (header >> 4) & 3;
++    //copyright = (header >> 3) & 1;
++    //original = (header >> 2) & 1;
++    //emphasis = header & 3;
++
++    if (s->mode == MPA_MONO)
++        s->nb_channels = 1;
++    else
++        s->nb_channels = 2;
++
++    if (bitrate_index != 0) {
++        frame_size = ff_mpa_bitrate_tab[s->lsf][s->layer - 1][bitrate_index];
++        s->bit_rate = frame_size * 1000;
++        switch(s->layer) {
++        case 1:
++            frame_size = (frame_size * 12000) / sample_rate;
++            frame_size = (frame_size + padding) * 4;
++            break;
++        case 2:
++            frame_size = (frame_size * 144000) / sample_rate;
++            frame_size += padding;
++            break;
++        default:
++        case 3:
++            frame_size = (frame_size * 144000) / (sample_rate << s->lsf);
++            frame_size += padding;
++            break;
++        }
++        s->frame_size = frame_size;
++    } else {
++        /* if no frame size computed, signal it */
++        return 1;
++    }
++
++    return 0;
++}
++
++/* useful helper to get mpeg audio stream infos. Return -1 if error in
++   header, otherwise the coded frame size in bytes */
++static int ff_mpa_decode_header(uint32_t head, int *sample_rate, int *channels, int *frame_size, int *bit_rate,int *layer)
++{
++    MPADecodeHeader s1, *s = &s1;
++
++    if (ff_mpa_check_header(head) != 0)
++        return -1;
++
++    if (ff_mpegaudio_decode_header(s, head) != 0) {
++        return -1;
++    }
++
++    switch(s->layer) {
++    case 1:
++        //avctx->codec_id = CODEC_ID_MP1;
++        *frame_size = 384;
++        break;
++    case 2:
++        //avctx->codec_id = CODEC_ID_MP2;
++        *frame_size = 1152;
++        break;
++    default:
++    case 3:
++        //avctx->codec_id = CODEC_ID_MP3;
++        if (s->lsf)
++            *frame_size = 576;
++        else
++            *frame_size = 1152;
++        break;
++    }
++
++    *sample_rate = s->sample_rate;
++    *channels = s->nb_channels;
++    *bit_rate = s->bit_rate;
++    *layer = s->layer;
++    //avctx->sub_id = s->layer;
++    return s->frame_size;
++}
++
++static int mp3_probe(media_probe_data_t *p)
++{
++    int max_frames, first_frames = 0;
++    int fsize, frames, sample_rate;
++    uint32_t header;
++    uint8_t *buf, *buf0, *buf2, *end;
++    int layer = 0;
++
++    buf0 = p->buf;
++    if(ff_id3v2_match(buf0)) {
++        buf0 += ff_id3v2_tag_len(buf0);
++    }
++    end = p->buf + p->buf_size - sizeof(uint32_t);
++    while(buf0 < end && !*buf0)
++        buf0++;
++
++    max_frames = 0;
++    buf = buf0;
++
++    for(; buf < end; buf= buf2+1) {
++        buf2 = buf;
++
++        for(frames = 0; buf2 < end; frames++) {
++            header = AV_RB32(buf2);
++            fsize = ff_mpa_decode_header(header, &sample_rate, &sample_rate, &sample_rate, &sample_rate,&layer);
++            if(fsize < 0)
++                return 0;//break;//for error check aac->mp3;
++            buf2 += fsize;
++        }
++        max_frames = FFMAX(max_frames, frames);
++        if(buf == buf0)
++            first_frames= frames;
++    }
++
++    //ALOGV("first_frames:%d max_frames:%d",first_frames,max_frames);
++
++    // keep this in sync with ac3 probe, both need to avoid
++    // issues with MPEG-files!
++    if((layer==1)||(layer==2))
++        return AVPROBE_SCORE_MAX -3;
++    if   (first_frames>=4) return AVPROBE_SCORE_MAX/2+1;
++    else if(max_frames>500)return AVPROBE_SCORE_MAX/2;
++    else if(max_frames>=2) return AVPROBE_SCORE_MAX/4;
++    else if(buf0!=p->buf)  return AVPROBE_SCORE_MAX/4-1;
++    //else if(max_frames>=1) return 1;
++    else                   return 0;
++//mpegps_mp3_unrecognized_format.mpg has max_frames=3
++}
++
++static int wav_probe(media_probe_data_t *p)
++{
++    /* check file header */
++    if (p->buf_size <= 32)
++        return 0;
++    if (!memcmp(p->buf + 8, "WAVE", 4)) {
++        if (!memcmp(p->buf, "RIFF", 4)) {
++            /*
++              Since ACT demuxer has standard WAV header at top of it's own,
++              returning score is decreased to avoid probe conflict
++              between ACT and WAV.
++            */
++        	int i, buflen = p->buf_size;
++        	unsigned char *ptr = p->buf;
++
++        	for(i=0x10; i<(buflen > 512 ? 512 : buflen); i++)
++        	{
++        	    if((ptr[i] == 0x64)&&(ptr[i+1] == 0x61)&&(ptr[i+2] == 0x74)&&(ptr[i+3] == 0x61))
++        			break;
++        	}
++        	i+=8;
++        	if(i<buflen)
++        	{
++        		for(;i<buflen;i++)
++        		{
++        			if(ptr[i]!=0)
++        				break;
++        		}
++        	}
++        	if(i<buflen-5)
++        	{
++        		if ((ptr[i + 0] == 0xff && ptr[i + 1] == 0x1f &&
++					  ptr[i + 2] == 0x00 && ptr[i + 3] == 0xe8 &&
++					  (ptr[i + 4] & 0xf0) == 0xf0 && ptr[i + 5] == 0x07)
++				   ||(ptr[i + 0] == 0x1f && ptr[i + 1] == 0xff &&
++					  ptr[i + 2] == 0xe8 && ptr[i + 3] == 0x00 &&
++					  ptr[i + 4] == 0x07 &&(ptr[i + 5] & 0xf0) == 0xf0)
++				   ||(ptr[i + 0] == 0xfe && ptr[i + 1] == 0x7f &&
++					  ptr[i + 2] == 0x01 && ptr[i + 3] == 0x80)
++				   ||(ptr[i + 0] == 0x7f && ptr[i + 1] == 0xfe &&
++					  ptr[i + 2] == 0x80 && ptr[i + 3] == 0x01))
++        		{
++        			return AVPROBE_SCORE_MAX - 2; //DTS
++        		}
++        	}
++            //add for adpcm call  CedarA
++            for(i=12; i<(buflen > 512 ? 512 : buflen); i++)
++        	{
++        	    if((ptr[i] == 0x66)&&(ptr[i+1] == 0x6D)&&(ptr[i+2] == 0x74)&&(ptr[i+3] == 0x20))//fmt
++        			break;
++        	}
++            if(i<buflen-10)
++            {
++                unsigned int tempWavTag = ptr[i+8]|((unsigned int)(ptr[i+9])<<8);
++                ALOGV("WAV FOR tag =%d\n",tempWavTag);
++                if(tempWavTag == 0x55)/* MPEG Layer 3 */
++                {
++	                return MEDIA_FORMAT_MP3;
++                }
++                else if(tempWavTag != 1)//if((tempWavTag != 1)&&(tempWavTag != 6)&&(tempWavTag != 7))
++                {
++                    return AVPROBE_SCORE_MAX -3;
++                }
++            }
++
++
++            return AVPROBE_SCORE_MAX - 1;
++        }
++        else if (!memcmp(p->buf,      "RF64", 4) &&
++                 !memcmp(p->buf + 12, "ds64", 4))
++            return AVPROBE_SCORE_MAX;
++    }
++
++    return 0;
++}
++
++enum CodecType {
++    CODEC_TYPE_UNKNOWN = -1,
++	CODEC_TYPE_VIDEO,
++	CODEC_TYPE_AUDIO,
++	CODEC_TYPE_DATA,
++	CODEC_TYPE_SUBTITLE,
++	CODEC_TYPE_ATTACHMENT,
++	CODEC_TYPE_NB
++};
++
++
++#define MAX_FTYPE_SIZE 5
++
++static int mp4_probe(media_probe_data_t *p) {
++	unsigned int offset;
++	unsigned int tag;
++	int score = 0;
++	char ftype_data[MAX_FTYPE_SIZE];
++
++	/* check file header */
++	offset = 0;
++	for (;;) {
++		/* ignore invalid offset */
++		if ((offset + 8) > (unsigned int) p->buf_size)
++			return score;
++		tag = AV_RL32(p->buf + offset + 4);
++		switch (tag) {
++		/* check for obvious tags */
++		case MKTAG('j','P',' ',' '): /* jpeg 2000 signature */
++		case MKTAG('m','o','o','v'):
++		case MKTAG('m','d','a','t'):
++		case MKTAG('p','n','o','t'): /* detect movs with preview pics like ew.mov and april.mov */
++		case MKTAG('u','d','t','a'): /* Packet Video PVAuthor adds this and a lot of more junk */
++			return AVPROBE_SCORE_MAX;
++			/* those are more common words, so rate then a bit less */
++		case MKTAG('e','d','i','w'): /* xdcam files have reverted first tags */
++		case MKTAG('w','i','d','e'):
++		case MKTAG('f','r','e','e'):
++		case MKTAG('j','u','n','k'):
++		case MKTAG('p','i','c','t'):
++			return AVPROBE_SCORE_MAX - 5;
++		case MKTAG('f','t','y','p'):
++
++			memcpy(ftype_data, p->buf+offset+8, MAX_FTYPE_SIZE-1);
++			ftype_data[MAX_FTYPE_SIZE-1] = '\0';
++//			ALOGV("ftype_data:%s",ftype_data);
++//			if(strcasestr(ftype_data,"3gp") != NULL
++//					|| strcasestr(ftype_data,"isom") != NULL
++//					||strcasestr(ftype_data,"3gg6") != NULL) {
++//				return 77;
++//			}
++			if((strcasestr(ftype_data,"3gg6") != NULL)) {
++				// cts test  testGapless3 m4a audio use
++				//	|| (strcasestr(ftype_data,"m4a") != NULL)) {
++
++				//cts test switch subtitle seamlessly with a 3gg5 video
++				//and test setnextplayer with m4a audio, use stagefright player
++				return 77;
++			}
++			return AVPROBE_SCORE_MAX;
++		case MKTAG(0x82,0x82,0x7f,0x7d ):
++		case MKTAG('s','k','i','p'):
++		case MKTAG('u','u','i','d'):
++		case MKTAG('p','r','f','l'):
++			offset = AV_RB32(p->buf+offset) + offset;
++			/* if we only find those cause probedata is too small at least rate them */
++			score = AVPROBE_SCORE_MAX - 50;
++			break;
++		default:
++			/* unrecognized tag */
++			return score;
++		}
++	}
++
++	return score;
++}
++
++int audio_format_detect(unsigned char *buf, int buf_size, int /*fd*/, int64_t /*offset*/)
++{
++	media_probe_data_t prob;
++	int file_format = MEDIA_FORMAT_UNKOWN;
++	int ret = 0;
++
++	prob.buf = buf;
++	prob.buf_size = buf_size;
++
++	if((ret = mp3_probe(&prob)) >= AVPROBE_SCORE_MAX/4-1){
++        if(ret == (AVPROBE_SCORE_MAX - 3)) {
++			return MEDIA_FORMAT_CEDARA;//mp1,mp2
++		}
++        else
++        {
++		    return MEDIA_FORMAT_MP3;
++        }
++	}
++
++	if(ff_id3v2_match(buf)) {
++        ret = ff_id3v2_tag_len(buf);
++        prob.buf = buf + ret;
++		prob.buf_size = buf_size - ret;
++    }
++
++	if( (ret = wav_probe(&prob)) > 0){
++		if(ret == (AVPROBE_SCORE_MAX - 2)) {
++			return MEDIA_FORMAT_DTS;
++		}
++        else if(ret == (AVPROBE_SCORE_MAX - 3)) {
++        	ALOGD("adpcm probe!");
++			return MEDIA_FORMAT_CEDARA;//adpcm
++		}
++		else if(ret == MEDIA_FORMAT_MP3){
++			ALOGD("mp3 probe!");
++			return MEDIA_FORMAT_MP3;
++		}
++		else {
++			return MEDIA_FORMAT_WAV;
++		}
++	}
++
++	if((ret = mp4_probe(&prob)) > 0) {
++		if(ret == 77) {
++			return MEDIA_FORMAT_3GP;
++		}
++		else {
++			return MEDIA_FORMAT_M4A;
++		}
++	}
++
++	return file_format;
++}
++
++} // android namespace
+diff --git a/media/libmediaplayerservice/SimpleMediaFormatProbe.h b/media/libmediaplayerservice/SimpleMediaFormatProbe.h
+new file mode 100755
+index 000000000..466639150
+--- /dev/null
++++ b/media/libmediaplayerservice/SimpleMediaFormatProbe.h
+@@ -0,0 +1,55 @@
++/*******************************************************************************
++--                                                                            --
++--                    CedarX Multimedia Framework                             --
++--                                                                            --
++--          the Multimedia Framework for Linux/Android System                 --
++--                                                                            --
++--       This software is confidential and proprietary and may be used        --
++--        only as expressly authorized by a licensing agreement from          --
++--                         Softwinner Products.                               --
++--                                                                            --
++--                   (C) COPYRIGHT 2011 SOFTWINNER PRODUCTS                   --
++--                            ALL RIGHTS RESERVED                             --
++--                                                                            --
++--                 The entire notice above must be reproduced                 --
++--                  on all copies and should not be removed.                  --
++--                                                                            --
++*******************************************************************************/
++
++namespace android {
++
++typedef struct media_probe_data_t{
++	unsigned char *buf;
++	int buf_size;
++}media_probe_data_t;
++
++typedef enum MEDIA_CONTAINER_FORMAT{
++	MEDIA_FORMAT_UNKOWN 		 	= 0, //don't touch the order
++	MEDIA_FORMAT_STAGEFRIGHT_MIN 	= 0,
++	MEDIA_FORMAT_MP3 			 	= 1,
++	MEDIA_FORMAT_OGG 			 	= 2,
++	MEDIA_FORMAT_WAV 				= 3,
++	MEDIA_FORMAT_AMR 				= 4,
++	MEDIA_FORMAT_FLAC 				= 5,
++	MEDIA_FORMAT_M4A  				= 6,
++	MEDIA_FORMAT_3GP 				= 7,
++	MEDIA_FORMAT_STAGEFRIGHT_MAX 	= 10,
++
++	MEDIA_FORMAT_CEDARX_MIN 		= 10,
++	MEDIA_FORMAT_MKV 				= 11,
++	MEDIA_FORMAT_CEDARX_MAX 		= 16,
++
++	MEDIA_FORMAT_CEDARA_MIN 		= 16,
++	MEDIA_FORMAT_APE  				= 17,
++	MEDIA_FORMAT_WMA 				= 19,
++	MEDIA_FORMAT_AC3  				= 20,
++	MEDIA_FORMAT_DTS  				= 21,
++	MEDIA_FORMAT_AAC  				= 22,
++	MEDIA_FORMAT_CEDARA 	 		= 31,
++	MEDIA_FORMAT_CEDARA_MAX 		= 32,
++}MEDIA_CONTAINER_FORMAT;
++
++extern int audio_format_detect(unsigned char *buf, int buf_size, int fd, int64_t offset);
++extern int stagefright_system_format_detect(unsigned char *buf, int buf_size);
++
++} // android namespace
+-- 
+2.43.0
+
