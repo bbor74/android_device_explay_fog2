@@ -1,0 +1,35 @@
+From 9806ae52f55f82edb567389d633cf350ccd7cb88 Mon Sep 17 00:00:00 2001
+From: Boris Belyaev <bbor1974@gmail.com>
+Date: Tue, 21 Jul 2026 10:41:50 +0400
+Subject: [PATCH 5/5] libui: Fix allocation for allwinner
+
+07-07 15:56:51.621   146   271 E Gralloc1On0Adapter: gralloc0 allocation failed: -22 (Invalid argument)
+07-07 15:56:51.621   146   271 E GraphicBufferAllocator: Failed to allocate (640 x 360) format 19 usage 10496: 5
+
+Change-Id: I006db572e4c242f0f4540dc209e77056479c4985
+---
+ libs/ui/GraphicBufferAllocator.cpp | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/libs/ui/GraphicBufferAllocator.cpp b/libs/ui/GraphicBufferAllocator.cpp
+index bed3f22..291fa11 100644
+--- a/libs/ui/GraphicBufferAllocator.cpp
++++ b/libs/ui/GraphicBufferAllocator.cpp
+@@ -101,6 +101,14 @@ status_t GraphicBufferAllocator::allocate(uint32_t width, uint32_t height,
+         ALOGE("Failed to set dimensions to (%u, %u): %d", width, height, error);
+         return BAD_VALUE;
+     }
++
++    // Fix for allwinner
++    if (format == 19) {
++      ALOGW("Warning: requested an invalid pixel format [0x%x] - Assumed HAL_PIXEL_FORMAT_YV12",format);
++
++      format = HAL_PIXEL_FORMAT_YV12;
++    }
++
+     error = descriptor->setFormat(static_cast<android_pixel_format_t>(format));
+     if (error != GRALLOC1_ERROR_NONE) {
+         ALOGE("Failed to set format to %d: %d", format, error);
+-- 
+2.43.0
+

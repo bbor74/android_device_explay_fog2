@@ -1,7 +1,7 @@
-From 604c082b11287c47215a32fe2e6471f1153161ca Mon Sep 17 00:00:00 2001
+From 13c08641b5382b09e5d79c567f606f626ac6764b Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Wed, 19 Feb 2025 09:30:42 +0400
-Subject: [PATCH 3/4] Legacy touchscreen support: Add ft5402_ts
+Subject: [PATCH 3/5] Legacy touchscreen support: Add ft5402_ts
 
 Change-Id: Ib5b6be59a50f4e68af9295f735f1c9184672ea6e
 ---
@@ -31,5 +31,5 @@ index 204b9e7..ea25bed 100644
  /*
   * Identifies a device.
 -- 
-2.17.1
+2.43.0
 

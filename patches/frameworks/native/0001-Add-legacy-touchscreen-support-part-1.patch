@@ -1,7 +1,7 @@
-From 23afa1831b60ecf6d1f68ca37dd8772e1a6cb242 Mon Sep 17 00:00:00 2001
+From d77da6f2b88f1a67e9a7b945baa2b6a111be393b Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Mon, 2 Jun 2025 16:47:17 +0400
-Subject: [PATCH 1/4] Add legacy touchscreen support - part 1
+Subject: [PATCH 1/5] Add legacy touchscreen support - part 1
 
 Change-Id: I2a801c289a91b3d7d7910589b808abd130df0703
 ---
@@ -68,5 +68,5 @@ index 99cd496..f4f5d08 100644
          }
  
 -- 
-2.17.1
+2.43.0
 
