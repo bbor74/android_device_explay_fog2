@@ -27,6 +27,7 @@ PRODUCT_PACKAGES += \
 	libtinyalsa
 
 include frameworks/av/media/libcedarc/libcdclist.mk
+include frameworks/av/media/libcedarx/libcdxlist.mk
 
 # Media profile
 PRODUCT_COPY_FILES += \
