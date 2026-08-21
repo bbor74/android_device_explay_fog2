@@ -2,3 +2,6 @@ type disp_device, dev_type;
 
 # /dev/rfkill
 type rfkill_device, dev_type;
+
+# /dev/cedar_dev
+type cedar_device, dev_type;
