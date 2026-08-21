@@ -5,3 +5,6 @@ allow mediaserver cache_file:file { create open setattr unlink write };
 #============= mediaserver ==============
 allow mediaserver platform_app:dir search;
 allow mediaserver platform_app:file { open read };
+
+#============= mediaserver ==============
+allow mediaserver cedar_device:chr_file { ioctl open read write };
