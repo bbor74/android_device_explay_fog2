@@ -1,13 +1,12 @@
 # mount point	fstype		device					device2
 
-/dev/block/nanda	/bootloader 	vfat  		defaults	defaults
-/dev/block/nandb	/env      		emmc    	defaults	defaults
-/dev/block/nandc	/boot			emmc		defaults	defaults
-/dev/block/nandd	/system			ext4		defaults	defaults
-/dev/block/nande	/misc			emmc		defaults	defaults
-/dev/block/nandf	/recovery		emmc		defaults	defaults
-/dev/block/nandg	/cache 			ext4		defaults	defaults
-/dev/block/nandh 	/databk			ext4		defaults	defaults
-/dev/block/nandi 	/data			ext4		defaults	defaults
-/dev/block/mmcblk0p1	/external_sd	vfat		defaults	defaults
-/dev/block/sda1		/usb-otg 		auto		defaults	defaults
+/dev/block/by-name/bootloader	/bootloader 	vfat  		defaults	defaults
+/dev/block/by-name/env			/env      		emmc    	defaults	defaults
+/dev/block/by-name/boot			/boot			emmc		defaults	defaults
+/dev/block/by-name/system		/system			ext4		defaults	defaults
+/dev/block/by-name/misc			/misc			emmc		defaults	defaults
+/dev/block/by-name/recovery		/recovery		emmc		defaults	defaults
+/dev/block/by-name/cache		/cache 			ext4		defaults	defaults
+/dev/block/by-name/UDISK 		/data			ext4		defaults	defaults
+/dev/block/mmcblk0p1			/external_sd	vfat		defaults	defaults
+/dev/block/sda1					/usb-otg 		auto		defaults	defaults
