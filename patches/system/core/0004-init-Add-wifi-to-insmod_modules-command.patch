@@ -1,7 +1,7 @@
-From b1233ecf8a9d5ba513bf9acad80073bac4af1971 Mon Sep 17 00:00:00 2001
+From d01e2c8327bf094b7aeb3edffceaefb41e69bd32 Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Sat, 28 Feb 2026 10:35:31 +0400
-Subject: [PATCH 4/4] init: Add 'wifi' to insmod_modules command
+Subject: [PATCH 4/5] init: Add 'wifi' to insmod_modules command
 
 Change-Id: I2eb31a82c0c0d2fe19a1985ce61aac2b4071356a
 ---
@@ -89,5 +89,5 @@ index 1a39dc197..c3fb8d844 100755
  
      return 1;
 -- 
-2.17.1
+2.43.0
 

@@ -1,7 +1,7 @@
-From 3e69312a1469b35e7dbe3e388ac3ddae868848c3 Mon Sep 17 00:00:00 2001
+From 6fcab7da09029b67c7d26a5c878466f68c34d9cf Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Tue, 3 Jun 2025 13:26:24 +0400
-Subject: [PATCH 2/4] init: Add format_userdata and insmod_modules commands
+Subject: [PATCH 2/5] init: Add format_userdata and insmod_modules commands
 
 Change-Id: Iedcc52fdc880efc66597ddd2f99fa39a8c7ebe56
 ---
@@ -243,5 +243,5 @@ index 949e139ff..b81f5d441 100755
          {"installkey",              {1,     1,    do_installkey}},
          {"load_persist_props",      {0,     0,    do_load_persist_props}},
 -- 
-2.17.1
+2.43.0
 
