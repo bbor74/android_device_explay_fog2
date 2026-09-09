@@ -1,2 +1,6 @@
 #============= vold ==============
 allow vold kernel:system module_request;
+
+#============= vold ==============
+allow vold device:dir { add_name create remove_name };
+
