@@ -1,7 +1,7 @@
-From b1233ecf8a9d5ba513bf9acad80073bac4af1971 Mon Sep 17 00:00:00 2001
+From 5f57cfb0c47c26a8d953bdf3009f3c92c264f538 Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Sat, 28 Feb 2026 10:35:31 +0400
-Subject: [PATCH 4/4] init: Add 'wifi' to insmod_modules command
+Subject: [PATCH 4/5] init: Add 'wifi' to insmod_modules command
 
 Change-Id: I2eb31a82c0c0d2fe19a1985ce61aac2b4071356a
 ---
@@ -9,10 +9,10 @@ Change-Id: I2eb31a82c0c0d2fe19a1985ce61aac2b4071356a
  1 file changed, 42 insertions(+), 1 deletion(-)
 
 diff --git a/init/builtins.cpp b/init/builtins.cpp
-index 1a39dc197..c3fb8d844 100755
+index 9a6499c..3ff0457 100755
 --- a/init/builtins.cpp
 +++ b/init/builtins.cpp
-@@ -1191,6 +1191,8 @@ static int do_insmod_modules(const std::vector<std::string>& args)
+@@ -1194,6 +1194,8 @@ static int do_insmod_modules(const std::vector<std::string>& args)
  {
  ERROR("-----------rogge---------------do_insmod_modules");
      const char *modules = args[1].c_str();
@@ -21,7 +21,7 @@ index 1a39dc197..c3fb8d844 100755
      int ret = 0;
      char options[1];
  
-@@ -1210,6 +1212,9 @@ ERROR("-----------rogge---------------do_insmod_modules");
+@@ -1213,6 +1215,9 @@ ERROR("-----------rogge---------------do_insmod_modules");
      //char num[1];
  
      char str[128];
@@ -31,7 +31,7 @@ index 1a39dc197..c3fb8d844 100755
  
      memset(back_name, 0, 64);
      memset(back_node, 0, 64);
-@@ -1218,9 +1223,11 @@ ERROR("-----------rogge---------------do_insmod_modules");
+@@ -1221,9 +1226,11 @@ ERROR("-----------rogge---------------do_insmod_modules");
      //memset(num, 0, 1);
  
      memset(str, 0, 128);
@@ -43,7 +43,7 @@ index 1a39dc197..c3fb8d844 100755
          //fopen back_name
          fp = fopen("/sys/devices/camera/back_name", "r");
          if (NULL == fp )
-@@ -1351,9 +1358,43 @@ ERROR("-----------rogge---------------do_insmod_modules");
+@@ -1354,9 +1361,43 @@ ERROR("-----------rogge---------------do_insmod_modules");
              }
          }
      }
@@ -89,5 +89,5 @@ index 1a39dc197..c3fb8d844 100755
  
      return 1;
 -- 
-2.17.1
+2.43.0
 

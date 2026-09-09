@@ -1,7 +1,7 @@
-From 7d51cd59c85e190eacc6e7c30ba22cb04d4c35e0 Mon Sep 17 00:00:00 2001
+From ff33eccc9d480370e18d8d6e41dc5b58daa04c28 Mon Sep 17 00:00:00 2001
 From: cjh1249131356 <cjh1249131356@gmail.com>
 Date: Sun, 1 May 2022 16:40:50 +0800
-Subject: [PATCH 1/4] libcutils: Silence log in recovery
+Subject: [PATCH 1/5] libcutils: Silence log in recovery
 
 * Error opening trace file: No such file or directory (2)
 
@@ -12,7 +12,7 @@ Signed-off-by: cjh1249131356 <cjh1249131356@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/libcutils/trace-dev.c b/libcutils/trace-dev.c
-index 778e4f03b..2d16d1f53 100644
+index 778e4f0..2d16d1f 100644
 --- a/libcutils/trace-dev.c
 +++ b/libcutils/trace-dev.c
 @@ -168,7 +168,7 @@ static void atrace_init_once()
@@ -25,5 +25,5 @@ index 778e4f03b..2d16d1f53 100644
          goto done;
      }
 -- 
-2.17.1
+2.43.0
 

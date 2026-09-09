@@ -1,7 +1,7 @@
-From 3e69312a1469b35e7dbe3e388ac3ddae868848c3 Mon Sep 17 00:00:00 2001
+From cc01b3d0128dfd450a0d8635277fb09a56c936ae Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Tue, 3 Jun 2025 13:26:24 +0400
-Subject: [PATCH 2/4] init: Add format_userdata and insmod_modules commands
+Subject: [PATCH 2/5] init: Add format_userdata and insmod_modules commands
 
 Change-Id: Iedcc52fdc880efc66597ddd2f99fa39a8c7ebe56
 ---
@@ -9,10 +9,10 @@ Change-Id: Iedcc52fdc880efc66597ddd2f99fa39a8c7ebe56
  1 file changed, 212 insertions(+)
 
 diff --git a/init/builtins.cpp b/init/builtins.cpp
-index 949e139ff..b81f5d441 100755
+index 8624483..16cf36b 100755
 --- a/init/builtins.cpp
 +++ b/init/builtins.cpp
-@@ -1149,6 +1149,216 @@ static int do_wait(const std::vector<std::string>& args) {
+@@ -1152,6 +1152,216 @@ static int do_wait(const std::vector<std::string>& args) {
          return -1;
  }
  
@@ -229,7 +229,7 @@ index 949e139ff..b81f5d441 100755
  /*
   * Callback to make a directory from the ext4 code
   */
-@@ -1191,10 +1401,12 @@ BuiltinFunctionMap::Map& BuiltinFunctionMap::map() const {
+@@ -1194,10 +1404,12 @@ BuiltinFunctionMap::Map& BuiltinFunctionMap::map() const {
          {"enable",                  {1,     1,    do_enable}},
          {"exec",                    {1,     kMax, do_exec}},
          {"export",                  {2,     2,    do_export}},
@@ -243,5 +243,5 @@ index 949e139ff..b81f5d441 100755
          {"installkey",              {1,     1,    do_installkey}},
          {"load_persist_props",      {0,     0,    do_load_persist_props}},
 -- 
-2.17.1
+2.43.0
 

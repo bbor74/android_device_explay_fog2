@@ -1,7 +1,7 @@
-From 59c6b0b9cf7a3f8276ccf950b9403fbadc74c27c Mon Sep 17 00:00:00 2001
+From 6649db8d71c2c3ebe54c5a821b8d22f8fb7bf226 Mon Sep 17 00:00:00 2001
 From: Boris Belyaev <bbor1974@gmail.com>
 Date: Tue, 23 Dec 2025 17:02:15 +0400
-Subject: [PATCH 3/4] init: modules in /system/lib/modules/
+Subject: [PATCH 3/5] init: modules in /system/lib/modules/
 
 Change-Id: If31b0fe1709b71108c5eaa7e28f730ae31cfbf3f
 ---
@@ -9,10 +9,10 @@ Change-Id: If31b0fe1709b71108c5eaa7e28f730ae31cfbf3f
  1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/init/builtins.cpp b/init/builtins.cpp
-index b81f5d441..1a39dc197 100755
+index 16cf36b..9a6499c 100755
 --- a/init/builtins.cpp
 +++ b/init/builtins.cpp
-@@ -1299,7 +1299,7 @@ ERROR("-----------rogge---------------do_insmod_modules");
+@@ -1302,7 +1302,7 @@ ERROR("-----------rogge---------------do_insmod_modules");
          if (back_name_len > 0)
          {
              memset(str, 0, 128);
@@ -21,7 +21,7 @@ index b81f5d441..1a39dc197 100755
              ret = insmod(str, options);
              if(ret < 0)
              {
-@@ -1313,7 +1313,7 @@ ERROR("-----------rogge---------------do_insmod_modules");
+@@ -1316,7 +1316,7 @@ ERROR("-----------rogge---------------do_insmod_modules");
          if (front_name_len > 0)
          {
            memset(str, 0, 128);
@@ -30,7 +30,7 @@ index b81f5d441..1a39dc197 100755
              ret = insmod(str, options);
              if(ret < 0)
              {
-@@ -1327,7 +1327,7 @@ ERROR("-----------rogge---------------do_insmod_modules");
+@@ -1330,7 +1330,7 @@ ERROR("-----------rogge---------------do_insmod_modules");
          if (back_node_len > 0)
          {
              memset(str, 0, 128);
@@ -39,7 +39,7 @@ index b81f5d441..1a39dc197 100755
              ret = insmod(str, options);
              if(ret < 0)
              {
-@@ -1341,7 +1341,7 @@ ERROR("-----------rogge---------------do_insmod_modules");
+@@ -1344,7 +1344,7 @@ ERROR("-----------rogge---------------do_insmod_modules");
          if (front_node_len > 0)
          {
            memset(str, 0, 128);
@@ -49,5 +49,5 @@ index b81f5d441..1a39dc197 100755
              if(ret < 0)
              {
 -- 
-2.17.1
+2.43.0
 
