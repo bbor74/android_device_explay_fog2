@@ -9,3 +9,6 @@ allow kernel device:dir { create remove_name rmdir write add_name };
 #============= kernel ==============
 allow kernel self:system module_request;
 
+#============= kernel ==============
+allow kernel self:capability dac_override;
+

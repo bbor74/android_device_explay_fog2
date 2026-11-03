@@ -5,3 +5,6 @@ allow cameraserver proc_meminfo:file { open read };
 
 #============= cameraserver ==============
 allow cameraserver proc:file { open read };
+
+#============= cameraserver ==============
+allow cameraserver sysfs:file { getattr open read };
