@@ -58,6 +58,7 @@ PRODUCT_PACKAGES += explay_settings
 
 # HAL
 PRODUCT_PACKAGES += \
+   camera_init \
    camera.polaris \
    gps.polaris \
    hwcomposer.polaris
